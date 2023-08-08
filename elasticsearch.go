@@ -121,10 +121,10 @@ type TypedClient struct {
 // It will use the ELASTICSEARCH_URL environment variable, if set,
 // to configure the addresses; use a comma to separate multiple URLs.
 //
-// If either cfg.Addresses or cfg.CloudID is set, the ELASTICSEARCH_URL
+// If cfg.Address or cfg.CloudID is set, the ELASTICSEARCH_URL
 // environment variable is ignored.
 //
-// It's an error to set both cfg.Addresses and cfg.CloudID.
+// It's an error to set both cfg.Address and cfg.CloudID.
 func NewClient(cfg Config) (*TypedClient, error) {
 	tp, err := newTransport(cfg)
 	if err != nil {
@@ -149,7 +149,7 @@ func newTransport(cfg Config) (*elastictransport.Client, error) {
 	if cfg.Address == "" && cfg.CloudID == "" {
 		addr = addrsFromEnvironment()
 	} else {
-		if cfg.Address == "" && cfg.CloudID != "" {
+		if cfg.Address != "" && cfg.CloudID != "" {
 			return nil, errors.New("cannot create client: both Addresses and CloudID are set")
 		}
 
