@@ -38,8 +38,6 @@ import (
 )
 
 const (
-	defaultURL = "http://localhost:9200"
-
 	// Version returns the package version as a string.
 	Version        = version.Client
 	unknownProduct = "the client noticed that the server is not Elasticsearch and we do not support this unknown product"
@@ -50,9 +48,10 @@ const (
 )
 
 var (
-	userAgent     string
-	reGoVersion   = regexp.MustCompile(`go(\d+\.\d+\..+)`)
-	reMetaVersion = regexp.MustCompile("([0-9.]+)(.*)")
+	userAgent           string
+	reGoVersion         = regexp.MustCompile(`go(\d+\.\d+\..+)`)
+	reMetaVersion       = regexp.MustCompile("([0-9.]+)(.*)")
+	reServerlessVersion = regexp.MustCompile("([0-9.]+)\\+([0-9]+)(.*)")
 )
 
 func init() {
@@ -82,7 +81,6 @@ type Config struct {
 	DiscoverNodesOnStart  bool          // Discover nodes when initializing the client. Default: false.
 	DiscoverNodesInterval time.Duration // Discover nodes periodically. Default: disabled.
 
-	EnableMetrics     bool // Enable the metrics collection.
 	EnableDebugLogger bool // Enable the debug logging.
 
 	DisableMetaHeader bool // Disable the additional "X-Elastic-Client-Meta" HTTP header.
@@ -166,14 +164,13 @@ func newTransport(cfg Config) (*elastictransport.Client, error) {
 		}
 	}
 
+	if addr == "" {
+		return nil, errors.New("cannot create client: address is empty")
+	}
+
 	endpoint, err := addrToURL(addr)
 	if err != nil {
 		return nil, fmt.Errorf("cannot create client: %s", err)
-	}
-
-	if endpoint == nil {
-		u, _ := url.Parse(defaultURL) // errcheck exclude
-		endpoint = u
 	}
 
 	// TODO(karmi): Refactor
@@ -203,7 +200,6 @@ func newTransport(cfg Config) (*elastictransport.Client, error) {
 		CompressRequestBody:      cfg.CompressRequestBody,
 		CompressRequestBodyLevel: cfg.CompressRequestBodyLevel,
 
-		EnableMetrics:     cfg.EnableMetrics,
 		EnableDebugLogger: cfg.EnableDebugLogger,
 
 		DiscoverNodesInterval: cfg.DiscoverNodesInterval,
@@ -361,7 +357,7 @@ func initMetaHeader(transport interface{}) string {
 	var strippedEsVersion string
 	var strippedTransportVersion string
 
-	strippedEsVersion = buildStrippedVersion(Version)
+	strippedEsVersion = buildServerLessStrippedVersion(Version)
 	strippedGoVersion = buildStrippedVersion(runtime.Version())
 
 	if _, ok := transport.(*elastictransport.Client); ok {
@@ -372,7 +368,7 @@ func initMetaHeader(transport interface{}) string {
 
 	var duos = [][]string{
 		{
-			"es",
+			"esv",
 			strippedEsVersion,
 		},
 		{
@@ -411,4 +407,15 @@ func buildStrippedVersion(version string) string {
 	}
 
 	return "0.0p"
+}
+
+func buildServerLessStrippedVersion(version string) string {
+	v := reServerlessVersion.FindStringSubmatch(version)
+
+	switch len(v) {
+	case 3, 4:
+		return v[1] + "+" + v[2]
+	default:
+		return "0.0p"
+	}
 }
