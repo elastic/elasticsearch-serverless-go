@@ -14,7 +14,7 @@ Elasticsearch operations with it.
 
 ## Requirements
 
-* Go x or higher installed on your system.
+* Go 1.13 or higher installed on your system.
 
 
 ## Installation
@@ -26,6 +26,7 @@ You can install the Elasticsearch Serverless Go client with the following
 commands:
 
 ```bash
+go get -u github.com/elastic/elasticsearch-serverless-go@latest
 ```
 
 
@@ -34,7 +35,10 @@ commands:
 You can instantiate a client by running the following command:
 
 ```go
-
+client, err := elasticsearch.NewClient(elasticsearch.Config{
+	APIKey: "you_api_key",
+	Address: "https://my-project-url",
+})
 ```
 
 You can find the Elasticsearch endpoint on the Cloud deployment management page.
@@ -63,14 +67,28 @@ The following is an example of indexing some classic books into the `books`
 index:
 
 ```go
+books := []Book{
+    {Name: "Snow Crash", Author: "Neal Stephenson", ReleaseDate: "1992-06-01", PageCount: 470},
+    {Name: "Revelation Space", Author: "Alastair Reynolds", ReleaseDate: "2000-03-15", PageCount: 585},
+    {Name: "1984", Author: "George Orwell", ReleaseDate: "1949-06-08", PageCount: 328},
+    {Name: "Fahrenheit 451", Author: "Ray Bradbury", ReleaseDate: "1953-10-15", PageCount: 227},
+    {Name: "Brave New World", Author: "Aldous Huxley", ReleaseDate: "1932-06-01", PageCount: 268},
+    {Name: "The Handmaid's Tale", Author: "Margaret Atwood", ReleaseDate: "1985-06-01", PageCount: 311},
+}
+indexName := "books"
 
+bulk := client.Bulk()
+for _, book := range books {
+    bulk.CreateOp(types.CreateOperation{Index_: &indexName}, book)
+}
+response, err := bulk.Do(context.TODO())
+
+fmt.Printf("%#v", response.Items)
 ```
 
 When you use the client to make a request to Elasticsearch, it returns an API 
-response object. You can check the HTTP return code by calling `status` and the 
-HTTP headers by calling `headers` on the response object. The response object 
-also behaves as a Hash, so you can access the body values directly as seen on 
-the previous example with ``.
+response object. You can access the body values directly as seen on
+the previous example with `res`.
 
 
 ### Getting documents
@@ -78,7 +96,7 @@ the previous example with ``.
 You can get documents by using the following code:
 
 ```go
-
+client.Get("my_index", id).Do(context.TODO())
 ```
 
 
@@ -88,7 +106,10 @@ Now that some data is available, you can search your documents using the
 **Search API**:
 
 ```go
-
+client.Search().
+	Index("books").
+	Q("snow").
+	Do(context.TODO())
 ```
 
 ### Updating a document
@@ -96,7 +117,13 @@ Now that some data is available, you can search your documents using the
 You can call the `update` API to update a document:
 
 ```go
-
+client.Update("books", "document_id").
+		Doc(
+			struct {
+				PageCount int `json:"page_count"`
+			}{PageCount: 312},
+		).
+		Do(context.TODO())
 ```
 
 ### Deleting a document
@@ -104,7 +131,7 @@ You can call the `update` API to update a document:
 You can call the `delete` API to delete a document:
 
 ```go
-
+client.Delete("books", "document_id").Do(context.TODO())
 ```
 
 
@@ -112,5 +139,5 @@ You can call the `delete` API to delete a document:
 
 
 ```go
-
+client.Indices.Delete("books").Do(context.TODO())
 ```
