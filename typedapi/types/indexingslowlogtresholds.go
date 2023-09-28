@@ -16,13 +16,13 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/f16d22a4e5e7786419e984239713298b06183ba9
+// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
 
 package types
 
 // IndexingSlowlogTresholds type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/f16d22a4e5e7786419e984239713298b06183ba9/specification/indices/_types/IndexSettings.ts#L554-L561
+// https://github.com/elastic/elasticsearch-specification/blob/d70d15b514ca03d715b6eb83fe5183246ded8717/specification/indices/_types/IndexSettings.ts#L554-L561
 type IndexingSlowlogTresholds struct {
 	// Index The indexing slow log, similar in functionality to the search slow log. The
 	// log file name ends with `_index_indexing_slowlog.json`.

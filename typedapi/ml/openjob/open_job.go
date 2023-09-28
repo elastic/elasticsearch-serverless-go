@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/f16d22a4e5e7786419e984239713298b06183ba9
+// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
 
 // Opens one or more anomaly detection jobs.
 package openjob
@@ -70,7 +70,7 @@ func NewOpenJobFunc(tp elastictransport.Interface) NewOpenJob {
 	return func(jobid string) *OpenJob {
 		n := New(tp)
 
-		n.JobId(jobid)
+		n._jobid(jobid)
 
 		return n
 	}
@@ -250,7 +250,7 @@ func (r *OpenJob) Header(key, value string) *OpenJob {
 
 // JobId Identifier for the anomaly detection job.
 // API Name: jobid
-func (r *OpenJob) JobId(jobid string) *OpenJob {
+func (r *OpenJob) _jobid(jobid string) *OpenJob {
 	r.paramSet |= jobidMask
 	r.jobid = jobid
 

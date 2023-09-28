@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/f16d22a4e5e7786419e984239713298b06183ba9
+// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
 
 package types
 
@@ -30,7 +30,7 @@ import (
 
 // ClusterStateUpdate type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/f16d22a4e5e7786419e984239713298b06183ba9/specification/nodes/_types/Stats.ts#L278-L343
+// https://github.com/elastic/elasticsearch-specification/blob/d70d15b514ca03d715b6eb83fe5183246ded8717/specification/nodes/_types/Stats.ts#L278-L343
 type ClusterStateUpdate struct {
 	// CommitTime The cumulative amount of time spent waiting for a successful cluster state
 	// update to commit, which measures the time from the start of each publication

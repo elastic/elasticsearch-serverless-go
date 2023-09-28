@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/f16d22a4e5e7786419e984239713298b06183ba9
+// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
 
 // Instantiates a filter.
 package putfilter
@@ -70,7 +70,7 @@ func NewPutFilterFunc(tp elastictransport.Interface) NewPutFilter {
 	return func(filterid string) *PutFilter {
 		n := New(tp)
 
-		n.FilterId(filterid)
+		n._filterid(filterid)
 
 		return n
 	}
@@ -248,7 +248,7 @@ func (r *PutFilter) Header(key, value string) *PutFilter {
 
 // FilterId A string that uniquely identifies a filter.
 // API Name: filterid
-func (r *PutFilter) FilterId(filterid string) *PutFilter {
+func (r *PutFilter) _filterid(filterid string) *PutFilter {
 	r.paramSet |= filteridMask
 	r.filterid = filterid
 

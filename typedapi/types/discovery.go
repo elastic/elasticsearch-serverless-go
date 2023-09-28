@@ -16,13 +16,13 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/f16d22a4e5e7786419e984239713298b06183ba9
+// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
 
 package types
 
 // Discovery type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/f16d22a4e5e7786419e984239713298b06183ba9/specification/nodes/_types/Stats.ts#L201-L219
+// https://github.com/elastic/elasticsearch-specification/blob/d70d15b514ca03d715b6eb83fe5183246ded8717/specification/nodes/_types/Stats.ts#L201-L219
 type Discovery struct {
 	ClusterApplierStats *ClusterAppliedStats `json:"cluster_applier_stats,omitempty"`
 	// ClusterStateQueue Contains statistics for the cluster state queue of the node.

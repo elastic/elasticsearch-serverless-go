@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/f16d22a4e5e7786419e984239713298b06183ba9
+// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
 
 // The terms enum API  can be used to discover terms in the index that begin
 // with the provided string. It is designed for low-latency look-ups used in
@@ -72,7 +72,7 @@ func NewTermsEnumFunc(tp elastictransport.Interface) NewTermsEnum {
 	return func(index string) *TermsEnum {
 		n := New(tp)
 
-		n.Index(index)
+		n._index(index)
 
 		return n
 	}
@@ -251,7 +251,7 @@ func (r *TermsEnum) Header(key, value string) *TermsEnum {
 // Index Comma-separated list of data streams, indices, and index aliases to search.
 // Wildcard (*) expressions are supported.
 // API Name: index
-func (r *TermsEnum) Index(index string) *TermsEnum {
+func (r *TermsEnum) _index(index string) *TermsEnum {
 	r.paramSet |= indexMask
 	r.index = index
 

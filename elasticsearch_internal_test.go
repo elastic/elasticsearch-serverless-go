@@ -218,7 +218,7 @@ func TestClientInterface(t *testing.T) {
 			t.Errorf("Unexpected call to transport by client")
 		}
 
-		c.Perform(&http.Request{URL: &url.URL{}, Header: make(http.Header)}) // errcheck ignore
+		c.Perform(&http.Request{URL: &url.URL{}, Header: make(http.Header)}) //nolint:errcheck
 
 		if called != true { // megacheck ignore
 			t.Errorf("Expected client to call transport")
@@ -471,7 +471,7 @@ func TestProductCheckError(t *testing.T) {
 		}
 
 		w.Header().Set("X-Elastic-Product", "Elasticsearch")
-		w.Write([]byte("[]"))
+		w.Write([]byte("[]")) //nolint:errcheck
 	}))
 	defer server.Close()
 
@@ -669,6 +669,6 @@ func TestContentTypeOverride(t *testing.T) {
 		search := core_search.New(tp)
 		search.Raw(strings.NewReader(""))
 		search.Header("Content-Type", contentType)
-		search.Do(context.Background())
+		search.Do(context.Background()) //nolint:errcheck
 	})
 }

@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/f16d22a4e5e7786419e984239713298b06183ba9
+// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
 
 package types
 
@@ -30,7 +30,7 @@ import (
 
 // RankFeatureFunctionSaturation type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/f16d22a4e5e7786419e984239713298b06183ba9/specification/_types/query_dsl/specialized.ts#L275-L280
+// https://github.com/elastic/elasticsearch-specification/blob/d70d15b514ca03d715b6eb83fe5183246ded8717/specification/_types/query_dsl/specialized.ts#L275-L280
 type RankFeatureFunctionSaturation struct {
 	// Pivot Configurable pivot value so that the result will be less than 0.5.
 	Pivot *float32 `json:"pivot,omitempty"`

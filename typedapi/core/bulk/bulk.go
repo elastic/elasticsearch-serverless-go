@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/f16d22a4e5e7786419e984239713298b06183ba9
+// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
 
 // Allows to perform multiple index/update/delete operations in a single
 // request.
@@ -55,8 +55,8 @@ type Bulk struct {
 
 	buf *gobytes.Buffer
 
-	req      []interface{}
-	deferred []func(request []interface{}) error
+	req      *Request
+	deferred []func(request *Request) error
 	raw      io.Reader
 
 	paramSet int
@@ -101,7 +101,7 @@ func (r *Bulk) Raw(raw io.Reader) *Bulk {
 }
 
 // Request allows to set the request property with the appropriate payload.
-func (r *Bulk) Request(req []interface{}) *Bulk {
+func (r *Bulk) Request(req *Request) *Bulk {
 	r.req = req
 
 	return r
@@ -129,7 +129,7 @@ func (r *Bulk) HttpRequest(ctx context.Context) (*http.Request, error) {
 		r.buf.ReadFrom(r.raw)
 	} else if r.req != nil {
 
-		for _, elem := range r.req {
+		for _, elem := range *r.req {
 			data, err := json.Marshal(elem)
 			if err != nil {
 				return nil, err

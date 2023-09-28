@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/f16d22a4e5e7786419e984239713298b06183ba9
+// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
 
 // Updates the index mappings.
 package putmapping
@@ -73,7 +73,7 @@ func NewPutMappingFunc(tp elastictransport.Interface) NewPutMapping {
 	return func(index string) *PutMapping {
 		n := New(tp)
 
-		n.Index(index)
+		n._index(index)
 
 		return n
 	}
@@ -250,7 +250,7 @@ func (r *PutMapping) Header(key, value string) *PutMapping {
 // Index A comma-separated list of index names the mapping should be added to
 // (supports wildcards); use `_all` or omit to add the mapping on all indices.
 // API Name: index
-func (r *PutMapping) Index(index string) *PutMapping {
+func (r *PutMapping) _index(index string) *PutMapping {
 	r.paramSet |= indexMask
 	r.index = index
 

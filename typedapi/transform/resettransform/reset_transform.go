@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/f16d22a4e5e7786419e984239713298b06183ba9
+// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
 
 // Resets an existing transform.
 package resettransform
@@ -68,7 +68,7 @@ func NewResetTransformFunc(tp elastictransport.Interface) NewResetTransform {
 	return func(transformid string) *ResetTransform {
 		n := New(tp)
 
-		n.TransformId(transformid)
+		n._transformid(transformid)
 
 		return n
 	}
@@ -219,7 +219,7 @@ func (r *ResetTransform) Header(key, value string) *ResetTransform {
 // hyphens, and underscores. It has a 64 character limit and must start and end
 // with alphanumeric characters.
 // API Name: transformid
-func (r *ResetTransform) TransformId(transformid string) *ResetTransform {
+func (r *ResetTransform) _transformid(transformid string) *ResetTransform {
 	r.paramSet |= transformidMask
 	r.transformid = transformid
 

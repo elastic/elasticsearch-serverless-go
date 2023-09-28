@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/f16d22a4e5e7786419e984239713298b06183ba9
+// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
 
 // Allows to execute several search operations in one request.
 package msearch
@@ -55,8 +55,8 @@ type Msearch struct {
 
 	buf *gobytes.Buffer
 
-	req      []types.MsearchRequestItem
-	deferred []func(request []types.MsearchRequestItem) error
+	req      *Request
+	deferred []func(request *Request) error
 	raw      io.Reader
 
 	paramSet int
@@ -100,7 +100,7 @@ func (r *Msearch) Raw(raw io.Reader) *Msearch {
 }
 
 // Request allows to set the request property with the appropriate payload.
-func (r *Msearch) Request(req []types.MsearchRequestItem) *Msearch {
+func (r *Msearch) Request(req *Request) *Msearch {
 	r.req = req
 
 	return r
@@ -128,7 +128,7 @@ func (r *Msearch) HttpRequest(ctx context.Context) (*http.Request, error) {
 		r.buf.ReadFrom(r.raw)
 	} else if r.req != nil {
 
-		for _, elem := range r.req {
+		for _, elem := range *r.req {
 			data, err := json.Marshal(elem)
 			if err != nil {
 				return nil, err

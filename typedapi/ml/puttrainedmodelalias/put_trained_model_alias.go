@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/f16d22a4e5e7786419e984239713298b06183ba9
+// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
 
 // Creates a new model alias (or reassigns an existing one) to refer to the
 // trained model
@@ -72,9 +72,9 @@ func NewPutTrainedModelAliasFunc(tp elastictransport.Interface) NewPutTrainedMod
 	return func(modelid, modelalias string) *PutTrainedModelAlias {
 		n := New(tp)
 
-		n.ModelAlias(modelalias)
+		n._modelalias(modelalias)
 
-		n.ModelId(modelid)
+		n._modelid(modelid)
 
 		return n
 	}
@@ -239,7 +239,7 @@ func (r *PutTrainedModelAlias) Header(key, value string) *PutTrainedModelAlias {
 
 // ModelAlias The alias to create or update. This value cannot end in numbers.
 // API Name: modelalias
-func (r *PutTrainedModelAlias) ModelAlias(modelalias string) *PutTrainedModelAlias {
+func (r *PutTrainedModelAlias) _modelalias(modelalias string) *PutTrainedModelAlias {
 	r.paramSet |= modelaliasMask
 	r.modelalias = modelalias
 
@@ -248,7 +248,7 @@ func (r *PutTrainedModelAlias) ModelAlias(modelalias string) *PutTrainedModelAli
 
 // ModelId The identifier for the trained model that the alias refers to.
 // API Name: modelid
-func (r *PutTrainedModelAlias) ModelId(modelid string) *PutTrainedModelAlias {
+func (r *PutTrainedModelAlias) _modelid(modelid string) *PutTrainedModelAlias {
 	r.paramSet |= modelidMask
 	r.modelid = modelid
 

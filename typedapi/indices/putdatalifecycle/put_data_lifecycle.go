@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/f16d22a4e5e7786419e984239713298b06183ba9
+// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
 
 // Updates the data stream lifecycle of the selected data streams.
 package putdatalifecycle
@@ -71,7 +71,7 @@ func NewPutDataLifecycleFunc(tp elastictransport.Interface) NewPutDataLifecycle 
 	return func(name string) *PutDataLifecycle {
 		n := New(tp)
 
-		n.Name(name)
+		n._name(name)
 
 		return n
 	}
@@ -240,7 +240,7 @@ func (r *PutDataLifecycle) Header(key, value string) *PutDataLifecycle {
 // Supports wildcards (`*`).
 // To target all data streams use `*` or `_all`.
 // API Name: name
-func (r *PutDataLifecycle) Name(name string) *PutDataLifecycle {
+func (r *PutDataLifecycle) _name(name string) *PutDataLifecycle {
 	r.paramSet |= nameMask
 	r.name = name
 

@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/f16d22a4e5e7786419e984239713298b06183ba9
+// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
 
 // Updates the description of a filter, adds items, or removes items.
 package updatefilter
@@ -70,7 +70,7 @@ func NewUpdateFilterFunc(tp elastictransport.Interface) NewUpdateFilter {
 	return func(filterid string) *UpdateFilter {
 		n := New(tp)
 
-		n.FilterId(filterid)
+		n._filterid(filterid)
 
 		return n
 	}
@@ -250,7 +250,7 @@ func (r *UpdateFilter) Header(key, value string) *UpdateFilter {
 
 // FilterId A string that uniquely identifies a filter.
 // API Name: filterid
-func (r *UpdateFilter) FilterId(filterid string) *UpdateFilter {
+func (r *UpdateFilter) _filterid(filterid string) *UpdateFilter {
 	r.paramSet |= filteridMask
 	r.filterid = filterid
 

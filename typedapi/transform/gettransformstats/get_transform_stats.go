@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/f16d22a4e5e7786419e984239713298b06183ba9
+// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
 
 // Retrieves usage information for transforms.
 package gettransformstats
@@ -68,7 +68,7 @@ func NewGetTransformStatsFunc(tp elastictransport.Interface) NewGetTransformStat
 	return func(transformid string) *GetTransformStats {
 		n := New(tp)
 
-		n.TransformId(transformid)
+		n._transformid(transformid)
 
 		return n
 	}
@@ -219,7 +219,7 @@ func (r *GetTransformStats) Header(key, value string) *GetTransformStats {
 // `_all`, by specifying `*` as the `<transform_id>`, or by omitting the
 // `<transform_id>`.
 // API Name: transformid
-func (r *GetTransformStats) TransformId(transformid string) *GetTransformStats {
+func (r *GetTransformStats) _transformid(transformid string) *GetTransformStats {
 	r.paramSet |= transformidMask
 	r.transformid = transformid
 

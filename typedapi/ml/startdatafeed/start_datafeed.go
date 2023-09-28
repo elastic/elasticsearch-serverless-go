@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/f16d22a4e5e7786419e984239713298b06183ba9
+// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
 
 // Starts one or more datafeeds.
 package startdatafeed
@@ -70,7 +70,7 @@ func NewStartDatafeedFunc(tp elastictransport.Interface) NewStartDatafeed {
 	return func(datafeedid string) *StartDatafeed {
 		n := New(tp)
 
-		n.DatafeedId(datafeedid)
+		n._datafeedid(datafeedid)
 
 		return n
 	}
@@ -254,7 +254,7 @@ func (r *StartDatafeed) Header(key, value string) *StartDatafeed {
 // start and end with alphanumeric
 // characters.
 // API Name: datafeedid
-func (r *StartDatafeed) DatafeedId(datafeedid string) *StartDatafeed {
+func (r *StartDatafeed) _datafeedid(datafeedid string) *StartDatafeed {
 	r.paramSet |= datafeedidMask
 	r.datafeedid = datafeedid
 

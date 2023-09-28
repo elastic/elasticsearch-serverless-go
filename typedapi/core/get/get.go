@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/f16d22a4e5e7786419e984239713298b06183ba9
+// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
 
 // Returns a document.
 package get
@@ -72,9 +72,9 @@ func NewGetFunc(tp elastictransport.Interface) NewGet {
 	return func(index, id string) *Get {
 		n := New(tp)
 
-		n.Id(id)
+		n._id(id)
 
-		n.Index(index)
+		n._index(index)
 
 		return n
 	}
@@ -247,7 +247,7 @@ func (r *Get) Header(key, value string) *Get {
 
 // Id Unique identifier of the document.
 // API Name: id
-func (r *Get) Id(id string) *Get {
+func (r *Get) _id(id string) *Get {
 	r.paramSet |= idMask
 	r.id = id
 
@@ -256,7 +256,7 @@ func (r *Get) Id(id string) *Get {
 
 // Index Name of the index that contains the document.
 // API Name: index
-func (r *Get) Index(index string) *Get {
+func (r *Get) _index(index string) *Get {
 	r.paramSet |= indexMask
 	r.index = index
 

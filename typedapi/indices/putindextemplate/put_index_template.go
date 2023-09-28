@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/f16d22a4e5e7786419e984239713298b06183ba9
+// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
 
 // Creates or updates an index template.
 package putindextemplate
@@ -71,7 +71,7 @@ func NewPutIndexTemplateFunc(tp elastictransport.Interface) NewPutIndexTemplate 
 	return func(name string) *PutIndexTemplate {
 		n := New(tp)
 
-		n.Name(name)
+		n._name(name)
 
 		return n
 	}
@@ -247,7 +247,7 @@ func (r *PutIndexTemplate) Header(key, value string) *PutIndexTemplate {
 
 // Name Index or template name
 // API Name: name
-func (r *PutIndexTemplate) Name(name string) *PutIndexTemplate {
+func (r *PutIndexTemplate) _name(name string) *PutIndexTemplate {
 	r.paramSet |= nameMask
 	r.name = name
 

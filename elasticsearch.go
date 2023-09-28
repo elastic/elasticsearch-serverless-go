@@ -51,7 +51,7 @@ var (
 	userAgent           string
 	reGoVersion         = regexp.MustCompile(`go(\d+\.\d+\..+)`)
 	reMetaVersion       = regexp.MustCompile("([0-9.]+)(.*)")
-	reServerlessVersion = regexp.MustCompile("([0-9.]+)\\+([0-9]+)(.*)")
+	reServerlessVersion = regexp.MustCompile(`([0-9.]+)\+([0-9]+)(.*)`)
 )
 
 func init() {

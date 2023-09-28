@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/f16d22a4e5e7786419e984239713298b06183ba9
+// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
 
 // Creates part of a trained model definition
 package puttrainedmodeldefinitionpart
@@ -73,9 +73,9 @@ func NewPutTrainedModelDefinitionPartFunc(tp elastictransport.Interface) NewPutT
 	return func(modelid, part string) *PutTrainedModelDefinitionPart {
 		n := New(tp)
 
-		n.ModelId(modelid)
+		n._modelid(modelid)
 
-		n.Part(part)
+		n._part(part)
 
 		return n
 	}
@@ -258,7 +258,7 @@ func (r *PutTrainedModelDefinitionPart) Header(key, value string) *PutTrainedMod
 
 // ModelId The unique identifier of the trained model.
 // API Name: modelid
-func (r *PutTrainedModelDefinitionPart) ModelId(modelid string) *PutTrainedModelDefinitionPart {
+func (r *PutTrainedModelDefinitionPart) _modelid(modelid string) *PutTrainedModelDefinitionPart {
 	r.paramSet |= modelidMask
 	r.modelid = modelid
 
@@ -270,7 +270,7 @@ func (r *PutTrainedModelDefinitionPart) ModelId(modelid string) *PutTrainedModel
 // order of their part number. The first part must be `0` and the final part
 // must be `total_parts - 1`.
 // API Name: part
-func (r *PutTrainedModelDefinitionPart) Part(part string) *PutTrainedModelDefinitionPart {
+func (r *PutTrainedModelDefinitionPart) _part(part string) *PutTrainedModelDefinitionPart {
 	r.paramSet |= partMask
 	r.part = part
 
