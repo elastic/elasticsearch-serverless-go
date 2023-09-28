@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/f16d22a4e5e7786419e984239713298b06183ba9
+// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
 
 // Updates certain properties of a datafeed.
 package updatedatafeed
@@ -72,7 +72,7 @@ func NewUpdateDatafeedFunc(tp elastictransport.Interface) NewUpdateDatafeed {
 	return func(datafeedid string) *UpdateDatafeed {
 		n := New(tp)
 
-		n.DatafeedId(datafeedid)
+		n._datafeedid(datafeedid)
 
 		return n
 	}
@@ -255,7 +255,7 @@ func (r *UpdateDatafeed) Header(key, value string) *UpdateDatafeed {
 // hyphens, and underscores.
 // It must start and end with alphanumeric characters.
 // API Name: datafeedid
-func (r *UpdateDatafeed) DatafeedId(datafeedid string) *UpdateDatafeed {
+func (r *UpdateDatafeed) _datafeedid(datafeedid string) *UpdateDatafeed {
 	r.paramSet |= datafeedidMask
 	r.datafeedid = datafeedid
 

@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/f16d22a4e5e7786419e984239713298b06183ba9
+// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
 
 // Deletes documents matching the provided query.
 package deletebyquery
@@ -75,7 +75,7 @@ func NewDeleteByQueryFunc(tp elastictransport.Interface) NewDeleteByQuery {
 	return func(index string) *DeleteByQuery {
 		n := New(tp)
 
-		n.Index(index)
+		n._index(index)
 
 		return n
 	}
@@ -254,7 +254,7 @@ func (r *DeleteByQuery) Header(key, value string) *DeleteByQuery {
 // To search all data streams or indices, omit this parameter or use `*` or
 // `_all`.
 // API Name: index
-func (r *DeleteByQuery) Index(index string) *DeleteByQuery {
+func (r *DeleteByQuery) _index(index string) *DeleteByQuery {
 	r.paramSet |= indexMask
 	r.index = index
 

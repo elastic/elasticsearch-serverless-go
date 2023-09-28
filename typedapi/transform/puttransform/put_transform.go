@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/f16d22a4e5e7786419e984239713298b06183ba9
+// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
 
 // Instantiates a transform.
 package puttransform
@@ -71,7 +71,7 @@ func NewPutTransformFunc(tp elastictransport.Interface) NewPutTransform {
 	return func(transformid string) *PutTransform {
 		n := New(tp)
 
-		n.TransformId(transformid)
+		n._transformid(transformid)
 
 		return n
 	}
@@ -250,7 +250,7 @@ func (r *PutTransform) Header(key, value string) *PutTransform {
 // hyphens, and underscores. It has a 64 character limit and must start and end
 // with alphanumeric characters.
 // API Name: transformid
-func (r *PutTransform) TransformId(transformid string) *PutTransform {
+func (r *PutTransform) _transformid(transformid string) *PutTransform {
 	r.paramSet |= transformidMask
 	r.transformid = transformid
 

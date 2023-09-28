@@ -16,403 +16,215 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/f16d22a4e5e7786419e984239713298b06183ba9
+// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
 
 package typedapi
 
 import (
-	// github.com/elastic/elasticsearch-serverless-go
-	async_search_delete "github.com/elastic/elasticsearch-serverless-go/typedapi/asyncsearch/delete"
-	// github.com/elastic/elasticsearch-serverless-go
-	async_search_get "github.com/elastic/elasticsearch-serverless-go/typedapi/asyncsearch/get"
-	// github.com/elastic/elasticsearch-serverless-go
-	async_search_status "github.com/elastic/elasticsearch-serverless-go/typedapi/asyncsearch/status"
-	// github.com/elastic/elasticsearch-serverless-go
-	async_search_submit "github.com/elastic/elasticsearch-serverless-go/typedapi/asyncsearch/submit"
-	// github.com/elastic/elasticsearch-serverless-go
-	cat_aliases "github.com/elastic/elasticsearch-serverless-go/typedapi/cat/aliases"
-	// github.com/elastic/elasticsearch-serverless-go
-	cat_component_templates "github.com/elastic/elasticsearch-serverless-go/typedapi/cat/componenttemplates"
-	// github.com/elastic/elasticsearch-serverless-go
-	cat_count "github.com/elastic/elasticsearch-serverless-go/typedapi/cat/count"
-	// github.com/elastic/elasticsearch-serverless-go
-	cat_help "github.com/elastic/elasticsearch-serverless-go/typedapi/cat/help"
-	// github.com/elastic/elasticsearch-serverless-go
-	cat_indices "github.com/elastic/elasticsearch-serverless-go/typedapi/cat/indices"
-	// github.com/elastic/elasticsearch-serverless-go
-	cat_ml_data_frame_analytics "github.com/elastic/elasticsearch-serverless-go/typedapi/cat/mldataframeanalytics"
-	// github.com/elastic/elasticsearch-serverless-go
-	cat_ml_datafeeds "github.com/elastic/elasticsearch-serverless-go/typedapi/cat/mldatafeeds"
-	// github.com/elastic/elasticsearch-serverless-go
-	cat_ml_jobs "github.com/elastic/elasticsearch-serverless-go/typedapi/cat/mljobs"
-	// github.com/elastic/elasticsearch-serverless-go
-	cat_ml_trained_models "github.com/elastic/elasticsearch-serverless-go/typedapi/cat/mltrainedmodels"
-	// github.com/elastic/elasticsearch-serverless-go
-	cat_transforms "github.com/elastic/elasticsearch-serverless-go/typedapi/cat/transforms"
-	// github.com/elastic/elasticsearch-serverless-go
-	cluster_delete_component_template "github.com/elastic/elasticsearch-serverless-go/typedapi/cluster/deletecomponenttemplate"
-	// github.com/elastic/elasticsearch-serverless-go
-	cluster_exists_component_template "github.com/elastic/elasticsearch-serverless-go/typedapi/cluster/existscomponenttemplate"
-	// github.com/elastic/elasticsearch-serverless-go
-	cluster_get_component_template "github.com/elastic/elasticsearch-serverless-go/typedapi/cluster/getcomponenttemplate"
-	// github.com/elastic/elasticsearch-serverless-go
-	cluster_get_settings "github.com/elastic/elasticsearch-serverless-go/typedapi/cluster/getsettings"
-	// github.com/elastic/elasticsearch-serverless-go
-	cluster_info "github.com/elastic/elasticsearch-serverless-go/typedapi/cluster/info"
-	// github.com/elastic/elasticsearch-serverless-go
-	cluster_pending_tasks "github.com/elastic/elasticsearch-serverless-go/typedapi/cluster/pendingtasks"
-	// github.com/elastic/elasticsearch-serverless-go
-	cluster_put_component_template "github.com/elastic/elasticsearch-serverless-go/typedapi/cluster/putcomponenttemplate"
-	// github.com/elastic/elasticsearch-serverless-go
-	cluster_put_settings "github.com/elastic/elasticsearch-serverless-go/typedapi/cluster/putsettings"
-	// github.com/elastic/elasticsearch-serverless-go
-	cluster_stats "github.com/elastic/elasticsearch-serverless-go/typedapi/cluster/stats"
-	// github.com/elastic/elasticsearch-serverless-go
-	core_bulk "github.com/elastic/elasticsearch-serverless-go/typedapi/core/bulk"
-	// github.com/elastic/elasticsearch-serverless-go
-	core_clear_scroll "github.com/elastic/elasticsearch-serverless-go/typedapi/core/clearscroll"
-	// github.com/elastic/elasticsearch-serverless-go
-	core_close_point_in_time "github.com/elastic/elasticsearch-serverless-go/typedapi/core/closepointintime"
-	// github.com/elastic/elasticsearch-serverless-go
-	core_count "github.com/elastic/elasticsearch-serverless-go/typedapi/core/count"
-	// github.com/elastic/elasticsearch-serverless-go
-	core_create "github.com/elastic/elasticsearch-serverless-go/typedapi/core/create"
-	// github.com/elastic/elasticsearch-serverless-go
-	core_delete "github.com/elastic/elasticsearch-serverless-go/typedapi/core/delete"
-	// github.com/elastic/elasticsearch-serverless-go
-	core_delete_by_query "github.com/elastic/elasticsearch-serverless-go/typedapi/core/deletebyquery"
-	// github.com/elastic/elasticsearch-serverless-go
-	core_delete_script "github.com/elastic/elasticsearch-serverless-go/typedapi/core/deletescript"
-	// github.com/elastic/elasticsearch-serverless-go
-	core_exists "github.com/elastic/elasticsearch-serverless-go/typedapi/core/exists"
-	// github.com/elastic/elasticsearch-serverless-go
-	core_exists_source "github.com/elastic/elasticsearch-serverless-go/typedapi/core/existssource"
-	// github.com/elastic/elasticsearch-serverless-go
-	core_field_caps "github.com/elastic/elasticsearch-serverless-go/typedapi/core/fieldcaps"
-	// github.com/elastic/elasticsearch-serverless-go
-	core_get "github.com/elastic/elasticsearch-serverless-go/typedapi/core/get"
-	// github.com/elastic/elasticsearch-serverless-go
-	core_get_script "github.com/elastic/elasticsearch-serverless-go/typedapi/core/getscript"
-	// github.com/elastic/elasticsearch-serverless-go
-	core_get_source "github.com/elastic/elasticsearch-serverless-go/typedapi/core/getsource"
-	// github.com/elastic/elasticsearch-serverless-go
-	core_index "github.com/elastic/elasticsearch-serverless-go/typedapi/core/index"
-	// github.com/elastic/elasticsearch-serverless-go
-	core_info "github.com/elastic/elasticsearch-serverless-go/typedapi/core/info"
-	// github.com/elastic/elasticsearch-serverless-go
-	core_mget "github.com/elastic/elasticsearch-serverless-go/typedapi/core/mget"
-	// github.com/elastic/elasticsearch-serverless-go
-	core_msearch "github.com/elastic/elasticsearch-serverless-go/typedapi/core/msearch"
-	// github.com/elastic/elasticsearch-serverless-go
-	core_msearch_template "github.com/elastic/elasticsearch-serverless-go/typedapi/core/msearchtemplate"
-	// github.com/elastic/elasticsearch-serverless-go
-	core_mtermvectors "github.com/elastic/elasticsearch-serverless-go/typedapi/core/mtermvectors"
-	// github.com/elastic/elasticsearch-serverless-go
-	core_open_point_in_time "github.com/elastic/elasticsearch-serverless-go/typedapi/core/openpointintime"
-	// github.com/elastic/elasticsearch-serverless-go
-	core_ping "github.com/elastic/elasticsearch-serverless-go/typedapi/core/ping"
-	// github.com/elastic/elasticsearch-serverless-go
-	core_put_script "github.com/elastic/elasticsearch-serverless-go/typedapi/core/putscript"
-	// github.com/elastic/elasticsearch-serverless-go
-	core_rank_eval "github.com/elastic/elasticsearch-serverless-go/typedapi/core/rankeval"
-	// github.com/elastic/elasticsearch-serverless-go
-	core_render_search_template "github.com/elastic/elasticsearch-serverless-go/typedapi/core/rendersearchtemplate"
-	// github.com/elastic/elasticsearch-serverless-go
-	core_scripts_painless_execute "github.com/elastic/elasticsearch-serverless-go/typedapi/core/scriptspainlessexecute"
-	// github.com/elastic/elasticsearch-serverless-go
-	core_scroll "github.com/elastic/elasticsearch-serverless-go/typedapi/core/scroll"
-	// github.com/elastic/elasticsearch-serverless-go
-	core_search "github.com/elastic/elasticsearch-serverless-go/typedapi/core/search"
-	// github.com/elastic/elasticsearch-serverless-go
-	core_search_mvt "github.com/elastic/elasticsearch-serverless-go/typedapi/core/searchmvt"
-	// github.com/elastic/elasticsearch-serverless-go
-	core_search_template "github.com/elastic/elasticsearch-serverless-go/typedapi/core/searchtemplate"
-	// github.com/elastic/elasticsearch-serverless-go
-	core_terms_enum "github.com/elastic/elasticsearch-serverless-go/typedapi/core/termsenum"
-	// github.com/elastic/elasticsearch-serverless-go
-	core_termvectors "github.com/elastic/elasticsearch-serverless-go/typedapi/core/termvectors"
-	// github.com/elastic/elasticsearch-serverless-go
-	core_update "github.com/elastic/elasticsearch-serverless-go/typedapi/core/update"
-	// github.com/elastic/elasticsearch-serverless-go
-	core_update_by_query "github.com/elastic/elasticsearch-serverless-go/typedapi/core/updatebyquery"
-	// github.com/elastic/elasticsearch-serverless-go
-	enrich_delete_policy "github.com/elastic/elasticsearch-serverless-go/typedapi/enrich/deletepolicy"
-	// github.com/elastic/elasticsearch-serverless-go
-	enrich_execute_policy "github.com/elastic/elasticsearch-serverless-go/typedapi/enrich/executepolicy"
-	// github.com/elastic/elasticsearch-serverless-go
-	enrich_get_policy "github.com/elastic/elasticsearch-serverless-go/typedapi/enrich/getpolicy"
-	// github.com/elastic/elasticsearch-serverless-go
-	enrich_put_policy "github.com/elastic/elasticsearch-serverless-go/typedapi/enrich/putpolicy"
-	// github.com/elastic/elasticsearch-serverless-go
-	enrich_stats "github.com/elastic/elasticsearch-serverless-go/typedapi/enrich/stats"
-	// github.com/elastic/elasticsearch-serverless-go
-	graph_explore "github.com/elastic/elasticsearch-serverless-go/typedapi/graph/explore"
-	// github.com/elastic/elasticsearch-serverless-go
-	indices_analyze "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/analyze"
-	// github.com/elastic/elasticsearch-serverless-go
-	indices_create "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/create"
-	// github.com/elastic/elasticsearch-serverless-go
-	indices_create_data_stream "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/createdatastream"
-	// github.com/elastic/elasticsearch-serverless-go
-	indices_data_streams_stats "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/datastreamsstats"
-	// github.com/elastic/elasticsearch-serverless-go
-	indices_delete "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/delete"
-	// github.com/elastic/elasticsearch-serverless-go
-	indices_delete_alias "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/deletealias"
-	// github.com/elastic/elasticsearch-serverless-go
-	indices_delete_data_lifecycle "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/deletedatalifecycle"
-	// github.com/elastic/elasticsearch-serverless-go
-	indices_delete_data_stream "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/deletedatastream"
-	// github.com/elastic/elasticsearch-serverless-go
-	indices_delete_index_template "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/deleteindextemplate"
-	// github.com/elastic/elasticsearch-serverless-go
-	indices_delete_template "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/deletetemplate"
-	// github.com/elastic/elasticsearch-serverless-go
-	indices_disk_usage "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/diskusage"
-	// github.com/elastic/elasticsearch-serverless-go
-	indices_exists "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/exists"
-	// github.com/elastic/elasticsearch-serverless-go
-	indices_exists_alias "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/existsalias"
-	// github.com/elastic/elasticsearch-serverless-go
-	indices_exists_index_template "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/existsindextemplate"
-	// github.com/elastic/elasticsearch-serverless-go
-	indices_exists_template "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/existstemplate"
-	// github.com/elastic/elasticsearch-serverless-go
-	indices_explain_data_lifecycle "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/explaindatalifecycle"
-	// github.com/elastic/elasticsearch-serverless-go
-	indices_get "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/get"
-	// github.com/elastic/elasticsearch-serverless-go
-	indices_get_alias "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/getalias"
-	// github.com/elastic/elasticsearch-serverless-go
-	indices_get_data_lifecycle "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/getdatalifecycle"
-	// github.com/elastic/elasticsearch-serverless-go
-	indices_get_data_stream "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/getdatastream"
-	// github.com/elastic/elasticsearch-serverless-go
-	indices_get_index_template "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/getindextemplate"
-	// github.com/elastic/elasticsearch-serverless-go
-	indices_get_mapping "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/getmapping"
-	// github.com/elastic/elasticsearch-serverless-go
-	indices_get_settings "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/getsettings"
-	// github.com/elastic/elasticsearch-serverless-go
-	indices_get_template "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/gettemplate"
-	// github.com/elastic/elasticsearch-serverless-go
-	indices_migrate_to_data_stream "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/migratetodatastream"
-	// github.com/elastic/elasticsearch-serverless-go
-	indices_modify_data_stream "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/modifydatastream"
-	// github.com/elastic/elasticsearch-serverless-go
-	indices_put_alias "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/putalias"
-	// github.com/elastic/elasticsearch-serverless-go
-	indices_put_data_lifecycle "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/putdatalifecycle"
-	// github.com/elastic/elasticsearch-serverless-go
-	indices_put_index_template "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/putindextemplate"
-	// github.com/elastic/elasticsearch-serverless-go
-	indices_put_mapping "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/putmapping"
-	// github.com/elastic/elasticsearch-serverless-go
-	indices_put_settings "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/putsettings"
-	// github.com/elastic/elasticsearch-serverless-go
-	indices_put_template "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/puttemplate"
-	// github.com/elastic/elasticsearch-serverless-go
-	indices_resolve_index "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/resolveindex"
-	// github.com/elastic/elasticsearch-serverless-go
-	indices_rollover "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/rollover"
-	// github.com/elastic/elasticsearch-serverless-go
-	indices_simulate_index_template "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/simulateindextemplate"
-	// github.com/elastic/elasticsearch-serverless-go
-	indices_simulate_template "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/simulatetemplate"
-	// github.com/elastic/elasticsearch-serverless-go
-	indices_update_aliases "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/updatealiases"
-	// github.com/elastic/elasticsearch-serverless-go
-	indices_validate_query "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/validatequery"
-	// github.com/elastic/elasticsearch-serverless-go
-	ingest_delete_pipeline "github.com/elastic/elasticsearch-serverless-go/typedapi/ingest/deletepipeline"
-	// github.com/elastic/elasticsearch-serverless-go
-	ingest_get_pipeline "github.com/elastic/elasticsearch-serverless-go/typedapi/ingest/getpipeline"
-	// github.com/elastic/elasticsearch-serverless-go
-	ingest_processor_grok "github.com/elastic/elasticsearch-serverless-go/typedapi/ingest/processorgrok"
-	// github.com/elastic/elasticsearch-serverless-go
-	ingest_put_pipeline "github.com/elastic/elasticsearch-serverless-go/typedapi/ingest/putpipeline"
-	// github.com/elastic/elasticsearch-serverless-go
-	ingest_simulate "github.com/elastic/elasticsearch-serverless-go/typedapi/ingest/simulate"
-	// github.com/elastic/elasticsearch-serverless-go
-	logstash_delete_pipeline "github.com/elastic/elasticsearch-serverless-go/typedapi/logstash/deletepipeline"
-	// github.com/elastic/elasticsearch-serverless-go
-	logstash_get_pipeline "github.com/elastic/elasticsearch-serverless-go/typedapi/logstash/getpipeline"
-	// github.com/elastic/elasticsearch-serverless-go
-	logstash_put_pipeline "github.com/elastic/elasticsearch-serverless-go/typedapi/logstash/putpipeline"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_close_job "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/closejob"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_delete_calendar "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/deletecalendar"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_delete_calendar_event "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/deletecalendarevent"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_delete_calendar_job "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/deletecalendarjob"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_delete_data_frame_analytics "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/deletedataframeanalytics"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_delete_datafeed "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/deletedatafeed"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_delete_filter "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/deletefilter"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_delete_job "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/deletejob"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_delete_trained_model "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/deletetrainedmodel"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_delete_trained_model_alias "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/deletetrainedmodelalias"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_estimate_model_memory "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/estimatemodelmemory"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_evaluate_data_frame "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/evaluatedataframe"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_flush_job "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/flushjob"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_get_calendar_events "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/getcalendarevents"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_get_calendars "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/getcalendars"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_get_data_frame_analytics "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/getdataframeanalytics"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_get_data_frame_analytics_stats "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/getdataframeanalyticsstats"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_get_datafeed_stats "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/getdatafeedstats"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_get_datafeeds "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/getdatafeeds"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_get_filters "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/getfilters"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_get_job_stats "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/getjobstats"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_get_jobs "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/getjobs"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_get_overall_buckets "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/getoverallbuckets"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_get_trained_models "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/gettrainedmodels"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_get_trained_models_stats "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/gettrainedmodelsstats"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_infer_trained_model "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/infertrainedmodel"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_open_job "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/openjob"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_post_calendar_events "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/postcalendarevents"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_preview_data_frame_analytics "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/previewdataframeanalytics"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_preview_datafeed "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/previewdatafeed"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_put_calendar "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/putcalendar"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_put_calendar_job "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/putcalendarjob"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_put_data_frame_analytics "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/putdataframeanalytics"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_put_datafeed "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/putdatafeed"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_put_filter "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/putfilter"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_put_job "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/putjob"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_put_trained_model "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/puttrainedmodel"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_put_trained_model_alias "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/puttrainedmodelalias"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_put_trained_model_definition_part "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/puttrainedmodeldefinitionpart"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_put_trained_model_vocabulary "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/puttrainedmodelvocabulary"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_reset_job "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/resetjob"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_start_data_frame_analytics "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/startdataframeanalytics"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_start_datafeed "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/startdatafeed"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_start_trained_model_deployment "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/starttrainedmodeldeployment"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_stop_data_frame_analytics "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/stopdataframeanalytics"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_stop_datafeed "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/stopdatafeed"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_stop_trained_model_deployment "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/stoptrainedmodeldeployment"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_update_data_frame_analytics "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/updatedataframeanalytics"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_update_datafeed "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/updatedatafeed"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_update_filter "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/updatefilter"
-	// github.com/elastic/elasticsearch-serverless-go
-	ml_update_job "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/updatejob"
-	// github.com/elastic/elasticsearch-serverless-go
-	query_ruleset_delete "github.com/elastic/elasticsearch-serverless-go/typedapi/queryruleset/delete"
-	// github.com/elastic/elasticsearch-serverless-go
-	query_ruleset_get "github.com/elastic/elasticsearch-serverless-go/typedapi/queryruleset/get"
-	// github.com/elastic/elasticsearch-serverless-go
-	query_ruleset_list "github.com/elastic/elasticsearch-serverless-go/typedapi/queryruleset/list"
-	// github.com/elastic/elasticsearch-serverless-go
-	query_ruleset_put "github.com/elastic/elasticsearch-serverless-go/typedapi/queryruleset/put"
-	// github.com/elastic/elasticsearch-serverless-go
-	search_application_delete "github.com/elastic/elasticsearch-serverless-go/typedapi/searchapplication/delete"
-	// github.com/elastic/elasticsearch-serverless-go
-	search_application_delete_behavioral_analytics "github.com/elastic/elasticsearch-serverless-go/typedapi/searchapplication/deletebehavioralanalytics"
-	// github.com/elastic/elasticsearch-serverless-go
-	search_application_get "github.com/elastic/elasticsearch-serverless-go/typedapi/searchapplication/get"
-	// github.com/elastic/elasticsearch-serverless-go
-	search_application_get_behavioral_analytics "github.com/elastic/elasticsearch-serverless-go/typedapi/searchapplication/getbehavioralanalytics"
-	// github.com/elastic/elasticsearch-serverless-go
-	search_application_list "github.com/elastic/elasticsearch-serverless-go/typedapi/searchapplication/list"
-	// github.com/elastic/elasticsearch-serverless-go
-	search_application_put "github.com/elastic/elasticsearch-serverless-go/typedapi/searchapplication/put"
-	// github.com/elastic/elasticsearch-serverless-go
-	search_application_put_behavioral_analytics "github.com/elastic/elasticsearch-serverless-go/typedapi/searchapplication/putbehavioralanalytics"
-	// github.com/elastic/elasticsearch-serverless-go
-	search_application_search "github.com/elastic/elasticsearch-serverless-go/typedapi/searchapplication/search"
-	// github.com/elastic/elasticsearch-serverless-go
-	security_authenticate "github.com/elastic/elasticsearch-serverless-go/typedapi/security/authenticate"
-	// github.com/elastic/elasticsearch-serverless-go
-	security_clear_api_key_cache "github.com/elastic/elasticsearch-serverless-go/typedapi/security/clearapikeycache"
-	// github.com/elastic/elasticsearch-serverless-go
-	security_create_api_key "github.com/elastic/elasticsearch-serverless-go/typedapi/security/createapikey"
-	// github.com/elastic/elasticsearch-serverless-go
-	security_get_api_key "github.com/elastic/elasticsearch-serverless-go/typedapi/security/getapikey"
-	// github.com/elastic/elasticsearch-serverless-go
-	security_invalidate_api_key "github.com/elastic/elasticsearch-serverless-go/typedapi/security/invalidateapikey"
-	// github.com/elastic/elasticsearch-serverless-go
-	security_query_api_keys "github.com/elastic/elasticsearch-serverless-go/typedapi/security/queryapikeys"
-	// github.com/elastic/elasticsearch-serverless-go
-	security_update_api_key "github.com/elastic/elasticsearch-serverless-go/typedapi/security/updateapikey"
-	// github.com/elastic/elasticsearch-serverless-go
-	synonyms_delete_synonym "github.com/elastic/elasticsearch-serverless-go/typedapi/synonyms/deletesynonym"
-	// github.com/elastic/elasticsearch-serverless-go
-	synonyms_delete_synonym_rule "github.com/elastic/elasticsearch-serverless-go/typedapi/synonyms/deletesynonymrule"
-	// github.com/elastic/elasticsearch-serverless-go
-	synonyms_get_synonym "github.com/elastic/elasticsearch-serverless-go/typedapi/synonyms/getsynonym"
-	// github.com/elastic/elasticsearch-serverless-go
-	synonyms_get_synonym_rule "github.com/elastic/elasticsearch-serverless-go/typedapi/synonyms/getsynonymrule"
-	// github.com/elastic/elasticsearch-serverless-go
-	synonyms_get_synonyms_sets "github.com/elastic/elasticsearch-serverless-go/typedapi/synonyms/getsynonymssets"
-	// github.com/elastic/elasticsearch-serverless-go
-	synonyms_put_synonym "github.com/elastic/elasticsearch-serverless-go/typedapi/synonyms/putsynonym"
-	// github.com/elastic/elasticsearch-serverless-go
-	synonyms_put_synonym_rule "github.com/elastic/elasticsearch-serverless-go/typedapi/synonyms/putsynonymrule"
-	// github.com/elastic/elasticsearch-serverless-go
-	transform_delete_transform "github.com/elastic/elasticsearch-serverless-go/typedapi/transform/deletetransform"
-	// github.com/elastic/elasticsearch-serverless-go
-	transform_get_transform "github.com/elastic/elasticsearch-serverless-go/typedapi/transform/gettransform"
-	// github.com/elastic/elasticsearch-serverless-go
-	transform_get_transform_stats "github.com/elastic/elasticsearch-serverless-go/typedapi/transform/gettransformstats"
-	// github.com/elastic/elasticsearch-serverless-go
-	transform_preview_transform "github.com/elastic/elasticsearch-serverless-go/typedapi/transform/previewtransform"
-	// github.com/elastic/elasticsearch-serverless-go
-	transform_put_transform "github.com/elastic/elasticsearch-serverless-go/typedapi/transform/puttransform"
-	// github.com/elastic/elasticsearch-serverless-go
-	transform_reset_transform "github.com/elastic/elasticsearch-serverless-go/typedapi/transform/resettransform"
-	// github.com/elastic/elasticsearch-serverless-go
-	transform_schedule_now_transform "github.com/elastic/elasticsearch-serverless-go/typedapi/transform/schedulenowtransform"
-	// github.com/elastic/elasticsearch-serverless-go
-	transform_start_transform "github.com/elastic/elasticsearch-serverless-go/typedapi/transform/starttransform"
-	// github.com/elastic/elasticsearch-serverless-go
-	transform_stop_transform "github.com/elastic/elasticsearch-serverless-go/typedapi/transform/stoptransform"
-	// github.com/elastic/elasticsearch-serverless-go
 	"github.com/elastic/elastic-transport-go/v8/elastictransport"
+	async_search_delete "github.com/elastic/elasticsearch-serverless-go/typedapi/asyncsearch/delete"
+	async_search_get "github.com/elastic/elasticsearch-serverless-go/typedapi/asyncsearch/get"
+	async_search_status "github.com/elastic/elasticsearch-serverless-go/typedapi/asyncsearch/status"
+	async_search_submit "github.com/elastic/elasticsearch-serverless-go/typedapi/asyncsearch/submit"
+	cat_aliases "github.com/elastic/elasticsearch-serverless-go/typedapi/cat/aliases"
+	cat_component_templates "github.com/elastic/elasticsearch-serverless-go/typedapi/cat/componenttemplates"
+	cat_count "github.com/elastic/elasticsearch-serverless-go/typedapi/cat/count"
+	cat_help "github.com/elastic/elasticsearch-serverless-go/typedapi/cat/help"
+	cat_indices "github.com/elastic/elasticsearch-serverless-go/typedapi/cat/indices"
+	cat_ml_datafeeds "github.com/elastic/elasticsearch-serverless-go/typedapi/cat/mldatafeeds"
+	cat_ml_data_frame_analytics "github.com/elastic/elasticsearch-serverless-go/typedapi/cat/mldataframeanalytics"
+	cat_ml_jobs "github.com/elastic/elasticsearch-serverless-go/typedapi/cat/mljobs"
+	cat_ml_trained_models "github.com/elastic/elasticsearch-serverless-go/typedapi/cat/mltrainedmodels"
+	cat_transforms "github.com/elastic/elasticsearch-serverless-go/typedapi/cat/transforms"
+	cluster_delete_component_template "github.com/elastic/elasticsearch-serverless-go/typedapi/cluster/deletecomponenttemplate"
+	cluster_exists_component_template "github.com/elastic/elasticsearch-serverless-go/typedapi/cluster/existscomponenttemplate"
+	cluster_get_component_template "github.com/elastic/elasticsearch-serverless-go/typedapi/cluster/getcomponenttemplate"
+	cluster_info "github.com/elastic/elasticsearch-serverless-go/typedapi/cluster/info"
+	cluster_put_component_template "github.com/elastic/elasticsearch-serverless-go/typedapi/cluster/putcomponenttemplate"
+	core_bulk "github.com/elastic/elasticsearch-serverless-go/typedapi/core/bulk"
+	core_clear_scroll "github.com/elastic/elasticsearch-serverless-go/typedapi/core/clearscroll"
+	core_close_point_in_time "github.com/elastic/elasticsearch-serverless-go/typedapi/core/closepointintime"
+	core_count "github.com/elastic/elasticsearch-serverless-go/typedapi/core/count"
+	core_create "github.com/elastic/elasticsearch-serverless-go/typedapi/core/create"
+	core_delete "github.com/elastic/elasticsearch-serverless-go/typedapi/core/delete"
+	core_delete_by_query "github.com/elastic/elasticsearch-serverless-go/typedapi/core/deletebyquery"
+	core_delete_script "github.com/elastic/elasticsearch-serverless-go/typedapi/core/deletescript"
+	core_exists "github.com/elastic/elasticsearch-serverless-go/typedapi/core/exists"
+	core_exists_source "github.com/elastic/elasticsearch-serverless-go/typedapi/core/existssource"
+	core_explain "github.com/elastic/elasticsearch-serverless-go/typedapi/core/explain"
+	core_field_caps "github.com/elastic/elasticsearch-serverless-go/typedapi/core/fieldcaps"
+	core_get "github.com/elastic/elasticsearch-serverless-go/typedapi/core/get"
+	core_get_script "github.com/elastic/elasticsearch-serverless-go/typedapi/core/getscript"
+	core_get_source "github.com/elastic/elasticsearch-serverless-go/typedapi/core/getsource"
+	core_index "github.com/elastic/elasticsearch-serverless-go/typedapi/core/index"
+	core_info "github.com/elastic/elasticsearch-serverless-go/typedapi/core/info"
+	core_mget "github.com/elastic/elasticsearch-serverless-go/typedapi/core/mget"
+	core_msearch "github.com/elastic/elasticsearch-serverless-go/typedapi/core/msearch"
+	core_msearch_template "github.com/elastic/elasticsearch-serverless-go/typedapi/core/msearchtemplate"
+	core_mtermvectors "github.com/elastic/elasticsearch-serverless-go/typedapi/core/mtermvectors"
+	core_open_point_in_time "github.com/elastic/elasticsearch-serverless-go/typedapi/core/openpointintime"
+	core_ping "github.com/elastic/elasticsearch-serverless-go/typedapi/core/ping"
+	core_put_script "github.com/elastic/elasticsearch-serverless-go/typedapi/core/putscript"
+	core_rank_eval "github.com/elastic/elasticsearch-serverless-go/typedapi/core/rankeval"
+	core_reindex "github.com/elastic/elasticsearch-serverless-go/typedapi/core/reindex"
+	core_render_search_template "github.com/elastic/elasticsearch-serverless-go/typedapi/core/rendersearchtemplate"
+	core_scripts_painless_execute "github.com/elastic/elasticsearch-serverless-go/typedapi/core/scriptspainlessexecute"
+	core_scroll "github.com/elastic/elasticsearch-serverless-go/typedapi/core/scroll"
+	core_search "github.com/elastic/elasticsearch-serverless-go/typedapi/core/search"
+	core_search_mvt "github.com/elastic/elasticsearch-serverless-go/typedapi/core/searchmvt"
+	core_search_template "github.com/elastic/elasticsearch-serverless-go/typedapi/core/searchtemplate"
+	core_terms_enum "github.com/elastic/elasticsearch-serverless-go/typedapi/core/termsenum"
+	core_termvectors "github.com/elastic/elasticsearch-serverless-go/typedapi/core/termvectors"
+	core_update "github.com/elastic/elasticsearch-serverless-go/typedapi/core/update"
+	core_update_by_query "github.com/elastic/elasticsearch-serverless-go/typedapi/core/updatebyquery"
+	enrich_delete_policy "github.com/elastic/elasticsearch-serverless-go/typedapi/enrich/deletepolicy"
+	enrich_execute_policy "github.com/elastic/elasticsearch-serverless-go/typedapi/enrich/executepolicy"
+	enrich_get_policy "github.com/elastic/elasticsearch-serverless-go/typedapi/enrich/getpolicy"
+	enrich_put_policy "github.com/elastic/elasticsearch-serverless-go/typedapi/enrich/putpolicy"
+	enrich_stats "github.com/elastic/elasticsearch-serverless-go/typedapi/enrich/stats"
+	eql_delete "github.com/elastic/elasticsearch-serverless-go/typedapi/eql/delete"
+	eql_get "github.com/elastic/elasticsearch-serverless-go/typedapi/eql/get"
+	eql_get_status "github.com/elastic/elasticsearch-serverless-go/typedapi/eql/getstatus"
+	eql_search "github.com/elastic/elasticsearch-serverless-go/typedapi/eql/search"
+	graph_explore "github.com/elastic/elasticsearch-serverless-go/typedapi/graph/explore"
+	indices_add_block "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/addblock"
+	indices_analyze "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/analyze"
+	indices_create "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/create"
+	indices_create_data_stream "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/createdatastream"
+	indices_data_streams_stats "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/datastreamsstats"
+	indices_delete "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/delete"
+	indices_delete_alias "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/deletealias"
+	indices_delete_data_lifecycle "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/deletedatalifecycle"
+	indices_delete_data_stream "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/deletedatastream"
+	indices_delete_index_template "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/deleteindextemplate"
+	indices_exists "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/exists"
+	indices_exists_alias "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/existsalias"
+	indices_exists_index_template "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/existsindextemplate"
+	indices_explain_data_lifecycle "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/explaindatalifecycle"
+	indices_get "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/get"
+	indices_get_alias "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/getalias"
+	indices_get_data_lifecycle "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/getdatalifecycle"
+	indices_get_data_stream "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/getdatastream"
+	indices_get_index_template "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/getindextemplate"
+	indices_get_mapping "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/getmapping"
+	indices_get_settings "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/getsettings"
+	indices_migrate_to_data_stream "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/migratetodatastream"
+	indices_modify_data_stream "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/modifydatastream"
+	indices_put_alias "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/putalias"
+	indices_put_data_lifecycle "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/putdatalifecycle"
+	indices_put_index_template "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/putindextemplate"
+	indices_put_mapping "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/putmapping"
+	indices_put_settings "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/putsettings"
+	indices_put_template "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/puttemplate"
+	indices_refresh "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/refresh"
+	indices_resolve_index "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/resolveindex"
+	indices_rollover "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/rollover"
+	indices_simulate_index_template "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/simulateindextemplate"
+	indices_simulate_template "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/simulatetemplate"
+	indices_update_aliases "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/updatealiases"
+	indices_validate_query "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/validatequery"
+	ingest_delete_pipeline "github.com/elastic/elasticsearch-serverless-go/typedapi/ingest/deletepipeline"
+	ingest_get_pipeline "github.com/elastic/elasticsearch-serverless-go/typedapi/ingest/getpipeline"
+	ingest_processor_grok "github.com/elastic/elasticsearch-serverless-go/typedapi/ingest/processorgrok"
+	ingest_put_pipeline "github.com/elastic/elasticsearch-serverless-go/typedapi/ingest/putpipeline"
+	ingest_simulate "github.com/elastic/elasticsearch-serverless-go/typedapi/ingest/simulate"
+	license_get "github.com/elastic/elasticsearch-serverless-go/typedapi/license/get"
+	logstash_delete_pipeline "github.com/elastic/elasticsearch-serverless-go/typedapi/logstash/deletepipeline"
+	logstash_get_pipeline "github.com/elastic/elasticsearch-serverless-go/typedapi/logstash/getpipeline"
+	logstash_put_pipeline "github.com/elastic/elasticsearch-serverless-go/typedapi/logstash/putpipeline"
+	ml_close_job "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/closejob"
+	ml_delete_calendar "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/deletecalendar"
+	ml_delete_calendar_event "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/deletecalendarevent"
+	ml_delete_calendar_job "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/deletecalendarjob"
+	ml_delete_datafeed "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/deletedatafeed"
+	ml_delete_data_frame_analytics "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/deletedataframeanalytics"
+	ml_delete_filter "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/deletefilter"
+	ml_delete_job "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/deletejob"
+	ml_delete_trained_model "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/deletetrainedmodel"
+	ml_delete_trained_model_alias "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/deletetrainedmodelalias"
+	ml_estimate_model_memory "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/estimatemodelmemory"
+	ml_evaluate_data_frame "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/evaluatedataframe"
+	ml_flush_job "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/flushjob"
+	ml_get_calendar_events "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/getcalendarevents"
+	ml_get_calendars "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/getcalendars"
+	ml_get_datafeeds "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/getdatafeeds"
+	ml_get_datafeed_stats "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/getdatafeedstats"
+	ml_get_data_frame_analytics "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/getdataframeanalytics"
+	ml_get_data_frame_analytics_stats "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/getdataframeanalyticsstats"
+	ml_get_filters "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/getfilters"
+	ml_get_jobs "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/getjobs"
+	ml_get_job_stats "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/getjobstats"
+	ml_get_overall_buckets "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/getoverallbuckets"
+	ml_get_trained_models "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/gettrainedmodels"
+	ml_get_trained_models_stats "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/gettrainedmodelsstats"
+	ml_infer_trained_model "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/infertrainedmodel"
+	ml_open_job "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/openjob"
+	ml_post_calendar_events "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/postcalendarevents"
+	ml_preview_datafeed "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/previewdatafeed"
+	ml_preview_data_frame_analytics "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/previewdataframeanalytics"
+	ml_put_calendar "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/putcalendar"
+	ml_put_calendar_job "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/putcalendarjob"
+	ml_put_datafeed "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/putdatafeed"
+	ml_put_data_frame_analytics "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/putdataframeanalytics"
+	ml_put_filter "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/putfilter"
+	ml_put_job "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/putjob"
+	ml_put_trained_model "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/puttrainedmodel"
+	ml_put_trained_model_alias "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/puttrainedmodelalias"
+	ml_put_trained_model_definition_part "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/puttrainedmodeldefinitionpart"
+	ml_put_trained_model_vocabulary "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/puttrainedmodelvocabulary"
+	ml_reset_job "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/resetjob"
+	ml_start_datafeed "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/startdatafeed"
+	ml_start_data_frame_analytics "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/startdataframeanalytics"
+	ml_start_trained_model_deployment "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/starttrainedmodeldeployment"
+	ml_stop_datafeed "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/stopdatafeed"
+	ml_stop_data_frame_analytics "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/stopdataframeanalytics"
+	ml_stop_trained_model_deployment "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/stoptrainedmodeldeployment"
+	ml_update_datafeed "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/updatedatafeed"
+	ml_update_data_frame_analytics "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/updatedataframeanalytics"
+	ml_update_filter "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/updatefilter"
+	ml_update_job "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/updatejob"
+	query_ruleset_delete "github.com/elastic/elasticsearch-serverless-go/typedapi/queryruleset/delete"
+	query_ruleset_get "github.com/elastic/elasticsearch-serverless-go/typedapi/queryruleset/get"
+	query_ruleset_list "github.com/elastic/elasticsearch-serverless-go/typedapi/queryruleset/list"
+	query_ruleset_put "github.com/elastic/elasticsearch-serverless-go/typedapi/queryruleset/put"
+	search_application_delete "github.com/elastic/elasticsearch-serverless-go/typedapi/searchapplication/delete"
+	search_application_delete_behavioral_analytics "github.com/elastic/elasticsearch-serverless-go/typedapi/searchapplication/deletebehavioralanalytics"
+	search_application_get "github.com/elastic/elasticsearch-serverless-go/typedapi/searchapplication/get"
+	search_application_get_behavioral_analytics "github.com/elastic/elasticsearch-serverless-go/typedapi/searchapplication/getbehavioralanalytics"
+	search_application_list "github.com/elastic/elasticsearch-serverless-go/typedapi/searchapplication/list"
+	search_application_put "github.com/elastic/elasticsearch-serverless-go/typedapi/searchapplication/put"
+	search_application_put_behavioral_analytics "github.com/elastic/elasticsearch-serverless-go/typedapi/searchapplication/putbehavioralanalytics"
+	search_application_search "github.com/elastic/elasticsearch-serverless-go/typedapi/searchapplication/search"
+	security_authenticate "github.com/elastic/elasticsearch-serverless-go/typedapi/security/authenticate"
+	security_create_api_key "github.com/elastic/elasticsearch-serverless-go/typedapi/security/createapikey"
+	security_get_api_key "github.com/elastic/elasticsearch-serverless-go/typedapi/security/getapikey"
+	security_has_privileges "github.com/elastic/elasticsearch-serverless-go/typedapi/security/hasprivileges"
+	security_invalidate_api_key "github.com/elastic/elasticsearch-serverless-go/typedapi/security/invalidateapikey"
+	security_query_api_keys "github.com/elastic/elasticsearch-serverless-go/typedapi/security/queryapikeys"
+	security_update_api_key "github.com/elastic/elasticsearch-serverless-go/typedapi/security/updateapikey"
+	sql_clear_cursor "github.com/elastic/elasticsearch-serverless-go/typedapi/sql/clearcursor"
+	sql_delete_async "github.com/elastic/elasticsearch-serverless-go/typedapi/sql/deleteasync"
+	sql_get_async "github.com/elastic/elasticsearch-serverless-go/typedapi/sql/getasync"
+	sql_get_async_status "github.com/elastic/elasticsearch-serverless-go/typedapi/sql/getasyncstatus"
+	sql_query "github.com/elastic/elasticsearch-serverless-go/typedapi/sql/query"
+	sql_translate "github.com/elastic/elasticsearch-serverless-go/typedapi/sql/translate"
+	synonyms_delete_synonym "github.com/elastic/elasticsearch-serverless-go/typedapi/synonyms/deletesynonym"
+	synonyms_delete_synonym_rule "github.com/elastic/elasticsearch-serverless-go/typedapi/synonyms/deletesynonymrule"
+	synonyms_get_synonym "github.com/elastic/elasticsearch-serverless-go/typedapi/synonyms/getsynonym"
+	synonyms_get_synonym_rule "github.com/elastic/elasticsearch-serverless-go/typedapi/synonyms/getsynonymrule"
+	synonyms_get_synonyms_sets "github.com/elastic/elasticsearch-serverless-go/typedapi/synonyms/getsynonymssets"
+	synonyms_put_synonym "github.com/elastic/elasticsearch-serverless-go/typedapi/synonyms/putsynonym"
+	synonyms_put_synonym_rule "github.com/elastic/elasticsearch-serverless-go/typedapi/synonyms/putsynonymrule"
+	tasks_get "github.com/elastic/elasticsearch-serverless-go/typedapi/tasks/get"
+	transform_delete_transform "github.com/elastic/elasticsearch-serverless-go/typedapi/transform/deletetransform"
+	transform_get_transform "github.com/elastic/elasticsearch-serverless-go/typedapi/transform/gettransform"
+	transform_get_transform_stats "github.com/elastic/elasticsearch-serverless-go/typedapi/transform/gettransformstats"
+	transform_preview_transform "github.com/elastic/elasticsearch-serverless-go/typedapi/transform/previewtransform"
+	transform_put_transform "github.com/elastic/elasticsearch-serverless-go/typedapi/transform/puttransform"
+	transform_reset_transform "github.com/elastic/elasticsearch-serverless-go/typedapi/transform/resettransform"
+	transform_schedule_now_transform "github.com/elastic/elasticsearch-serverless-go/typedapi/transform/schedulenowtransform"
+	transform_start_transform "github.com/elastic/elasticsearch-serverless-go/typedapi/transform/starttransform"
+	transform_stop_transform "github.com/elastic/elasticsearch-serverless-go/typedapi/transform/stoptransform"
 	transform_update_transform "github.com/elastic/elasticsearch-serverless-go/typedapi/transform/updatetransform"
 )
 
@@ -480,26 +292,12 @@ type Cluster struct {
 	// Returns one or more component templates
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-component-template.html
 	GetComponentTemplate cluster_get_component_template.NewGetComponentTemplate
-	// Returns cluster settings.
-	// https://www.elastic.co/guide/en/elasticsearch/reference/current/cluster-get-settings.html
-	GetSettings cluster_get_settings.NewGetSettings
 	// Returns different information about the cluster.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/cluster-info.html
 	Info cluster_info.NewInfo
-	// Returns a list of any cluster-level changes (e.g. create index, update
-	// mapping,
-	// allocate or fail shard) which have not yet been executed.
-	// https://www.elastic.co/guide/en/elasticsearch/reference/current/cluster-pending.html
-	PendingTasks cluster_pending_tasks.NewPendingTasks
 	// Creates or updates a component template
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-component-template.html
 	PutComponentTemplate cluster_put_component_template.NewPutComponentTemplate
-	// Updates the cluster settings.
-	// https://www.elastic.co/guide/en/elasticsearch/reference/current/cluster-update-settings.html
-	PutSettings cluster_put_settings.NewPutSettings
-	// Returns high-level overview of cluster statistics.
-	// https://www.elastic.co/guide/en/elasticsearch/reference/current/cluster-stats.html
-	Stats cluster_stats.NewStats
 }
 
 type Core struct {
@@ -537,6 +335,9 @@ type Core struct {
 	// Returns information about whether a document source exists in an index.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-get.html
 	ExistsSource core_exists_source.NewExistsSource
+	// Returns information about why a specific matches (or doesn't match) a query.
+	// https://www.elastic.co/guide/en/elasticsearch/reference/current/search-explain.html
+	Explain core_explain.NewExplain
 	// Returns the information about the capabilities of fields among multiple
 	// indices.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/search-field-caps.html
@@ -581,6 +382,13 @@ type Core struct {
 	// search queries
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/search-rank-eval.html
 	RankEval core_rank_eval.NewRankEval
+	// Allows to copy documents from one index to another, optionally filtering the
+	// source
+	// documents by a query, changing the destination index settings, or fetching
+	// the
+	// documents from a remote cluster.
+	// https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-reindex.html
+	Reindex core_reindex.NewReindex
 	// Allows to use the Mustache language to pre-render a search definition.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/render-search-template-api.html
 	RenderSearchTemplate core_render_search_template.NewRenderSearchTemplate
@@ -638,6 +446,24 @@ type Enrich struct {
 	Stats enrich_stats.NewStats
 }
 
+type Eql struct {
+	// Deletes an async EQL search by ID. If the search is still running, the search
+	// request will be cancelled. Otherwise, the saved search results are deleted.
+	// https://www.elastic.co/guide/en/elasticsearch/reference/current/eql-search-api.html
+	Delete eql_delete.NewDelete
+	// Returns async results from previously executed Event Query Language (EQL)
+	// search
+	//  https://www.elastic.co/guide/en/elasticsearch/reference/current/get-async-eql-search-api.html
+	Get eql_get.NewGet
+	// Returns the status of a previously submitted async or stored Event Query
+	// Language (EQL) search
+	//  https://www.elastic.co/guide/en/elasticsearch/reference/current/get-async-eql-status-api.html
+	GetStatus eql_get_status.NewGetStatus
+	// Returns results matching a query expressed in Event Query Language (EQL)
+	// https://www.elastic.co/guide/en/elasticsearch/reference/current/eql-search-api.html
+	Search eql_search.NewSearch
+}
+
 type Graph struct {
 	// Explore extracted and summarized information about the documents and terms in
 	// an index.
@@ -646,6 +472,9 @@ type Graph struct {
 }
 
 type Indices struct {
+	// Adds a block to an index.
+	// https://www.elastic.co/guide/en/elasticsearch/reference/current/index-modules-blocks.html
+	AddBlock indices_add_block.NewAddBlock
 	// Performs the analysis process on a text and return the tokens breakdown of
 	// the text.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-analyze.html
@@ -674,12 +503,6 @@ type Indices struct {
 	// Deletes an index template.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-templates.html
 	DeleteIndexTemplate indices_delete_index_template.NewDeleteIndexTemplate
-	// Deletes an index template.
-	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-templates.html
-	DeleteTemplate indices_delete_template.NewDeleteTemplate
-	// Analyzes the disk usage of each field of an index or data stream
-	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-disk-usage.html
-	DiskUsage indices_disk_usage.NewDiskUsage
 	// Returns information about whether a particular index exists.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-exists.html
 	Exists indices_exists.NewExists
@@ -689,9 +512,6 @@ type Indices struct {
 	// Returns information about whether a particular index template exists.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-templates.html
 	ExistsIndexTemplate indices_exists_index_template.NewExistsIndexTemplate
-	// Returns information about whether a particular index template exists.
-	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-templates.html
-	ExistsTemplate indices_exists_template.NewExistsTemplate
 	// Retrieves information about the index's current data stream lifecycle, such
 	// as any potential encountered error, time since creation etc.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/data-streams-explain-lifecycle.html
@@ -717,9 +537,6 @@ type Indices struct {
 	// Returns settings for one or more indices.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-get-settings.html
 	GetSettings indices_get_settings.NewGetSettings
-	// Returns an index template.
-	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-templates.html
-	GetTemplate indices_get_template.NewGetTemplate
 	// Migrates an alias to a data stream
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/data-streams.html
 	MigrateToDataStream indices_migrate_to_data_stream.NewMigrateToDataStream
@@ -744,6 +561,9 @@ type Indices struct {
 	// Creates or updates an index template.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-templates.html
 	PutTemplate indices_put_template.NewPutTemplate
+	// Performs the refresh operation in one or more indices.
+	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-refresh.html
+	Refresh indices_refresh.NewRefresh
 	// Returns information about any matching indices, aliases, and data streams
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-resolve-index-api.html
 	ResolveIndex indices_resolve_index.NewResolveIndex
@@ -782,6 +602,12 @@ type Ingest struct {
 	// Allows to simulate a pipeline with example documents.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/simulate-pipeline-api.html
 	Simulate ingest_simulate.NewSimulate
+}
+
+type License struct {
+	// Retrieves licensing information for the cluster
+	// https://www.elastic.co/guide/en/elasticsearch/reference/current/get-license.html
+	Get license_get.NewGet
 }
 
 type Logstash struct {
@@ -1003,15 +829,15 @@ type Security struct {
 	// authenticated user.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/security-api-authenticate.html
 	Authenticate security_authenticate.NewAuthenticate
-	// Clear a subset or all entries from the API key cache.
-	// https://www.elastic.co/guide/en/elasticsearch/reference/current/security-api-clear-api-key-cache.html
-	ClearApiKeyCache security_clear_api_key_cache.NewClearApiKeyCache
 	// Creates an API key for access without requiring basic authentication.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/security-api-create-api-key.html
 	CreateApiKey security_create_api_key.NewCreateApiKey
 	// Retrieves information for one or more API keys.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/security-api-get-api-key.html
 	GetApiKey security_get_api_key.NewGetApiKey
+	// Determines whether the specified user has a specified list of privileges.
+	// https://www.elastic.co/guide/en/elasticsearch/reference/current/security-api-has-privileges.html
+	HasPrivileges security_has_privileges.NewHasPrivileges
 	// Invalidates one or more API keys.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/security-api-invalidate-api-key.html
 	InvalidateApiKey security_invalidate_api_key.NewInvalidateApiKey
@@ -1021,6 +847,30 @@ type Security struct {
 	// Updates attributes of an existing API key.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/security-api-update-api-key.html
 	UpdateApiKey security_update_api_key.NewUpdateApiKey
+}
+
+type Sql struct {
+	// Clears the SQL cursor
+	// https://www.elastic.co/guide/en/elasticsearch/reference/current/clear-sql-cursor-api.html
+	ClearCursor sql_clear_cursor.NewClearCursor
+	// Deletes an async SQL search or a stored synchronous SQL search. If the search
+	// is still running, the API cancels it.
+	// https://www.elastic.co/guide/en/elasticsearch/reference/current/delete-async-sql-search-api.html
+	DeleteAsync sql_delete_async.NewDeleteAsync
+	// Returns the current status and available results for an async SQL search or
+	// stored synchronous SQL search
+	// https://www.elastic.co/guide/en/elasticsearch/reference/current/get-async-sql-search-api.html
+	GetAsync sql_get_async.NewGetAsync
+	// Returns the current status of an async SQL search or a stored synchronous SQL
+	// search
+	// https://www.elastic.co/guide/en/elasticsearch/reference/current/get-async-sql-search-status-api.html
+	GetAsyncStatus sql_get_async_status.NewGetAsyncStatus
+	// Executes a SQL request
+	// https://www.elastic.co/guide/en/elasticsearch/reference/current/sql-search-api.html
+	Query sql_query.NewQuery
+	// Translates SQL into Elasticsearch queries
+	// https://www.elastic.co/guide/en/elasticsearch/reference/current/sql-translate-api.html
+	Translate sql_translate.NewTranslate
 }
 
 type Synonyms struct {
@@ -1045,6 +895,12 @@ type Synonyms struct {
 	// Creates or updates a synonym rule in a synonym set
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/put-synonym-rule.html
 	PutSynonymRule synonyms_put_synonym_rule.NewPutSynonymRule
+}
+
+type Tasks struct {
+	// Returns information about a task.
+	// https://www.elastic.co/guide/en/elasticsearch/reference/current/tasks.html
+	Get tasks_get.NewGet
 }
 
 type Transform struct {
@@ -1086,15 +942,19 @@ type API struct {
 	Cluster           Cluster
 	Core              Core
 	Enrich            Enrich
+	Eql               Eql
 	Graph             Graph
 	Indices           Indices
 	Ingest            Ingest
+	License           License
 	Logstash          Logstash
 	Ml                Ml
 	QueryRuleset      QueryRuleset
 	SearchApplication SearchApplication
 	Security          Security
+	Sql               Sql
 	Synonyms          Synonyms
+	Tasks             Tasks
 	Transform         Transform
 
 	// Allows to perform multiple index/update/delete operations in a single
@@ -1131,6 +991,9 @@ type API struct {
 	// Returns information about whether a document source exists in an index.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-get.html
 	ExistsSource core_exists_source.NewExistsSource
+	// Returns information about why a specific matches (or doesn't match) a query.
+	// https://www.elastic.co/guide/en/elasticsearch/reference/current/search-explain.html
+	Explain core_explain.NewExplain
 	// Returns the information about the capabilities of fields among multiple
 	// indices.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/search-field-caps.html
@@ -1175,6 +1038,13 @@ type API struct {
 	// search queries
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/search-rank-eval.html
 	RankEval core_rank_eval.NewRankEval
+	// Allows to copy documents from one index to another, optionally filtering the
+	// source
+	// documents by a query, changing the destination index settings, or fetching
+	// the
+	// documents from a remote cluster.
+	// https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-reindex.html
+	Reindex core_reindex.NewReindex
 	// Allows to use the Mustache language to pre-render a search definition.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/render-search-template-api.html
 	RenderSearchTemplate core_render_search_template.NewRenderSearchTemplate
@@ -1242,12 +1112,8 @@ func New(tp elastictransport.Interface) *API {
 			DeleteComponentTemplate: cluster_delete_component_template.NewDeleteComponentTemplateFunc(tp),
 			ExistsComponentTemplate: cluster_exists_component_template.NewExistsComponentTemplateFunc(tp),
 			GetComponentTemplate:    cluster_get_component_template.NewGetComponentTemplateFunc(tp),
-			GetSettings:             cluster_get_settings.NewGetSettingsFunc(tp),
 			Info:                    cluster_info.NewInfoFunc(tp),
-			PendingTasks:            cluster_pending_tasks.NewPendingTasksFunc(tp),
 			PutComponentTemplate:    cluster_put_component_template.NewPutComponentTemplateFunc(tp),
-			PutSettings:             cluster_put_settings.NewPutSettingsFunc(tp),
-			Stats:                   cluster_stats.NewStatsFunc(tp),
 		},
 
 		// Core
@@ -1262,6 +1128,7 @@ func New(tp elastictransport.Interface) *API {
 			DeleteScript:           core_delete_script.NewDeleteScriptFunc(tp),
 			Exists:                 core_exists.NewExistsFunc(tp),
 			ExistsSource:           core_exists_source.NewExistsSourceFunc(tp),
+			Explain:                core_explain.NewExplainFunc(tp),
 			FieldCaps:              core_field_caps.NewFieldCapsFunc(tp),
 			Get:                    core_get.NewGetFunc(tp),
 			GetScript:              core_get_script.NewGetScriptFunc(tp),
@@ -1276,6 +1143,7 @@ func New(tp elastictransport.Interface) *API {
 			Ping:                   core_ping.NewPingFunc(tp),
 			PutScript:              core_put_script.NewPutScriptFunc(tp),
 			RankEval:               core_rank_eval.NewRankEvalFunc(tp),
+			Reindex:                core_reindex.NewReindexFunc(tp),
 			RenderSearchTemplate:   core_render_search_template.NewRenderSearchTemplateFunc(tp),
 			ScriptsPainlessExecute: core_scripts_painless_execute.NewScriptsPainlessExecuteFunc(tp),
 			Scroll:                 core_scroll.NewScrollFunc(tp),
@@ -1297,6 +1165,14 @@ func New(tp elastictransport.Interface) *API {
 			Stats:         enrich_stats.NewStatsFunc(tp),
 		},
 
+		// Eql
+		Eql: Eql{
+			Delete:    eql_delete.NewDeleteFunc(tp),
+			Get:       eql_get.NewGetFunc(tp),
+			GetStatus: eql_get_status.NewGetStatusFunc(tp),
+			Search:    eql_search.NewSearchFunc(tp),
+		},
+
 		// Graph
 		Graph: Graph{
 			Explore: graph_explore.NewExploreFunc(tp),
@@ -1304,6 +1180,7 @@ func New(tp elastictransport.Interface) *API {
 
 		// Indices
 		Indices: Indices{
+			AddBlock:              indices_add_block.NewAddBlockFunc(tp),
 			Analyze:               indices_analyze.NewAnalyzeFunc(tp),
 			Create:                indices_create.NewCreateFunc(tp),
 			CreateDataStream:      indices_create_data_stream.NewCreateDataStreamFunc(tp),
@@ -1313,12 +1190,9 @@ func New(tp elastictransport.Interface) *API {
 			DeleteDataLifecycle:   indices_delete_data_lifecycle.NewDeleteDataLifecycleFunc(tp),
 			DeleteDataStream:      indices_delete_data_stream.NewDeleteDataStreamFunc(tp),
 			DeleteIndexTemplate:   indices_delete_index_template.NewDeleteIndexTemplateFunc(tp),
-			DeleteTemplate:        indices_delete_template.NewDeleteTemplateFunc(tp),
-			DiskUsage:             indices_disk_usage.NewDiskUsageFunc(tp),
 			Exists:                indices_exists.NewExistsFunc(tp),
 			ExistsAlias:           indices_exists_alias.NewExistsAliasFunc(tp),
 			ExistsIndexTemplate:   indices_exists_index_template.NewExistsIndexTemplateFunc(tp),
-			ExistsTemplate:        indices_exists_template.NewExistsTemplateFunc(tp),
 			ExplainDataLifecycle:  indices_explain_data_lifecycle.NewExplainDataLifecycleFunc(tp),
 			Get:                   indices_get.NewGetFunc(tp),
 			GetAlias:              indices_get_alias.NewGetAliasFunc(tp),
@@ -1327,7 +1201,6 @@ func New(tp elastictransport.Interface) *API {
 			GetIndexTemplate:      indices_get_index_template.NewGetIndexTemplateFunc(tp),
 			GetMapping:            indices_get_mapping.NewGetMappingFunc(tp),
 			GetSettings:           indices_get_settings.NewGetSettingsFunc(tp),
-			GetTemplate:           indices_get_template.NewGetTemplateFunc(tp),
 			MigrateToDataStream:   indices_migrate_to_data_stream.NewMigrateToDataStreamFunc(tp),
 			ModifyDataStream:      indices_modify_data_stream.NewModifyDataStreamFunc(tp),
 			PutAlias:              indices_put_alias.NewPutAliasFunc(tp),
@@ -1336,6 +1209,7 @@ func New(tp elastictransport.Interface) *API {
 			PutMapping:            indices_put_mapping.NewPutMappingFunc(tp),
 			PutSettings:           indices_put_settings.NewPutSettingsFunc(tp),
 			PutTemplate:           indices_put_template.NewPutTemplateFunc(tp),
+			Refresh:               indices_refresh.NewRefreshFunc(tp),
 			ResolveIndex:          indices_resolve_index.NewResolveIndexFunc(tp),
 			Rollover:              indices_rollover.NewRolloverFunc(tp),
 			SimulateIndexTemplate: indices_simulate_index_template.NewSimulateIndexTemplateFunc(tp),
@@ -1351,6 +1225,11 @@ func New(tp elastictransport.Interface) *API {
 			ProcessorGrok:  ingest_processor_grok.NewProcessorGrokFunc(tp),
 			PutPipeline:    ingest_put_pipeline.NewPutPipelineFunc(tp),
 			Simulate:       ingest_simulate.NewSimulateFunc(tp),
+		},
+
+		// License
+		License: License{
+			Get: license_get.NewGetFunc(tp),
 		},
 
 		// Logstash
@@ -1438,12 +1317,22 @@ func New(tp elastictransport.Interface) *API {
 		// Security
 		Security: Security{
 			Authenticate:     security_authenticate.NewAuthenticateFunc(tp),
-			ClearApiKeyCache: security_clear_api_key_cache.NewClearApiKeyCacheFunc(tp),
 			CreateApiKey:     security_create_api_key.NewCreateApiKeyFunc(tp),
 			GetApiKey:        security_get_api_key.NewGetApiKeyFunc(tp),
+			HasPrivileges:    security_has_privileges.NewHasPrivilegesFunc(tp),
 			InvalidateApiKey: security_invalidate_api_key.NewInvalidateApiKeyFunc(tp),
 			QueryApiKeys:     security_query_api_keys.NewQueryApiKeysFunc(tp),
 			UpdateApiKey:     security_update_api_key.NewUpdateApiKeyFunc(tp),
+		},
+
+		// Sql
+		Sql: Sql{
+			ClearCursor:    sql_clear_cursor.NewClearCursorFunc(tp),
+			DeleteAsync:    sql_delete_async.NewDeleteAsyncFunc(tp),
+			GetAsync:       sql_get_async.NewGetAsyncFunc(tp),
+			GetAsyncStatus: sql_get_async_status.NewGetAsyncStatusFunc(tp),
+			Query:          sql_query.NewQueryFunc(tp),
+			Translate:      sql_translate.NewTranslateFunc(tp),
 		},
 
 		// Synonyms
@@ -1455,6 +1344,11 @@ func New(tp elastictransport.Interface) *API {
 			GetSynonymsSets:   synonyms_get_synonyms_sets.NewGetSynonymsSetsFunc(tp),
 			PutSynonym:        synonyms_put_synonym.NewPutSynonymFunc(tp),
 			PutSynonymRule:    synonyms_put_synonym_rule.NewPutSynonymRuleFunc(tp),
+		},
+
+		// Tasks
+		Tasks: Tasks{
+			Get: tasks_get.NewGetFunc(tp),
 		},
 
 		// Transform
@@ -1481,6 +1375,7 @@ func New(tp elastictransport.Interface) *API {
 		DeleteScript:           core_delete_script.NewDeleteScriptFunc(tp),
 		Exists:                 core_exists.NewExistsFunc(tp),
 		ExistsSource:           core_exists_source.NewExistsSourceFunc(tp),
+		Explain:                core_explain.NewExplainFunc(tp),
 		FieldCaps:              core_field_caps.NewFieldCapsFunc(tp),
 		Get:                    core_get.NewGetFunc(tp),
 		GetScript:              core_get_script.NewGetScriptFunc(tp),
@@ -1495,6 +1390,7 @@ func New(tp elastictransport.Interface) *API {
 		Ping:                   core_ping.NewPingFunc(tp),
 		PutScript:              core_put_script.NewPutScriptFunc(tp),
 		RankEval:               core_rank_eval.NewRankEvalFunc(tp),
+		Reindex:                core_reindex.NewReindexFunc(tp),
 		RenderSearchTemplate:   core_render_search_template.NewRenderSearchTemplateFunc(tp),
 		ScriptsPainlessExecute: core_scripts_painless_execute.NewScriptsPainlessExecuteFunc(tp),
 		Scroll:                 core_scroll.NewScrollFunc(tp),

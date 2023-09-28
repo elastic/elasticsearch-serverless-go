@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/f16d22a4e5e7786419e984239713298b06183ba9
+// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
 
 // Retrieves the status of a previously submitted async search request given its
 // ID.
@@ -68,7 +68,7 @@ func NewStatusFunc(tp elastictransport.Interface) NewStatus {
 	return func(id string) *Status {
 		n := New(tp)
 
-		n.Id(id)
+		n._id(id)
 
 		return n
 	}
@@ -217,7 +217,7 @@ func (r *Status) Header(key, value string) *Status {
 
 // Id A unique identifier for the async search.
 // API Name: id
-func (r *Status) Id(id string) *Status {
+func (r *Status) _id(id string) *Status {
 	r.paramSet |= idMask
 	r.id = id
 

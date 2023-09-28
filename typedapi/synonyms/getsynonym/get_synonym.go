@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/f16d22a4e5e7786419e984239713298b06183ba9
+// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
 
 // Retrieves a synonym set
 package getsynonym
@@ -68,7 +68,7 @@ func NewGetSynonymFunc(tp elastictransport.Interface) NewGetSynonym {
 	return func(id string) *GetSynonym {
 		n := New(tp)
 
-		n.Id(id)
+		n._id(id)
 
 		return n
 	}
@@ -214,7 +214,7 @@ func (r *GetSynonym) Header(key, value string) *GetSynonym {
 
 // Id "The id of the synonyms set to be retrieved
 // API Name: id
-func (r *GetSynonym) Id(id string) *GetSynonym {
+func (r *GetSynonym) _id(id string) *GetSynonym {
 	r.paramSet |= idMask
 	r.id = id
 

@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/f16d22a4e5e7786419e984239713298b06183ba9
+// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
 
 // Returns information about one or more indices.
 package get
@@ -70,7 +70,7 @@ func NewGetFunc(tp elastictransport.Interface) NewGet {
 	return func(index string) *Get {
 		n := New(tp)
 
-		n.Index(index)
+		n._index(index)
 
 		return n
 	}
@@ -216,7 +216,7 @@ func (r *Get) Header(key, value string) *Get {
 // limit the request.
 // Wildcard expressions (*) are supported.
 // API Name: index
-func (r *Get) Index(index string) *Get {
+func (r *Get) _index(index string) *Get {
 	r.paramSet |= indexMask
 	r.index = index
 

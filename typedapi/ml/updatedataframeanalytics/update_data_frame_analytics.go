@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/f16d22a4e5e7786419e984239713298b06183ba9
+// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
 
 // Updates certain properties of a data frame analytics job.
 package updatedataframeanalytics
@@ -70,7 +70,7 @@ func NewUpdateDataFrameAnalyticsFunc(tp elastictransport.Interface) NewUpdateDat
 	return func(id string) *UpdateDataFrameAnalytics {
 		n := New(tp)
 
-		n.Id(id)
+		n._id(id)
 
 		return n
 	}
@@ -254,7 +254,7 @@ func (r *UpdateDataFrameAnalytics) Header(key, value string) *UpdateDataFrameAna
 // lowercase alphanumeric characters (a-z and 0-9), hyphens, and
 // underscores. It must start and end with alphanumeric characters.
 // API Name: id
-func (r *UpdateDataFrameAnalytics) Id(id string) *UpdateDataFrameAnalytics {
+func (r *UpdateDataFrameAnalytics) _id(id string) *UpdateDataFrameAnalytics {
 	r.paramSet |= idMask
 	r.id = id
 

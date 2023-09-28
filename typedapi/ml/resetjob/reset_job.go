@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/f16d22a4e5e7786419e984239713298b06183ba9
+// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
 
 // Resets an existing anomaly detection job.
 package resetjob
@@ -68,7 +68,7 @@ func NewResetJobFunc(tp elastictransport.Interface) NewResetJob {
 	return func(jobid string) *ResetJob {
 		n := New(tp)
 
-		n.JobId(jobid)
+		n._jobid(jobid)
 
 		return n
 	}
@@ -218,7 +218,7 @@ func (r *ResetJob) Header(key, value string) *ResetJob {
 
 // JobId The ID of the job to reset.
 // API Name: jobid
-func (r *ResetJob) JobId(jobid string) *ResetJob {
+func (r *ResetJob) _jobid(jobid string) *ResetJob {
 	r.paramSet |= jobidMask
 	r.jobid = jobid
 

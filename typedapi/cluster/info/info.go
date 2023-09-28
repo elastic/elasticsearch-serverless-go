@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/f16d22a4e5e7786419e984239713298b06183ba9
+// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
 
 // Returns different information about the cluster.
 package info
@@ -67,7 +67,7 @@ func NewInfoFunc(tp elastictransport.Interface) NewInfo {
 	return func(target string) *Info {
 		n := New(tp)
 
-		n.Target(target)
+		n._target(target)
 
 		return n
 	}
@@ -214,7 +214,7 @@ func (r *Info) Header(key, value string) *Info {
 // Target Limits the information returned to the specific target. Supports a
 // comma-separated list, such as http,ingest.
 // API Name: target
-func (r *Info) Target(target string) *Info {
+func (r *Info) _target(target string) *Info {
 	r.paramSet |= targetMask
 	r.target = target
 

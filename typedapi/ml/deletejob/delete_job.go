@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/f16d22a4e5e7786419e984239713298b06183ba9
+// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
 
 // Deletes an existing anomaly detection job.
 package deletejob
@@ -68,7 +68,7 @@ func NewDeleteJobFunc(tp elastictransport.Interface) NewDeleteJob {
 	return func(jobid string) *DeleteJob {
 		n := New(tp)
 
-		n.JobId(jobid)
+		n._jobid(jobid)
 
 		return n
 	}
@@ -216,7 +216,7 @@ func (r *DeleteJob) Header(key, value string) *DeleteJob {
 
 // JobId Identifier for the anomaly detection job.
 // API Name: jobid
-func (r *DeleteJob) JobId(jobid string) *DeleteJob {
+func (r *DeleteJob) _jobid(jobid string) *DeleteJob {
 	r.paramSet |= jobidMask
 	r.jobid = jobid
 

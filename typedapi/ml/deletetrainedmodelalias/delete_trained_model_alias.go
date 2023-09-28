@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/f16d22a4e5e7786419e984239713298b06183ba9
+// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
 
 // Deletes a model alias that refers to the trained model
 package deletetrainedmodelalias
@@ -70,9 +70,9 @@ func NewDeleteTrainedModelAliasFunc(tp elastictransport.Interface) NewDeleteTrai
 	return func(modelid, modelalias string) *DeleteTrainedModelAlias {
 		n := New(tp)
 
-		n.ModelAlias(modelalias)
+		n._modelalias(modelalias)
 
-		n.ModelId(modelid)
+		n._modelid(modelid)
 
 		return n
 	}
@@ -236,7 +236,7 @@ func (r *DeleteTrainedModelAlias) Header(key, value string) *DeleteTrainedModelA
 
 // ModelAlias The model alias to delete.
 // API Name: modelalias
-func (r *DeleteTrainedModelAlias) ModelAlias(modelalias string) *DeleteTrainedModelAlias {
+func (r *DeleteTrainedModelAlias) _modelalias(modelalias string) *DeleteTrainedModelAlias {
 	r.paramSet |= modelaliasMask
 	r.modelalias = modelalias
 
@@ -245,7 +245,7 @@ func (r *DeleteTrainedModelAlias) ModelAlias(modelalias string) *DeleteTrainedMo
 
 // ModelId The trained model ID to which the model alias refers.
 // API Name: modelid
-func (r *DeleteTrainedModelAlias) ModelId(modelid string) *DeleteTrainedModelAlias {
+func (r *DeleteTrainedModelAlias) _modelid(modelid string) *DeleteTrainedModelAlias {
 	r.paramSet |= modelidMask
 	r.modelid = modelid
 

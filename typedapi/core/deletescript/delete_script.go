@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/f16d22a4e5e7786419e984239713298b06183ba9
+// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
 
 // Deletes a script.
 package deletescript
@@ -67,7 +67,7 @@ func NewDeleteScriptFunc(tp elastictransport.Interface) NewDeleteScript {
 	return func(id string) *DeleteScript {
 		n := New(tp)
 
-		n.Id(id)
+		n._id(id)
 
 		return n
 	}
@@ -213,7 +213,7 @@ func (r *DeleteScript) Header(key, value string) *DeleteScript {
 
 // Id Identifier for the stored script or search template.
 // API Name: id
-func (r *DeleteScript) Id(id string) *DeleteScript {
+func (r *DeleteScript) _id(id string) *DeleteScript {
 	r.paramSet |= idMask
 	r.id = id
 

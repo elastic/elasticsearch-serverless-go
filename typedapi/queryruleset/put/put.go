@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/f16d22a4e5e7786419e984239713298b06183ba9
+// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
 
 // Creates or updates a query ruleset.
 package put
@@ -52,8 +52,8 @@ type Put struct {
 
 	buf *gobytes.Buffer
 
-	req      *types.QueryRuleset
-	deferred []func(request *types.QueryRuleset) error
+	req      *Request
+	deferred []func(request *Request) error
 	raw      io.Reader
 
 	paramSet int
@@ -70,7 +70,7 @@ func NewPutFunc(tp elastictransport.Interface) NewPut {
 	return func(rulesetid string) *Put {
 		n := New(tp)
 
-		n.RulesetId(rulesetid)
+		n._rulesetid(rulesetid)
 
 		return n
 	}
@@ -85,6 +85,8 @@ func New(tp elastictransport.Interface) *Put {
 		values:    make(url.Values),
 		headers:   make(http.Header),
 		buf:       gobytes.NewBuffer(nil),
+
+		req: NewRequest(),
 	}
 
 	return r
@@ -99,7 +101,7 @@ func (r *Put) Raw(raw io.Reader) *Put {
 }
 
 // Request allows to set the request property with the appropriate payload.
-func (r *Put) Request(req *types.QueryRuleset) *Put {
+func (r *Put) Request(req *Request) *Put {
 	r.req = req
 
 	return r
@@ -244,9 +246,16 @@ func (r *Put) Header(key, value string) *Put {
 
 // RulesetId The unique identifier of the query ruleset to be created or updated
 // API Name: rulesetid
-func (r *Put) RulesetId(rulesetid string) *Put {
+func (r *Put) _rulesetid(rulesetid string) *Put {
 	r.paramSet |= rulesetidMask
 	r.rulesetid = rulesetid
+
+	return r
+}
+
+// API name: rules
+func (r *Put) Rules(rules ...types.QueryRule) *Put {
+	r.req.Rules = rules
 
 	return r
 }

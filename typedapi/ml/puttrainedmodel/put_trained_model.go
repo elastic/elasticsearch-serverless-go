@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/f16d22a4e5e7786419e984239713298b06183ba9
+// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
 
 // Creates an inference trained model.
 package puttrainedmodel
@@ -72,7 +72,7 @@ func NewPutTrainedModelFunc(tp elastictransport.Interface) NewPutTrainedModel {
 	return func(modelid string) *PutTrainedModel {
 		n := New(tp)
 
-		n.ModelId(modelid)
+		n._modelid(modelid)
 
 		return n
 	}
@@ -250,7 +250,7 @@ func (r *PutTrainedModel) Header(key, value string) *PutTrainedModel {
 
 // ModelId The unique identifier of the trained model.
 // API Name: modelid
-func (r *PutTrainedModel) ModelId(modelid string) *PutTrainedModel {
+func (r *PutTrainedModel) _modelid(modelid string) *PutTrainedModel {
 	r.paramSet |= modelidMask
 	r.modelid = modelid
 

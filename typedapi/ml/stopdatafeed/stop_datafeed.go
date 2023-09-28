@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/f16d22a4e5e7786419e984239713298b06183ba9
+// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
 
 // Stops one or more datafeeds.
 package stopdatafeed
@@ -70,7 +70,7 @@ func NewStopDatafeedFunc(tp elastictransport.Interface) NewStopDatafeed {
 	return func(datafeedid string) *StopDatafeed {
 		n := New(tp)
 
-		n.DatafeedId(datafeedid)
+		n._datafeedid(datafeedid)
 
 		return n
 	}
@@ -254,7 +254,7 @@ func (r *StopDatafeed) Header(key, value string) *StopDatafeed {
 // using `_all` or by specifying `*` as
 // the identifier.
 // API Name: datafeedid
-func (r *StopDatafeed) DatafeedId(datafeedid string) *StopDatafeed {
+func (r *StopDatafeed) _datafeedid(datafeedid string) *StopDatafeed {
 	r.paramSet |= datafeedidMask
 	r.datafeedid = datafeedid
 

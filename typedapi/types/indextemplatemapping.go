@@ -16,13 +16,13 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/f16d22a4e5e7786419e984239713298b06183ba9
+// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
 
 package types
 
 // IndexTemplateMapping type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/f16d22a4e5e7786419e984239713298b06183ba9/specification/indices/put_index_template/IndicesPutIndexTemplateRequest.ts#L97-L119
+// https://github.com/elastic/elasticsearch-specification/blob/d70d15b514ca03d715b6eb83fe5183246ded8717/specification/indices/put_index_template/IndicesPutIndexTemplateRequest.ts#L97-L119
 type IndexTemplateMapping struct {
 	// Aliases Aliases to add.
 	// If the index template includes a `data_stream` object, these are data stream

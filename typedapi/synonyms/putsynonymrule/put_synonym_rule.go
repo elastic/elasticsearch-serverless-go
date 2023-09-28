@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/f16d22a4e5e7786419e984239713298b06183ba9
+// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
 
 // Creates or updates a synonym rule in a synonym set
 package putsynonymrule
@@ -73,9 +73,9 @@ func NewPutSynonymRuleFunc(tp elastictransport.Interface) NewPutSynonymRule {
 	return func(setid, ruleid string) *PutSynonymRule {
 		n := New(tp)
 
-		n.SetId(setid)
+		n._setid(setid)
 
-		n.RuleId(ruleid)
+		n._ruleid(ruleid)
 
 		return n
 	}
@@ -254,7 +254,7 @@ func (r *PutSynonymRule) Header(key, value string) *PutSynonymRule {
 
 // SetId The id of the synonym set to be updated with the synonym rule
 // API Name: setid
-func (r *PutSynonymRule) SetId(setid string) *PutSynonymRule {
+func (r *PutSynonymRule) _setid(setid string) *PutSynonymRule {
 	r.paramSet |= setidMask
 	r.setid = setid
 
@@ -263,7 +263,7 @@ func (r *PutSynonymRule) SetId(setid string) *PutSynonymRule {
 
 // RuleId The id of the synonym rule to be updated or created
 // API Name: ruleid
-func (r *PutSynonymRule) RuleId(ruleid string) *PutSynonymRule {
+func (r *PutSynonymRule) _ruleid(ruleid string) *PutSynonymRule {
 	r.paramSet |= ruleidMask
 	r.ruleid = ruleid
 

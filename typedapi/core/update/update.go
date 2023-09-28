@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/f16d22a4e5e7786419e984239713298b06183ba9
+// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
 
 // Updates a document with a script or partial document.
 package update
@@ -75,9 +75,9 @@ func NewUpdateFunc(tp elastictransport.Interface) NewUpdate {
 	return func(index, id string) *Update {
 		n := New(tp)
 
-		n.Id(id)
+		n._id(id)
 
-		n.Index(index)
+		n._index(index)
 
 		return n
 	}
@@ -256,7 +256,7 @@ func (r *Update) Header(key, value string) *Update {
 
 // Id Document ID
 // API Name: id
-func (r *Update) Id(id string) *Update {
+func (r *Update) _id(id string) *Update {
 	r.paramSet |= idMask
 	r.id = id
 
@@ -265,7 +265,7 @@ func (r *Update) Id(id string) *Update {
 
 // Index The name of the index
 // API Name: index
-func (r *Update) Index(index string) *Update {
+func (r *Update) _index(index string) *Update {
 	r.paramSet |= indexMask
 	r.index = index
 

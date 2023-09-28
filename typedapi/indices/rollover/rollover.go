@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/f16d22a4e5e7786419e984239713298b06183ba9
+// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
 
 // Updates an alias to point to a new index when the existing index
 // is considered to be too large or too old.
@@ -75,7 +75,7 @@ func NewRolloverFunc(tp elastictransport.Interface) NewRollover {
 	return func(alias string) *Rollover {
 		n := New(tp)
 
-		n.Alias(alias)
+		n._alias(alias)
 
 		return n
 	}
@@ -263,7 +263,7 @@ func (r *Rollover) Header(key, value string) *Rollover {
 
 // Alias Name of the data stream or index alias to roll over.
 // API Name: alias
-func (r *Rollover) Alias(alias string) *Rollover {
+func (r *Rollover) _alias(alias string) *Rollover {
 	r.paramSet |= aliasMask
 	r.alias = alias
 

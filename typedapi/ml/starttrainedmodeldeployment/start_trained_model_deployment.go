@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/f16d22a4e5e7786419e984239713298b06183ba9
+// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
 
 // Start a trained model deployment.
 package starttrainedmodeldeployment
@@ -70,7 +70,7 @@ func NewStartTrainedModelDeploymentFunc(tp elastictransport.Interface) NewStartT
 	return func(modelid string) *StartTrainedModelDeployment {
 		n := New(tp)
 
-		n.ModelId(modelid)
+		n._modelid(modelid)
 
 		return n
 	}
@@ -234,7 +234,7 @@ func (r *StartTrainedModelDeployment) Header(key, value string) *StartTrainedMod
 // ModelId The unique identifier of the trained model. Currently, only PyTorch models
 // are supported.
 // API Name: modelid
-func (r *StartTrainedModelDeployment) ModelId(modelid string) *StartTrainedModelDeployment {
+func (r *StartTrainedModelDeployment) _modelid(modelid string) *StartTrainedModelDeployment {
 	r.paramSet |= modelidMask
 	r.modelid = modelid
 

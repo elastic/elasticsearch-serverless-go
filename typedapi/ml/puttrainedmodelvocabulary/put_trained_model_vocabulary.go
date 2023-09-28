@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/f16d22a4e5e7786419e984239713298b06183ba9
+// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
 
 // Creates a trained model vocabulary
 package puttrainedmodelvocabulary
@@ -70,7 +70,7 @@ func NewPutTrainedModelVocabularyFunc(tp elastictransport.Interface) NewPutTrain
 	return func(modelid string) *PutTrainedModelVocabulary {
 		n := New(tp)
 
-		n.ModelId(modelid)
+		n._modelid(modelid)
 
 		return n
 	}
@@ -250,7 +250,7 @@ func (r *PutTrainedModelVocabulary) Header(key, value string) *PutTrainedModelVo
 
 // ModelId The unique identifier of the trained model.
 // API Name: modelid
-func (r *PutTrainedModelVocabulary) ModelId(modelid string) *PutTrainedModelVocabulary {
+func (r *PutTrainedModelVocabulary) _modelid(modelid string) *PutTrainedModelVocabulary {
 	r.paramSet |= modelidMask
 	r.modelid = modelid
 

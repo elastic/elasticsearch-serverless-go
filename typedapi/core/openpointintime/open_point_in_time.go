@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/f16d22a4e5e7786419e984239713298b06183ba9
+// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
 
 // Open a point in time that can be used in subsequent searches
 package openpointintime
@@ -69,7 +69,7 @@ func NewOpenPointInTimeFunc(tp elastictransport.Interface) NewOpenPointInTime {
 	return func(index string) *OpenPointInTime {
 		n := New(tp)
 
-		n.Index(index)
+		n._index(index)
 
 		return n
 	}
@@ -216,7 +216,7 @@ func (r *OpenPointInTime) Header(key, value string) *OpenPointInTime {
 // Index A comma-separated list of index names to open point in time; use `_all` or
 // empty string to perform the operation on all indices
 // API Name: index
-func (r *OpenPointInTime) Index(index string) *OpenPointInTime {
+func (r *OpenPointInTime) _index(index string) *OpenPointInTime {
 	r.paramSet |= indexMask
 	r.index = index
 
