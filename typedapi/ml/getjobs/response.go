@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
+// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
 
 package getjobs
 
@@ -26,7 +26,7 @@ import (
 
 // Response holds the response body struct for the package getjobs
 //
-// https://github.com/elastic/elasticsearch-specification/blob/d70d15b514ca03d715b6eb83fe5183246ded8717/specification/ml/get_jobs/MlGetJobsResponse.ts#L23-L28
+// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/ml/get_jobs/MlGetJobsResponse.ts#L23-L28
 
 type Response struct {
 	Count int64       `json:"count"`
