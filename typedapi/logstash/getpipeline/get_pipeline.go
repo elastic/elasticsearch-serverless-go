@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
+// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
 
 // Retrieves Logstash Pipelines used by Central Management
 package getpipeline
@@ -59,15 +59,13 @@ type GetPipeline struct {
 }
 
 // NewGetPipeline type alias for index.
-type NewGetPipeline func(id string) *GetPipeline
+type NewGetPipeline func() *GetPipeline
 
 // NewGetPipelineFunc returns a new instance of GetPipeline with the provided transport.
 // Used in the index of the library this allows to retrieve every apis in once place.
 func NewGetPipelineFunc(tp elastictransport.Interface) NewGetPipeline {
-	return func(id string) *GetPipeline {
+	return func() *GetPipeline {
 		n := New(tp)
-
-		n._id(id)
 
 		return n
 	}
@@ -222,7 +220,7 @@ func (r *GetPipeline) Header(key, value string) *GetPipeline {
 
 // Id Comma-separated list of pipeline identifiers.
 // API Name: id
-func (r *GetPipeline) _id(id string) *GetPipeline {
+func (r *GetPipeline) Id(id string) *GetPipeline {
 	r.paramSet |= idMask
 	r.id = id
 

@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
+// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
 
 package types
 
@@ -30,9 +30,12 @@ import (
 
 // ClusterStatistics type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/d70d15b514ca03d715b6eb83fe5183246ded8717/specification/_types/Stats.ts#L27-L32
+// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/Stats.ts#L27-L35
 type ClusterStatistics struct {
 	Details    map[string]ClusterDetails `json:"details,omitempty"`
+	Failed     int                       `json:"failed"`
+	Partial    int                       `json:"partial"`
+	Running    int                       `json:"running"`
 	Skipped    int                       `json:"skipped"`
 	Successful int                       `json:"successful"`
 	Total      int                       `json:"total"`
@@ -59,6 +62,54 @@ func (s *ClusterStatistics) UnmarshalJSON(data []byte) error {
 			}
 			if err := dec.Decode(&s.Details); err != nil {
 				return err
+			}
+
+		case "failed":
+
+			var tmp interface{}
+			dec.Decode(&tmp)
+			switch v := tmp.(type) {
+			case string:
+				value, err := strconv.Atoi(v)
+				if err != nil {
+					return err
+				}
+				s.Failed = value
+			case float64:
+				f := int(v)
+				s.Failed = f
+			}
+
+		case "partial":
+
+			var tmp interface{}
+			dec.Decode(&tmp)
+			switch v := tmp.(type) {
+			case string:
+				value, err := strconv.Atoi(v)
+				if err != nil {
+					return err
+				}
+				s.Partial = value
+			case float64:
+				f := int(v)
+				s.Partial = f
+			}
+
+		case "running":
+
+			var tmp interface{}
+			dec.Decode(&tmp)
+			switch v := tmp.(type) {
+			case string:
+				value, err := strconv.Atoi(v)
+				if err != nil {
+					return err
+				}
+				s.Running = value
+			case float64:
+				f := int(v)
+				s.Running = f
 			}
 
 		case "skipped":

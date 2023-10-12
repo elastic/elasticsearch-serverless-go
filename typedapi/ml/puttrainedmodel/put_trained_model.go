@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/d70d15b514ca03d715b6eb83fe5183246ded8717
+// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
 
 // Creates an inference trained model.
 package puttrainedmodel
@@ -356,6 +356,24 @@ func (r *PutTrainedModel) ModelSizeBytes(modelsizebytes int64) *PutTrainedModel 
 // API name: model_type
 func (r *PutTrainedModel) ModelType(modeltype trainedmodeltype.TrainedModelType) *PutTrainedModel {
 	r.req.ModelType = &modeltype
+
+	return r
+}
+
+// PlatformArchitecture The platform architecture (if applicable) of the trained mode. If the model
+// only works on one platform, because it is heavily optimized for a particular
+// processor architecture and OS combination, then this field specifies which.
+// The format of the string must match the platform identifiers used by
+// Elasticsearch,
+// so one of, `linux-x86_64`, `linux-aarch64`, `darwin-x86_64`,
+// `darwin-aarch64`,
+// or `windows-x86_64`. For portable models (those that work independent of
+// processor
+// architecture or OS features), leave this field unset.
+// API name: platform_architecture
+func (r *PutTrainedModel) PlatformArchitecture(platformarchitecture string) *PutTrainedModel {
+
+	r.req.PlatformArchitecture = &platformarchitecture
 
 	return r
 }

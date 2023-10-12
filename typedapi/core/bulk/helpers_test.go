@@ -44,10 +44,10 @@ func TestBulk_CreateOp(t *testing.T) {
 			args: args{
 				types.CreateOperation{Index_: &indexName},
 				struct {
-					Id   int    `json:"id"`
+					ID   int    `json:"id"`
 					Name string `json:"name"`
 				}{
-					Id:   1,
+					ID:   1,
 					Name: "Foo",
 				},
 			},
@@ -180,10 +180,10 @@ func TestBulk_IndexOp(t *testing.T) {
 			args: args{
 				types.IndexOperation{Index_: &indexName},
 				struct {
-					Id   int    `json:"id"`
+					ID   int    `json:"id"`
 					Name string `json:"name"`
 				}{
-					Id:   1,
+					ID:   1,
 					Name: "Foo",
 				},
 			},
@@ -312,10 +312,10 @@ func TestBulk_UpdateOp(t *testing.T) {
 			args: args{
 				types.UpdateOperation{Index_: &indexName},
 				struct {
-					Id   int    `json:"id"`
+					ID   int    `json:"id"`
 					Name string `json:"name"`
 				}{
-					Id:   1,
+					ID:   1,
 					Name: "bar",
 				},
 				nil,
@@ -330,10 +330,10 @@ func TestBulk_UpdateOp(t *testing.T) {
 			args: args{
 				types.UpdateOperation{Index_: &indexName},
 				struct {
-					Id   int    `json:"id"`
+					ID   int    `json:"id"`
 					Name string `json:"name"`
 				}{
-					Id:   1,
+					ID:   1,
 					Name: "bar",
 				},
 				&types.UpdateAction{},
@@ -348,10 +348,10 @@ func TestBulk_UpdateOp(t *testing.T) {
 			args: args{
 				types.UpdateOperation{Index_: &indexName},
 				struct {
-					Id   int    `json:"id"`
+					ID   int    `json:"id"`
 					Name string `json:"name"`
 				}{
-					Id:   1,
+					ID:   1,
 					Name: "bar",
 				},
 				&types.UpdateAction{
