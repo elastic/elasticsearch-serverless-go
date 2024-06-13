@@ -21,6 +21,7 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"go.opentelemetry.io/otel/trace"
 	"net/http"
 	"net/url"
 	"os"
@@ -87,8 +88,26 @@ type Config struct {
 
 	RetryBackoff func(attempt int) time.Duration // Optional backoff duration. Default: nil.
 
-	Transport http.RoundTripper       // The HTTP transport object.
-	Logger    elastictransport.Logger // The logger object.
+	Transport       http.RoundTripper                // The HTTP transport object.
+	Logger          elastictransport.Logger          // The logger object.
+	Instrumentation elastictransport.Instrumentation // Enable instrumentation throughout the client.
+}
+
+// NewOpenTelemetryInstrumentation provides the OpenTelemetry integration for both low-level and TypedAPI.
+// provider is optional, if nil is passed the integration will retrieve the provider set globally by otel.
+// captureSearchBody allows to define if the search queries body should be included in the span.
+// Search endpoints are:
+//
+//	search
+//	async_search.submit
+//	msearch
+//	eql.search
+//	terms_enum
+//	search_template
+//	msearch_template
+//	render_search_template
+func NewOpenTelemetryInstrumentation(provider trace.TracerProvider, captureSearchBody bool) elastictransport.Instrumentation {
+	return elastictransport.NewOtelInstrumentation(provider, captureSearchBody, Version)
 }
 
 // BaseClient represents the Elasticsearch client.
@@ -180,7 +199,7 @@ func newTransport(cfg Config) (*elastictransport.Client, error) {
 		cfg.Password = pw
 	}
 
-	tp, err := elastictransport.New(elastictransport.Config{
+	tpConfig := elastictransport.Config{
 		UserAgent: userAgent,
 
 		URLs:         []*url.URL{endpoint},
@@ -204,9 +223,12 @@ func newTransport(cfg Config) (*elastictransport.Client, error) {
 
 		DiscoverNodesInterval: cfg.DiscoverNodesInterval,
 
-		Transport: cfg.Transport,
-		Logger:    cfg.Logger,
-	})
+		Transport:       cfg.Transport,
+		Logger:          cfg.Logger,
+		Instrumentation: cfg.Instrumentation,
+	}
+
+	tp, err := elastictransport.New(tpConfig)
 	if err != nil {
 		return nil, fmt.Errorf("error creating transport: %s", err)
 	}
@@ -240,6 +262,14 @@ func (c *BaseClient) Perform(req *http.Request) (*http.Response, error) {
 	}
 
 	return res, err
+}
+
+// InstrumentationEnabled propagates back to the client the Instrumentation provided by the transport.
+func (c *BaseClient) InstrumentationEnabled() elastictransport.Instrumentation {
+	if tp, ok := c.Transport.(elastictransport.Instrumented); ok {
+		return tp.InstrumentationEnabled()
+	}
+	return nil
 }
 
 // doProductCheck calls f if there as not been a prior successful call to doProductCheck,
