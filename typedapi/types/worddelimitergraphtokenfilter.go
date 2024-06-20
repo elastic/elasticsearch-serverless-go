@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // WordDelimiterGraphTokenFilter type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/analysis/token_filters.ts#L149-L166
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/analysis/token_filters.ts#L151-L168
 type WordDelimiterGraphTokenFilter struct {
 	AdjustOffsets         *bool              `json:"adjust_offsets,omitempty"`
 	CatenateAll           *bool              `json:"catenate_all,omitempty"`
@@ -67,13 +68,13 @@ func (s *WordDelimiterGraphTokenFilter) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "adjust_offsets":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "AdjustOffsets", err)
 				}
 				s.AdjustOffsets = &value
 			case bool:
@@ -81,13 +82,13 @@ func (s *WordDelimiterGraphTokenFilter) UnmarshalJSON(data []byte) error {
 			}
 
 		case "catenate_all":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "CatenateAll", err)
 				}
 				s.CatenateAll = &value
 			case bool:
@@ -95,13 +96,13 @@ func (s *WordDelimiterGraphTokenFilter) UnmarshalJSON(data []byte) error {
 			}
 
 		case "catenate_numbers":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "CatenateNumbers", err)
 				}
 				s.CatenateNumbers = &value
 			case bool:
@@ -109,13 +110,13 @@ func (s *WordDelimiterGraphTokenFilter) UnmarshalJSON(data []byte) error {
 			}
 
 		case "catenate_words":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "CatenateWords", err)
 				}
 				s.CatenateWords = &value
 			case bool:
@@ -123,13 +124,13 @@ func (s *WordDelimiterGraphTokenFilter) UnmarshalJSON(data []byte) error {
 			}
 
 		case "generate_number_parts":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "GenerateNumberParts", err)
 				}
 				s.GenerateNumberParts = &value
 			case bool:
@@ -137,13 +138,13 @@ func (s *WordDelimiterGraphTokenFilter) UnmarshalJSON(data []byte) error {
 			}
 
 		case "generate_word_parts":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "GenerateWordParts", err)
 				}
 				s.GenerateWordParts = &value
 			case bool:
@@ -151,13 +152,13 @@ func (s *WordDelimiterGraphTokenFilter) UnmarshalJSON(data []byte) error {
 			}
 
 		case "ignore_keywords":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "IgnoreKeywords", err)
 				}
 				s.IgnoreKeywords = &value
 			case bool:
@@ -166,18 +167,18 @@ func (s *WordDelimiterGraphTokenFilter) UnmarshalJSON(data []byte) error {
 
 		case "preserve_original":
 			if err := dec.Decode(&s.PreserveOriginal); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "PreserveOriginal", err)
 			}
 
 		case "protected_words":
 			if err := dec.Decode(&s.ProtectedWords); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "ProtectedWords", err)
 			}
 
 		case "protected_words_path":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "ProtectedWordsPath", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -187,13 +188,13 @@ func (s *WordDelimiterGraphTokenFilter) UnmarshalJSON(data []byte) error {
 			s.ProtectedWordsPath = &o
 
 		case "split_on_case_change":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "SplitOnCaseChange", err)
 				}
 				s.SplitOnCaseChange = &value
 			case bool:
@@ -201,13 +202,13 @@ func (s *WordDelimiterGraphTokenFilter) UnmarshalJSON(data []byte) error {
 			}
 
 		case "split_on_numerics":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "SplitOnNumerics", err)
 				}
 				s.SplitOnNumerics = &value
 			case bool:
@@ -215,13 +216,13 @@ func (s *WordDelimiterGraphTokenFilter) UnmarshalJSON(data []byte) error {
 			}
 
 		case "stem_english_possessive":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "StemEnglishPossessive", err)
 				}
 				s.StemEnglishPossessive = &value
 			case bool:
@@ -230,18 +231,18 @@ func (s *WordDelimiterGraphTokenFilter) UnmarshalJSON(data []byte) error {
 
 		case "type":
 			if err := dec.Decode(&s.Type); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Type", err)
 			}
 
 		case "type_table":
 			if err := dec.Decode(&s.TypeTable); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "TypeTable", err)
 			}
 
 		case "type_table_path":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "TypeTablePath", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -252,7 +253,7 @@ func (s *WordDelimiterGraphTokenFilter) UnmarshalJSON(data []byte) error {
 
 		case "version":
 			if err := dec.Decode(&s.Version); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Version", err)
 			}
 
 		}

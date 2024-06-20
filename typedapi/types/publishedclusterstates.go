@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // PublishedClusterStates type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/nodes/_types/Stats.ts#L263-L276
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/nodes/_types/Stats.ts#L263-L276
 type PublishedClusterStates struct {
 	// CompatibleDiffs Number of compatible differences between published cluster states.
 	CompatibleDiffs *int64 `json:"compatible_diffs,omitempty"`
@@ -56,13 +57,13 @@ func (s *PublishedClusterStates) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "compatible_diffs":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "CompatibleDiffs", err)
 				}
 				s.CompatibleDiffs = &value
 			case float64:
@@ -71,13 +72,13 @@ func (s *PublishedClusterStates) UnmarshalJSON(data []byte) error {
 			}
 
 		case "full_states":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "FullStates", err)
 				}
 				s.FullStates = &value
 			case float64:
@@ -86,13 +87,13 @@ func (s *PublishedClusterStates) UnmarshalJSON(data []byte) error {
 			}
 
 		case "incompatible_diffs":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "IncompatibleDiffs", err)
 				}
 				s.IncompatibleDiffs = &value
 			case float64:

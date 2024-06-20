@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,6 +24,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 
@@ -32,7 +33,7 @@ import (
 
 // TrainedModelAssignmentRoutingTable type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/ml/_types/TrainedModel.ts#L373-L391
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/ml/_types/TrainedModel.ts#L374-L392
 type TrainedModelAssignmentRoutingTable struct {
 	// CurrentAllocations Current number of allocations.
 	CurrentAllocations int `json:"current_allocations"`
@@ -62,13 +63,13 @@ func (s *TrainedModelAssignmentRoutingTable) UnmarshalJSON(data []byte) error {
 
 		case "current_allocations":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "CurrentAllocations", err)
 				}
 				s.CurrentAllocations = value
 			case float64:
@@ -79,7 +80,7 @@ func (s *TrainedModelAssignmentRoutingTable) UnmarshalJSON(data []byte) error {
 		case "reason":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Reason", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -90,18 +91,18 @@ func (s *TrainedModelAssignmentRoutingTable) UnmarshalJSON(data []byte) error {
 
 		case "routing_state":
 			if err := dec.Decode(&s.RoutingState); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "RoutingState", err)
 			}
 
 		case "target_allocations":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "TargetAllocations", err)
 				}
 				s.TargetAllocations = value
 			case float64:

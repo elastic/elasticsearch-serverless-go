@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // Checkpointing type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/transform/get_transform_stats/types.ts#L85-L92
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/transform/get_transform_stats/types.ts#L85-L92
 type Checkpointing struct {
 	ChangesLastDetectedAt         *int64           `json:"changes_last_detected_at,omitempty"`
 	ChangesLastDetectedAtDateTime DateTime         `json:"changes_last_detected_at_date_time,omitempty"`
@@ -56,13 +57,13 @@ func (s *Checkpointing) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "changes_last_detected_at":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "ChangesLastDetectedAt", err)
 				}
 				s.ChangesLastDetectedAt = &value
 			case float64:
@@ -72,22 +73,22 @@ func (s *Checkpointing) UnmarshalJSON(data []byte) error {
 
 		case "changes_last_detected_at_date_time":
 			if err := dec.Decode(&s.ChangesLastDetectedAtDateTime); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "ChangesLastDetectedAtDateTime", err)
 			}
 
 		case "last":
 			if err := dec.Decode(&s.Last); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Last", err)
 			}
 
 		case "last_search_time":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "LastSearchTime", err)
 				}
 				s.LastSearchTime = &value
 			case float64:
@@ -97,17 +98,17 @@ func (s *Checkpointing) UnmarshalJSON(data []byte) error {
 
 		case "next":
 			if err := dec.Decode(&s.Next); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Next", err)
 			}
 
 		case "operations_behind":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "OperationsBehind", err)
 				}
 				s.OperationsBehind = &value
 			case float64:

@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // ConfusionMatrixThreshold type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/ml/evaluate_data_frame/types.ts#L137-L158
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/ml/evaluate_data_frame/types.ts#L137-L158
 type ConfusionMatrixThreshold struct {
 	// FalseNegative False Negative
 	FalseNegative int `json:"fn"`
@@ -59,13 +60,13 @@ func (s *ConfusionMatrixThreshold) UnmarshalJSON(data []byte) error {
 
 		case "fn":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "FalseNegative", err)
 				}
 				s.FalseNegative = value
 			case float64:
@@ -75,13 +76,13 @@ func (s *ConfusionMatrixThreshold) UnmarshalJSON(data []byte) error {
 
 		case "fp":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "FalsePositive", err)
 				}
 				s.FalsePositive = value
 			case float64:
@@ -91,13 +92,13 @@ func (s *ConfusionMatrixThreshold) UnmarshalJSON(data []byte) error {
 
 		case "tn":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "TrueNegative", err)
 				}
 				s.TrueNegative = value
 			case float64:
@@ -107,13 +108,13 @@ func (s *ConfusionMatrixThreshold) UnmarshalJSON(data []byte) error {
 
 		case "tp":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "TruePositive", err)
 				}
 				s.TruePositive = value
 			case float64:

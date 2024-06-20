@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,12 +24,13 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 )
 
 // TotalFeatureImportance type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/ml/_types/TrainedModel.ts#L232-L239
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/ml/_types/TrainedModel.ts#L233-L240
 type TotalFeatureImportance struct {
 	// Classes If the trained model is a classification model, feature importance statistics
 	// are gathered per target class value.
@@ -58,17 +59,17 @@ func (s *TotalFeatureImportance) UnmarshalJSON(data []byte) error {
 
 		case "classes":
 			if err := dec.Decode(&s.Classes); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Classes", err)
 			}
 
 		case "feature_name":
 			if err := dec.Decode(&s.FeatureName); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "FeatureName", err)
 			}
 
 		case "importance":
 			if err := dec.Decode(&s.Importance); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Importance", err)
 			}
 
 		}

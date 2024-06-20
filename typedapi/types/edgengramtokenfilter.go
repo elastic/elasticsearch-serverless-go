@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,6 +24,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 
@@ -32,7 +33,7 @@ import (
 
 // EdgeNGramTokenFilter type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/analysis/token_filters.ts#L79-L85
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/analysis/token_filters.ts#L79-L85
 type EdgeNGramTokenFilter struct {
 	MaxGram          *int                         `json:"max_gram,omitempty"`
 	MinGram          *int                         `json:"min_gram,omitempty"`
@@ -59,13 +60,13 @@ func (s *EdgeNGramTokenFilter) UnmarshalJSON(data []byte) error {
 
 		case "max_gram":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "MaxGram", err)
 				}
 				s.MaxGram = &value
 			case float64:
@@ -75,13 +76,13 @@ func (s *EdgeNGramTokenFilter) UnmarshalJSON(data []byte) error {
 
 		case "min_gram":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "MinGram", err)
 				}
 				s.MinGram = &value
 			case float64:
@@ -91,22 +92,22 @@ func (s *EdgeNGramTokenFilter) UnmarshalJSON(data []byte) error {
 
 		case "preserve_original":
 			if err := dec.Decode(&s.PreserveOriginal); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "PreserveOriginal", err)
 			}
 
 		case "side":
 			if err := dec.Decode(&s.Side); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Side", err)
 			}
 
 		case "type":
 			if err := dec.Decode(&s.Type); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Type", err)
 			}
 
 		case "version":
 			if err := dec.Decode(&s.Version); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Version", err)
 			}
 
 		}

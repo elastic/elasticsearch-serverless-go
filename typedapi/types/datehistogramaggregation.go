@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,6 +24,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 
@@ -33,7 +34,7 @@ import (
 
 // DateHistogramAggregation type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/aggregations/bucket.ts#L189-L247
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/aggregations/bucket.ts#L191-L249
 type DateHistogramAggregation struct {
 	// CalendarInterval Calendar-aware interval.
 	// Can be specified using the unit name, such as `month`, or as a single unit
@@ -55,8 +56,7 @@ type DateHistogramAggregation struct {
 	Interval   Duration                     `json:"interval,omitempty"`
 	// Keyed Set to `true` to associate a unique string key with each bucket and return
 	// the ranges as a hash rather than an array.
-	Keyed *bool    `json:"keyed,omitempty"`
-	Meta  Metadata `json:"meta,omitempty"`
+	Keyed *bool `json:"keyed,omitempty"`
 	// MinDocCount Only returns buckets that have `min_doc_count` number of documents.
 	// By default, all buckets between the first bucket that matches documents and
 	// the last one are returned.
@@ -64,7 +64,6 @@ type DateHistogramAggregation struct {
 	// Missing The value to apply to documents that do not have a value.
 	// By default, documents without a value are ignored.
 	Missing DateTime `json:"missing,omitempty"`
-	Name    *string  `json:"name,omitempty"`
 	// Offset Changes the start value of each bucket by the specified positive (`+`) or
 	// negative offset (`-`) duration.
 	Offset Duration `json:"offset,omitempty"`
@@ -94,28 +93,28 @@ func (s *DateHistogramAggregation) UnmarshalJSON(data []byte) error {
 
 		case "calendar_interval":
 			if err := dec.Decode(&s.CalendarInterval); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "CalendarInterval", err)
 			}
 
 		case "extended_bounds":
 			if err := dec.Decode(&s.ExtendedBounds); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "ExtendedBounds", err)
 			}
 
 		case "field":
 			if err := dec.Decode(&s.Field); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Field", err)
 			}
 
 		case "fixed_interval":
 			if err := dec.Decode(&s.FixedInterval); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "FixedInterval", err)
 			}
 
 		case "format":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Format", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -126,42 +125,37 @@ func (s *DateHistogramAggregation) UnmarshalJSON(data []byte) error {
 
 		case "hard_bounds":
 			if err := dec.Decode(&s.HardBounds); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "HardBounds", err)
 			}
 
 		case "interval":
 			if err := dec.Decode(&s.Interval); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Interval", err)
 			}
 
 		case "keyed":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Keyed", err)
 				}
 				s.Keyed = &value
 			case bool:
 				s.Keyed = &v
 			}
 
-		case "meta":
-			if err := dec.Decode(&s.Meta); err != nil {
-				return err
-			}
-
 		case "min_doc_count":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "MinDocCount", err)
 				}
 				s.MinDocCount = &value
 			case float64:
@@ -171,24 +165,12 @@ func (s *DateHistogramAggregation) UnmarshalJSON(data []byte) error {
 
 		case "missing":
 			if err := dec.Decode(&s.Missing); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Missing", err)
 			}
-
-		case "name":
-			var tmp json.RawMessage
-			if err := dec.Decode(&tmp); err != nil {
-				return err
-			}
-			o := string(tmp[:])
-			o, err = strconv.Unquote(o)
-			if err != nil {
-				o = string(tmp[:])
-			}
-			s.Name = &o
 
 		case "offset":
 			if err := dec.Decode(&s.Offset); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Offset", err)
 			}
 
 		case "order":
@@ -201,13 +183,13 @@ func (s *DateHistogramAggregation) UnmarshalJSON(data []byte) error {
 			case '{':
 				o := make(map[string]sortorder.SortOrder, 0)
 				if err := localDec.Decode(&o); err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Order", err)
 				}
 				s.Order = o
 			case '[':
 				o := make([]map[string]sortorder.SortOrder, 0)
 				if err := localDec.Decode(&o); err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Order", err)
 				}
 				s.Order = o
 			}
@@ -217,17 +199,48 @@ func (s *DateHistogramAggregation) UnmarshalJSON(data []byte) error {
 				s.Params = make(map[string]json.RawMessage, 0)
 			}
 			if err := dec.Decode(&s.Params); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Params", err)
 			}
 
 		case "script":
-			if err := dec.Decode(&s.Script); err != nil {
-				return err
+			message := json.RawMessage{}
+			if err := dec.Decode(&message); err != nil {
+				return fmt.Errorf("%s | %w", "Script", err)
+			}
+			keyDec := json.NewDecoder(bytes.NewReader(message))
+			for {
+				t, err := keyDec.Token()
+				if err != nil {
+					if errors.Is(err, io.EOF) {
+						break
+					}
+					return fmt.Errorf("%s | %w", "Script", err)
+				}
+
+				switch t {
+
+				case "lang", "options", "source":
+					o := NewInlineScript()
+					localDec := json.NewDecoder(bytes.NewReader(message))
+					if err := localDec.Decode(&o); err != nil {
+						return fmt.Errorf("%s | %w", "Script", err)
+					}
+					s.Script = o
+
+				case "id":
+					o := NewStoredScriptId()
+					localDec := json.NewDecoder(bytes.NewReader(message))
+					if err := localDec.Decode(&o); err != nil {
+						return fmt.Errorf("%s | %w", "Script", err)
+					}
+					s.Script = o
+
+				}
 			}
 
 		case "time_zone":
 			if err := dec.Decode(&s.TimeZone); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "TimeZone", err)
 			}
 
 		}

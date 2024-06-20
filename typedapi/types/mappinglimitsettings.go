@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // MappingLimitSettings type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/indices/_types/IndexSettings.ts#L402-L415
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/indices/_types/IndexSettings.ts#L409-L422
 type MappingLimitSettings struct {
 	Coerce          *bool                                `json:"coerce,omitempty"`
 	Depth           *MappingLimitSettingsDepth           `json:"depth,omitempty"`
@@ -58,13 +59,13 @@ func (s *MappingLimitSettings) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "coerce":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Coerce", err)
 				}
 				s.Coerce = &value
 			case bool:
@@ -73,27 +74,27 @@ func (s *MappingLimitSettings) UnmarshalJSON(data []byte) error {
 
 		case "depth":
 			if err := dec.Decode(&s.Depth); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Depth", err)
 			}
 
 		case "dimension_fields":
 			if err := dec.Decode(&s.DimensionFields); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "DimensionFields", err)
 			}
 
 		case "field_name_length":
 			if err := dec.Decode(&s.FieldNameLength); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "FieldNameLength", err)
 			}
 
 		case "ignore_malformed":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "IgnoreMalformed", err)
 				}
 				s.IgnoreMalformed = &value
 			case bool:
@@ -102,17 +103,17 @@ func (s *MappingLimitSettings) UnmarshalJSON(data []byte) error {
 
 		case "nested_fields":
 			if err := dec.Decode(&s.NestedFields); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "NestedFields", err)
 			}
 
 		case "nested_objects":
 			if err := dec.Decode(&s.NestedObjects); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "NestedObjects", err)
 			}
 
 		case "total_fields":
 			if err := dec.Decode(&s.TotalFields); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "TotalFields", err)
 			}
 
 		}

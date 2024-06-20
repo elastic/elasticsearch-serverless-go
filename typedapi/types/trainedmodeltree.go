@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // TrainedModelTree type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/ml/put_trained_model/types.ts#L74-L79
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/ml/put_trained_model/types.ts#L74-L79
 type TrainedModelTree struct {
 	ClassificationLabels []string               `json:"classification_labels,omitempty"`
 	FeatureNames         []string               `json:"feature_names"`
@@ -55,18 +56,18 @@ func (s *TrainedModelTree) UnmarshalJSON(data []byte) error {
 
 		case "classification_labels":
 			if err := dec.Decode(&s.ClassificationLabels); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "ClassificationLabels", err)
 			}
 
 		case "feature_names":
 			if err := dec.Decode(&s.FeatureNames); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "FeatureNames", err)
 			}
 
 		case "target_type":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "TargetType", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -77,7 +78,7 @@ func (s *TrainedModelTree) UnmarshalJSON(data []byte) error {
 
 		case "tree_structure":
 			if err := dec.Decode(&s.TreeStructure); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "TreeStructure", err)
 			}
 
 		}

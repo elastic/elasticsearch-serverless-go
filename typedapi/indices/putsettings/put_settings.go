@@ -16,9 +16,10 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
-// Updates the index settings.
+// Changes a dynamic index setting in real time. For data streams, index setting
+// changes are applied to all backing indices by default.
 package putsettings
 
 import (
@@ -53,15 +54,19 @@ type PutSettings struct {
 	values  url.Values
 	path    url.URL
 
-	buf *gobytes.Buffer
+	raw io.Reader
 
 	req      *Request
 	deferred []func(request *Request) error
-	raw      io.Reader
+	buf      *gobytes.Buffer
 
 	paramSet int
 
 	index string
+
+	spanStarted bool
+
+	instrument elastictransport.Instrumentation
 }
 
 // NewPutSettings type alias for index.
@@ -77,15 +82,25 @@ func NewPutSettingsFunc(tp elastictransport.Interface) NewPutSettings {
 	}
 }
 
-// Updates the index settings.
+// Changes a dynamic index setting in real time. For data streams, index setting
+// changes are applied to all backing indices by default.
 //
-// https://www.elastic.co/guide/en/elasticsearch/reference/master/indices-update-settings.html
+// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-update-settings.html
 func New(tp elastictransport.Interface) *PutSettings {
 	r := &PutSettings{
 		transport: tp,
 		values:    make(url.Values),
 		headers:   make(http.Header),
-		buf:       gobytes.NewBuffer(nil),
+
+		buf: gobytes.NewBuffer(nil),
+
+		req: NewRequest(),
+	}
+
+	if instrumented, ok := r.transport.(elastictransport.Instrumented); ok {
+		if instrument := instrumented.InstrumentationEnabled(); instrument != nil {
+			r.instrument = instrument
+		}
 	}
 
 	return r
@@ -124,9 +139,7 @@ func (r *PutSettings) HttpRequest(ctx context.Context) (*http.Request, error) {
 		}
 	}
 
-	if r.raw != nil {
-		r.buf.ReadFrom(r.raw)
-	} else if r.req != nil {
+	if r.raw == nil && r.req != nil {
 
 		data, err := json.Marshal(r.req)
 
@@ -136,6 +149,10 @@ func (r *PutSettings) HttpRequest(ctx context.Context) (*http.Request, error) {
 
 		r.buf.Write(data)
 
+	}
+
+	if r.buf.Len() > 0 {
+		r.raw = r.buf
 	}
 
 	r.path.Scheme = "http"
@@ -149,6 +166,9 @@ func (r *PutSettings) HttpRequest(ctx context.Context) (*http.Request, error) {
 	case r.paramSet == indexMask:
 		path.WriteString("/")
 
+		if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+			instrument.RecordPathPart(ctx, "index", r.index)
+		}
 		path.WriteString(r.index)
 		path.WriteString("/")
 		path.WriteString("_settings")
@@ -164,20 +184,20 @@ func (r *PutSettings) HttpRequest(ctx context.Context) (*http.Request, error) {
 	}
 
 	if ctx != nil {
-		req, err = http.NewRequestWithContext(ctx, method, r.path.String(), r.buf)
+		req, err = http.NewRequestWithContext(ctx, method, r.path.String(), r.raw)
 	} else {
-		req, err = http.NewRequest(method, r.path.String(), r.buf)
+		req, err = http.NewRequest(method, r.path.String(), r.raw)
 	}
 
 	req.Header = r.headers.Clone()
 
 	if req.Header.Get("Elastic-Api-Version") == "" {
-		if r.buf.Len() > 0 {
+		if r.raw != nil {
 			req.Header.Set("Elastic-Api-Version", "2023-10-31")
 		}
 	}
 	if req.Header.Get("Content-Type") == "" {
-		if r.buf.Len() > 0 {
+		if r.raw != nil {
 			req.Header.Set("Content-Type", "application/json")
 		}
 	}
@@ -194,27 +214,66 @@ func (r *PutSettings) HttpRequest(ctx context.Context) (*http.Request, error) {
 }
 
 // Perform runs the http.Request through the provided transport and returns an http.Response.
-func (r PutSettings) Perform(ctx context.Context) (*http.Response, error) {
+func (r PutSettings) Perform(providedCtx context.Context) (*http.Response, error) {
+	var ctx context.Context
+	if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+		if r.spanStarted == false {
+			ctx := instrument.Start(providedCtx, "indices.put_settings")
+			defer instrument.Close(ctx)
+		}
+	}
+	if ctx == nil {
+		ctx = providedCtx
+	}
+
 	req, err := r.HttpRequest(ctx)
 	if err != nil {
+		if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+			instrument.RecordError(ctx, err)
+		}
 		return nil, err
 	}
 
+	if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+		instrument.BeforeRequest(req, "indices.put_settings")
+		if reader := instrument.RecordRequestBody(ctx, "indices.put_settings", r.raw); reader != nil {
+			req.Body = reader
+		}
+	}
 	res, err := r.transport.Perform(req)
+	if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+		instrument.AfterRequest(req, "elasticsearch", "indices.put_settings")
+	}
 	if err != nil {
-		return nil, fmt.Errorf("an error happened during the PutSettings query execution: %w", err)
+		localErr := fmt.Errorf("an error happened during the PutSettings query execution: %w", err)
+		if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+			instrument.RecordError(ctx, localErr)
+		}
+		return nil, localErr
 	}
 
 	return res, nil
 }
 
 // Do runs the request through the transport, handle the response and returns a putsettings.Response
-func (r PutSettings) Do(ctx context.Context) (*Response, error) {
+func (r PutSettings) Do(providedCtx context.Context) (*Response, error) {
+	var ctx context.Context
+	r.spanStarted = true
+	if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+		ctx = instrument.Start(providedCtx, "indices.put_settings")
+		defer instrument.Close(ctx)
+	}
+	if ctx == nil {
+		ctx = providedCtx
+	}
 
 	response := NewResponse()
 
 	res, err := r.Perform(ctx)
 	if err != nil {
+		if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+			instrument.RecordError(ctx, err)
+		}
 		return nil, err
 	}
 	defer res.Body.Close()
@@ -222,6 +281,9 @@ func (r PutSettings) Do(ctx context.Context) (*Response, error) {
 	if res.StatusCode < 299 {
 		err = json.NewDecoder(res.Body).Decode(response)
 		if err != nil {
+			if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+				instrument.RecordError(ctx, err)
+			}
 			return nil, err
 		}
 
@@ -231,6 +293,9 @@ func (r PutSettings) Do(ctx context.Context) (*Response, error) {
 	errorResponse := types.NewElasticsearchError()
 	err = json.NewDecoder(res.Body).Decode(errorResponse)
 	if err != nil {
+		if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+			instrument.RecordError(ctx, err)
+		}
 		return nil, err
 	}
 
@@ -238,12 +303,26 @@ func (r PutSettings) Do(ctx context.Context) (*Response, error) {
 		errorResponse.Status = res.StatusCode
 	}
 
+	if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+		instrument.RecordError(ctx, errorResponse)
+	}
 	return nil, errorResponse
 }
 
 // Header set a key, value pair in the PutSettings headers map.
 func (r *PutSettings) Header(key, value string) *PutSettings {
 	r.headers.Set(key, value)
+
+	return r
+}
+
+// Indices Comma-separated list of data streams, indices, and aliases used to limit
+// the request. Supports wildcards (`*`). To target all data streams and
+// indices, omit this parameter or use `*` or `_all`.
+// API Name: index
+func (r *PutSettings) Indices(index string) *PutSettings {
+	r.paramSet |= indexMask
+	r.index = index
 
 	return r
 }
@@ -310,10 +389,56 @@ func (r *PutSettings) PreserveExisting(preserveexisting bool) *PutSettings {
 }
 
 // Timeout Period to wait for a response. If no response is received before the
-//  timeout expires, the request fails and returns an error.
+//
+//	timeout expires, the request fails and returns an error.
+//
 // API name: timeout
 func (r *PutSettings) Timeout(duration string) *PutSettings {
 	r.values.Set("timeout", duration)
+
+	return r
+}
+
+// ErrorTrace When set to `true` Elasticsearch will include the full stack trace of errors
+// when they occur.
+// API name: error_trace
+func (r *PutSettings) ErrorTrace(errortrace bool) *PutSettings {
+	r.values.Set("error_trace", strconv.FormatBool(errortrace))
+
+	return r
+}
+
+// FilterPath Comma-separated list of filters in dot notation which reduce the response
+// returned by Elasticsearch.
+// API name: filter_path
+func (r *PutSettings) FilterPath(filterpaths ...string) *PutSettings {
+	tmp := []string{}
+	for _, item := range filterpaths {
+		tmp = append(tmp, fmt.Sprintf("%v", item))
+	}
+	r.values.Set("filter_path", strings.Join(tmp, ","))
+
+	return r
+}
+
+// Human When set to `true` will return statistics in a format suitable for humans.
+// For example `"exists_time": "1h"` for humans and
+// `"eixsts_time_in_millis": 3600000` for computers. When disabled the human
+// readable values will be omitted. This makes sense for responses being
+// consumed
+// only by machines.
+// API name: human
+func (r *PutSettings) Human(human bool) *PutSettings {
+	r.values.Set("human", strconv.FormatBool(human))
+
+	return r
+}
+
+// Pretty If set to `true` the returned JSON will be "pretty-formatted". Only use
+// this option for debugging only.
+// API name: pretty
+func (r *PutSettings) Pretty(pretty bool) *PutSettings {
+	r.values.Set("pretty", strconv.FormatBool(pretty))
 
 	return r
 }
@@ -670,17 +795,10 @@ func (r *PutSettings) Settings(settings *types.IndexSettings) *PutSettings {
 	return r
 }
 
-// API name: shards
-func (r *PutSettings) Shards(shards int) *PutSettings {
-	r.req.Shards = &shards
-
-	return r
-}
-
 // Similarity Configure custom similarity settings to customize how search results are
 // scored.
 // API name: similarity
-func (r *PutSettings) Similarity(similarity *types.SettingsSimilarity) *PutSettings {
+func (r *PutSettings) Similarity(similarity map[string]types.SettingsSimilarity) *PutSettings {
 
 	r.req.Similarity = similarity
 

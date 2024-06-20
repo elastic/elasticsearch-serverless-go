@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // CgroupCpu type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/nodes/_types/Stats.ts#L487-L504
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/nodes/_types/Stats.ts#L487-L504
 type CgroupCpu struct {
 	// CfsPeriodMicros The period of time, in microseconds, for how regularly all tasks in the same
 	// cgroup as the Elasticsearch process should have their access to CPU resources
@@ -63,13 +64,13 @@ func (s *CgroupCpu) UnmarshalJSON(data []byte) error {
 
 		case "cfs_period_micros":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "CfsPeriodMicros", err)
 				}
 				s.CfsPeriodMicros = &value
 			case float64:
@@ -79,13 +80,13 @@ func (s *CgroupCpu) UnmarshalJSON(data []byte) error {
 
 		case "cfs_quota_micros":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "CfsQuotaMicros", err)
 				}
 				s.CfsQuotaMicros = &value
 			case float64:
@@ -96,7 +97,7 @@ func (s *CgroupCpu) UnmarshalJSON(data []byte) error {
 		case "control_group":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "ControlGroup", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -107,7 +108,7 @@ func (s *CgroupCpu) UnmarshalJSON(data []byte) error {
 
 		case "stat":
 			if err := dec.Decode(&s.Stat); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Stat", err)
 			}
 
 		}

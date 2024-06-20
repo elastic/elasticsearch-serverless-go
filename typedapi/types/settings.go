@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // Settings type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/transform/_types/Transform.ts#L98-L144
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/transform/_types/Transform.ts#L98-L144
 type Settings struct {
 	// AlignCheckpoints Specifies whether the transform checkpoint ranges should be optimized for
 	// performance. Such optimization can align
@@ -83,13 +84,13 @@ func (s *Settings) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "align_checkpoints":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "AlignCheckpoints", err)
 				}
 				s.AlignCheckpoints = &value
 			case bool:
@@ -97,13 +98,13 @@ func (s *Settings) UnmarshalJSON(data []byte) error {
 			}
 
 		case "dates_as_epoch_millis":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "DatesAsEpochMillis", err)
 				}
 				s.DatesAsEpochMillis = &value
 			case bool:
@@ -111,13 +112,13 @@ func (s *Settings) UnmarshalJSON(data []byte) error {
 			}
 
 		case "deduce_mappings":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "DeduceMappings", err)
 				}
 				s.DeduceMappings = &value
 			case bool:
@@ -125,13 +126,13 @@ func (s *Settings) UnmarshalJSON(data []byte) error {
 			}
 
 		case "docs_per_second":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseFloat(v, 32)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "DocsPerSecond", err)
 				}
 				f := float32(value)
 				s.DocsPerSecond = &f
@@ -142,13 +143,13 @@ func (s *Settings) UnmarshalJSON(data []byte) error {
 
 		case "max_page_search_size":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "MaxPageSearchSize", err)
 				}
 				s.MaxPageSearchSize = &value
 			case float64:
@@ -157,13 +158,13 @@ func (s *Settings) UnmarshalJSON(data []byte) error {
 			}
 
 		case "unattended":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Unattended", err)
 				}
 				s.Unattended = &value
 			case bool:

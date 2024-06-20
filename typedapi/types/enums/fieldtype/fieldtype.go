@@ -16,14 +16,14 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 // Package fieldtype
 package fieldtype
 
 import "strings"
 
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/mapping/Property.ts#L158-L202
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/mapping/Property.ts#L166-L213
 type FieldType struct {
 	Name string
 }
@@ -56,6 +56,8 @@ var (
 	Nested = FieldType{"nested"}
 
 	Object = FieldType{"object"}
+
+	Version = FieldType{"version"}
 
 	Murmur3 = FieldType{"murmur3"}
 
@@ -111,9 +113,13 @@ var (
 
 	Densevector = FieldType{"dense_vector"}
 
+	Semantictext = FieldType{"semantic_text"}
+
 	Sparsevector = FieldType{"sparse_vector"}
 
 	Matchonlytext = FieldType{"match_only_text"}
+
+	Icucollationkeyword = FieldType{"icu_collation_keyword"}
 )
 
 func (f FieldType) MarshalText() (text []byte, err error) {
@@ -151,6 +157,8 @@ func (f *FieldType) UnmarshalText(text []byte) error {
 		*f = Nested
 	case "object":
 		*f = Object
+	case "version":
+		*f = Version
 	case "murmur3":
 		*f = Murmur3
 	case "token_count":
@@ -205,10 +213,14 @@ func (f *FieldType) UnmarshalText(text []byte) error {
 		*f = Aggregatemetricdouble
 	case "dense_vector":
 		*f = Densevector
+	case "semantic_text":
+		*f = Semantictext
 	case "sparse_vector":
 		*f = Sparsevector
 	case "match_only_text":
 		*f = Matchonlytext
+	case "icu_collation_keyword":
+		*f = Icucollationkeyword
 	default:
 		*f = FieldType{string(text)}
 	}

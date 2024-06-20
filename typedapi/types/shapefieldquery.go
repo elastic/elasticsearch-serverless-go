@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,6 +24,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 
 	"github.com/elastic/elasticsearch-serverless-go/typedapi/types/enums/geoshaperelation"
@@ -31,7 +32,7 @@ import (
 
 // ShapeFieldQuery type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/query_dsl/specialized.ts#L354-L367
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/query_dsl/specialized.ts#L354-L367
 type ShapeFieldQuery struct {
 	// IndexedShape Queries using a pre-indexed shape.
 	IndexedShape *FieldLookup `json:"indexed_shape,omitempty"`
@@ -59,17 +60,17 @@ func (s *ShapeFieldQuery) UnmarshalJSON(data []byte) error {
 
 		case "indexed_shape":
 			if err := dec.Decode(&s.IndexedShape); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "IndexedShape", err)
 			}
 
 		case "relation":
 			if err := dec.Decode(&s.Relation); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Relation", err)
 			}
 
 		case "shape":
 			if err := dec.Decode(&s.Shape); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Shape", err)
 			}
 
 		}

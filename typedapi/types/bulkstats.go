@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // BulkStats type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/Stats.ts#L68-L78
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/Stats.ts#L68-L78
 type BulkStats struct {
 	AvgSize           ByteSize `json:"avg_size,omitempty"`
 	AvgSizeInBytes    int64    `json:"avg_size_in_bytes"`
@@ -60,17 +61,17 @@ func (s *BulkStats) UnmarshalJSON(data []byte) error {
 
 		case "avg_size":
 			if err := dec.Decode(&s.AvgSize); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "AvgSize", err)
 			}
 
 		case "avg_size_in_bytes":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "AvgSizeInBytes", err)
 				}
 				s.AvgSizeInBytes = value
 			case float64:
@@ -80,22 +81,22 @@ func (s *BulkStats) UnmarshalJSON(data []byte) error {
 
 		case "avg_time":
 			if err := dec.Decode(&s.AvgTime); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "AvgTime", err)
 			}
 
 		case "avg_time_in_millis":
 			if err := dec.Decode(&s.AvgTimeInMillis); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "AvgTimeInMillis", err)
 			}
 
 		case "total_operations":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "TotalOperations", err)
 				}
 				s.TotalOperations = value
 			case float64:
@@ -105,17 +106,17 @@ func (s *BulkStats) UnmarshalJSON(data []byte) error {
 
 		case "total_size":
 			if err := dec.Decode(&s.TotalSize); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "TotalSize", err)
 			}
 
 		case "total_size_in_bytes":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "TotalSizeInBytes", err)
 				}
 				s.TotalSizeInBytes = value
 			case float64:
@@ -125,12 +126,12 @@ func (s *BulkStats) UnmarshalJSON(data []byte) error {
 
 		case "total_time":
 			if err := dec.Decode(&s.TotalTime); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "TotalTime", err)
 			}
 
 		case "total_time_in_millis":
 			if err := dec.Decode(&s.TotalTimeInMillis); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "TotalTimeInMillis", err)
 			}
 
 		}

@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -34,7 +34,7 @@ import (
 
 // KeyedPercentiles type alias.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/aggregations/Aggregate.ts#L158-L158
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/aggregations/Aggregate.ts#L158-L158
 type KeyedPercentiles map[string]string
 
 func (s KeyedPercentiles) UnmarshalJSON(data []byte) error {
@@ -51,7 +51,7 @@ func (s KeyedPercentiles) UnmarshalJSON(data []byte) error {
 
 		if key, ok := t.(string); ok {
 
-			var tmp interface{}
+			var tmp any
 			if err := dec.Decode(&tmp); err != nil {
 				return err
 			}

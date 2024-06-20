@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // DataCounts type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/ml/_types/Job.ts#L352-L372
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/ml/_types/Job.ts#L352-L372
 type DataCounts struct {
 	BucketCount                 int64  `json:"bucket_count"`
 	EarliestRecordTimestamp     *int64 `json:"earliest_record_timestamp,omitempty"`
@@ -69,13 +70,13 @@ func (s *DataCounts) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "bucket_count":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "BucketCount", err)
 				}
 				s.BucketCount = value
 			case float64:
@@ -84,13 +85,13 @@ func (s *DataCounts) UnmarshalJSON(data []byte) error {
 			}
 
 		case "earliest_record_timestamp":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "EarliestRecordTimestamp", err)
 				}
 				s.EarliestRecordTimestamp = &value
 			case float64:
@@ -99,13 +100,13 @@ func (s *DataCounts) UnmarshalJSON(data []byte) error {
 			}
 
 		case "empty_bucket_count":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "EmptyBucketCount", err)
 				}
 				s.EmptyBucketCount = value
 			case float64:
@@ -114,13 +115,13 @@ func (s *DataCounts) UnmarshalJSON(data []byte) error {
 			}
 
 		case "input_bytes":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "InputBytes", err)
 				}
 				s.InputBytes = value
 			case float64:
@@ -129,13 +130,13 @@ func (s *DataCounts) UnmarshalJSON(data []byte) error {
 			}
 
 		case "input_field_count":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "InputFieldCount", err)
 				}
 				s.InputFieldCount = value
 			case float64:
@@ -144,13 +145,13 @@ func (s *DataCounts) UnmarshalJSON(data []byte) error {
 			}
 
 		case "input_record_count":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "InputRecordCount", err)
 				}
 				s.InputRecordCount = value
 			case float64:
@@ -159,13 +160,13 @@ func (s *DataCounts) UnmarshalJSON(data []byte) error {
 			}
 
 		case "invalid_date_count":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "InvalidDateCount", err)
 				}
 				s.InvalidDateCount = value
 			case float64:
@@ -175,17 +176,17 @@ func (s *DataCounts) UnmarshalJSON(data []byte) error {
 
 		case "job_id":
 			if err := dec.Decode(&s.JobId); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "JobId", err)
 			}
 
 		case "last_data_time":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "LastDataTime", err)
 				}
 				s.LastDataTime = &value
 			case float64:
@@ -194,13 +195,13 @@ func (s *DataCounts) UnmarshalJSON(data []byte) error {
 			}
 
 		case "latest_bucket_timestamp":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "LatestBucketTimestamp", err)
 				}
 				s.LatestBucketTimestamp = &value
 			case float64:
@@ -209,13 +210,13 @@ func (s *DataCounts) UnmarshalJSON(data []byte) error {
 			}
 
 		case "latest_empty_bucket_timestamp":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "LatestEmptyBucketTimestamp", err)
 				}
 				s.LatestEmptyBucketTimestamp = &value
 			case float64:
@@ -224,13 +225,13 @@ func (s *DataCounts) UnmarshalJSON(data []byte) error {
 			}
 
 		case "latest_record_timestamp":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "LatestRecordTimestamp", err)
 				}
 				s.LatestRecordTimestamp = &value
 			case float64:
@@ -239,13 +240,13 @@ func (s *DataCounts) UnmarshalJSON(data []byte) error {
 			}
 
 		case "latest_sparse_bucket_timestamp":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "LatestSparseBucketTimestamp", err)
 				}
 				s.LatestSparseBucketTimestamp = &value
 			case float64:
@@ -254,13 +255,13 @@ func (s *DataCounts) UnmarshalJSON(data []byte) error {
 			}
 
 		case "log_time":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "LogTime", err)
 				}
 				s.LogTime = &value
 			case float64:
@@ -269,13 +270,13 @@ func (s *DataCounts) UnmarshalJSON(data []byte) error {
 			}
 
 		case "missing_field_count":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "MissingFieldCount", err)
 				}
 				s.MissingFieldCount = value
 			case float64:
@@ -284,13 +285,13 @@ func (s *DataCounts) UnmarshalJSON(data []byte) error {
 			}
 
 		case "out_of_order_timestamp_count":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "OutOfOrderTimestampCount", err)
 				}
 				s.OutOfOrderTimestampCount = value
 			case float64:
@@ -299,13 +300,13 @@ func (s *DataCounts) UnmarshalJSON(data []byte) error {
 			}
 
 		case "processed_field_count":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "ProcessedFieldCount", err)
 				}
 				s.ProcessedFieldCount = value
 			case float64:
@@ -314,13 +315,13 @@ func (s *DataCounts) UnmarshalJSON(data []byte) error {
 			}
 
 		case "processed_record_count":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "ProcessedRecordCount", err)
 				}
 				s.ProcessedRecordCount = value
 			case float64:
@@ -329,13 +330,13 @@ func (s *DataCounts) UnmarshalJSON(data []byte) error {
 			}
 
 		case "sparse_bucket_count":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "SparseBucketCount", err)
 				}
 				s.SparseBucketCount = value
 			case float64:

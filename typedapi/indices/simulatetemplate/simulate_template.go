@@ -16,9 +16,10 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
-// Simulate resolving the given template name or body
+// Returns the index configuration that would be applied by a particular index
+// template.
 package simulatetemplate
 
 import (
@@ -51,15 +52,19 @@ type SimulateTemplate struct {
 	values  url.Values
 	path    url.URL
 
-	buf *gobytes.Buffer
+	raw io.Reader
 
 	req      *Request
 	deferred []func(request *Request) error
-	raw      io.Reader
+	buf      *gobytes.Buffer
 
 	paramSet int
 
 	name string
+
+	spanStarted bool
+
+	instrument elastictransport.Instrumentation
 }
 
 // NewSimulateTemplate type alias for index.
@@ -75,15 +80,25 @@ func NewSimulateTemplateFunc(tp elastictransport.Interface) NewSimulateTemplate 
 	}
 }
 
-// Simulate resolving the given template name or body
+// Returns the index configuration that would be applied by a particular index
+// template.
 //
-// https://www.elastic.co/guide/en/elasticsearch/reference/master/indices-templates.html
+// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-simulate-template.html
 func New(tp elastictransport.Interface) *SimulateTemplate {
 	r := &SimulateTemplate{
 		transport: tp,
 		values:    make(url.Values),
 		headers:   make(http.Header),
-		buf:       gobytes.NewBuffer(nil),
+
+		buf: gobytes.NewBuffer(nil),
+
+		req: NewRequest(),
+	}
+
+	if instrumented, ok := r.transport.(elastictransport.Instrumented); ok {
+		if instrument := instrumented.InstrumentationEnabled(); instrument != nil {
+			r.instrument = instrument
+		}
 	}
 
 	return r
@@ -122,9 +137,7 @@ func (r *SimulateTemplate) HttpRequest(ctx context.Context) (*http.Request, erro
 		}
 	}
 
-	if r.raw != nil {
-		r.buf.ReadFrom(r.raw)
-	} else if r.req != nil {
+	if r.raw == nil && r.req != nil {
 
 		data, err := json.Marshal(r.req)
 
@@ -134,6 +147,10 @@ func (r *SimulateTemplate) HttpRequest(ctx context.Context) (*http.Request, erro
 
 		r.buf.Write(data)
 
+	}
+
+	if r.buf.Len() > 0 {
+		r.raw = r.buf
 	}
 
 	r.path.Scheme = "http"
@@ -153,6 +170,9 @@ func (r *SimulateTemplate) HttpRequest(ctx context.Context) (*http.Request, erro
 		path.WriteString("_simulate")
 		path.WriteString("/")
 
+		if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+			instrument.RecordPathPart(ctx, "name", r.name)
+		}
 		path.WriteString(r.name)
 
 		method = http.MethodPost
@@ -166,20 +186,20 @@ func (r *SimulateTemplate) HttpRequest(ctx context.Context) (*http.Request, erro
 	}
 
 	if ctx != nil {
-		req, err = http.NewRequestWithContext(ctx, method, r.path.String(), r.buf)
+		req, err = http.NewRequestWithContext(ctx, method, r.path.String(), r.raw)
 	} else {
-		req, err = http.NewRequest(method, r.path.String(), r.buf)
+		req, err = http.NewRequest(method, r.path.String(), r.raw)
 	}
 
 	req.Header = r.headers.Clone()
 
 	if req.Header.Get("Elastic-Api-Version") == "" {
-		if r.buf.Len() > 0 {
+		if r.raw != nil {
 			req.Header.Set("Elastic-Api-Version", "2023-10-31")
 		}
 	}
 	if req.Header.Get("Content-Type") == "" {
-		if r.buf.Len() > 0 {
+		if r.raw != nil {
 			req.Header.Set("Content-Type", "application/json")
 		}
 	}
@@ -196,27 +216,66 @@ func (r *SimulateTemplate) HttpRequest(ctx context.Context) (*http.Request, erro
 }
 
 // Perform runs the http.Request through the provided transport and returns an http.Response.
-func (r SimulateTemplate) Perform(ctx context.Context) (*http.Response, error) {
+func (r SimulateTemplate) Perform(providedCtx context.Context) (*http.Response, error) {
+	var ctx context.Context
+	if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+		if r.spanStarted == false {
+			ctx := instrument.Start(providedCtx, "indices.simulate_template")
+			defer instrument.Close(ctx)
+		}
+	}
+	if ctx == nil {
+		ctx = providedCtx
+	}
+
 	req, err := r.HttpRequest(ctx)
 	if err != nil {
+		if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+			instrument.RecordError(ctx, err)
+		}
 		return nil, err
 	}
 
+	if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+		instrument.BeforeRequest(req, "indices.simulate_template")
+		if reader := instrument.RecordRequestBody(ctx, "indices.simulate_template", r.raw); reader != nil {
+			req.Body = reader
+		}
+	}
 	res, err := r.transport.Perform(req)
+	if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+		instrument.AfterRequest(req, "elasticsearch", "indices.simulate_template")
+	}
 	if err != nil {
-		return nil, fmt.Errorf("an error happened during the SimulateTemplate query execution: %w", err)
+		localErr := fmt.Errorf("an error happened during the SimulateTemplate query execution: %w", err)
+		if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+			instrument.RecordError(ctx, localErr)
+		}
+		return nil, localErr
 	}
 
 	return res, nil
 }
 
 // Do runs the request through the transport, handle the response and returns a simulatetemplate.Response
-func (r SimulateTemplate) Do(ctx context.Context) (*Response, error) {
+func (r SimulateTemplate) Do(providedCtx context.Context) (*Response, error) {
+	var ctx context.Context
+	r.spanStarted = true
+	if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+		ctx = instrument.Start(providedCtx, "indices.simulate_template")
+		defer instrument.Close(ctx)
+	}
+	if ctx == nil {
+		ctx = providedCtx
+	}
 
 	response := NewResponse()
 
 	res, err := r.Perform(ctx)
 	if err != nil {
+		if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+			instrument.RecordError(ctx, err)
+		}
 		return nil, err
 	}
 	defer res.Body.Close()
@@ -224,6 +283,9 @@ func (r SimulateTemplate) Do(ctx context.Context) (*Response, error) {
 	if res.StatusCode < 299 {
 		err = json.NewDecoder(res.Body).Decode(response)
 		if err != nil {
+			if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+				instrument.RecordError(ctx, err)
+			}
 			return nil, err
 		}
 
@@ -233,6 +295,9 @@ func (r SimulateTemplate) Do(ctx context.Context) (*Response, error) {
 	errorResponse := types.NewElasticsearchError()
 	err = json.NewDecoder(res.Body).Decode(errorResponse)
 	if err != nil {
+		if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+			instrument.RecordError(ctx, err)
+		}
 		return nil, err
 	}
 
@@ -240,6 +305,9 @@ func (r SimulateTemplate) Do(ctx context.Context) (*Response, error) {
 		errorResponse.Status = res.StatusCode
 	}
 
+	if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+		instrument.RecordError(ctx, errorResponse)
+	}
 	return nil, errorResponse
 }
 
@@ -289,6 +357,57 @@ func (r *SimulateTemplate) IncludeDefaults(includedefaults bool) *SimulateTempla
 	return r
 }
 
+// ErrorTrace When set to `true` Elasticsearch will include the full stack trace of errors
+// when they occur.
+// API name: error_trace
+func (r *SimulateTemplate) ErrorTrace(errortrace bool) *SimulateTemplate {
+	r.values.Set("error_trace", strconv.FormatBool(errortrace))
+
+	return r
+}
+
+// FilterPath Comma-separated list of filters in dot notation which reduce the response
+// returned by Elasticsearch.
+// API name: filter_path
+func (r *SimulateTemplate) FilterPath(filterpaths ...string) *SimulateTemplate {
+	tmp := []string{}
+	for _, item := range filterpaths {
+		tmp = append(tmp, fmt.Sprintf("%v", item))
+	}
+	r.values.Set("filter_path", strings.Join(tmp, ","))
+
+	return r
+}
+
+// Human When set to `true` will return statistics in a format suitable for humans.
+// For example `"exists_time": "1h"` for humans and
+// `"eixsts_time_in_millis": 3600000` for computers. When disabled the human
+// readable values will be omitted. This makes sense for responses being
+// consumed
+// only by machines.
+// API name: human
+func (r *SimulateTemplate) Human(human bool) *SimulateTemplate {
+	r.values.Set("human", strconv.FormatBool(human))
+
+	return r
+}
+
+// Pretty If set to `true` the returned JSON will be "pretty-formatted". Only use
+// this option for debugging only.
+// API name: pretty
+func (r *SimulateTemplate) Pretty(pretty bool) *SimulateTemplate {
+	r.values.Set("pretty", strconv.FormatBool(pretty))
+
+	return r
+}
+
+// AllowAutoCreate This setting overrides the value of the `action.auto_create_index` cluster
+// setting.
+// If set to `true` in a template, then indices can be automatically created
+// using that template even if auto-creation of indices is disabled via
+// `actions.auto_create_index`.
+// If set to `false`, then indices or data streams matching the template must
+// always be explicitly created, and may never be automatically created.
 // API name: allow_auto_create
 func (r *SimulateTemplate) AllowAutoCreate(allowautocreate bool) *SimulateTemplate {
 	r.req.AllowAutoCreate = &allowautocreate
@@ -311,22 +430,45 @@ func (r *SimulateTemplate) ComposedOf(composedofs ...string) *SimulateTemplate {
 // Supports an empty object.
 // Data streams require a matching index template with a `data_stream` object.
 // API name: data_stream
-func (r *SimulateTemplate) DataStream(datastream *types.IndexTemplateDataStreamConfiguration) *SimulateTemplate {
+func (r *SimulateTemplate) DataStream(datastream *types.DataStreamVisibility) *SimulateTemplate {
 
 	r.req.DataStream = datastream
 
 	return r
 }
 
-// IndexPatterns Name of the index template.
-// API name: index_patterns
-func (r *SimulateTemplate) IndexPatterns(names ...string) *SimulateTemplate {
-	r.req.IndexPatterns = names
+// Deprecated Marks this index template as deprecated. When creating or updating a
+// non-deprecated index template
+// that uses deprecated components, Elasticsearch will emit a deprecation
+// warning.
+// API name: deprecated
+func (r *SimulateTemplate) Deprecated(deprecated bool) *SimulateTemplate {
+	r.req.Deprecated = &deprecated
 
 	return r
 }
 
-// Meta_ Optional user metadata about the index template. May have any contents.
+// IgnoreMissingComponentTemplates The configuration option ignore_missing_component_templates can be used when
+// an index template
+// references a component template that might not exist
+// API name: ignore_missing_component_templates
+func (r *SimulateTemplate) IgnoreMissingComponentTemplates(ignoremissingcomponenttemplates ...string) *SimulateTemplate {
+	r.req.IgnoreMissingComponentTemplates = ignoremissingcomponenttemplates
+
+	return r
+}
+
+// IndexPatterns Array of wildcard (`*`) expressions used to match the names of data streams
+// and indices during creation.
+// API name: index_patterns
+func (r *SimulateTemplate) IndexPatterns(indices ...string) *SimulateTemplate {
+	r.req.IndexPatterns = indices
+
+	return r
+}
+
+// Meta_ Optional user metadata about the index template.
+// May have any contents.
 // This map is not automatically generated by Elasticsearch.
 // API name: _meta
 func (r *SimulateTemplate) Meta_(metadata types.Metadata) *SimulateTemplate {
@@ -353,7 +495,7 @@ func (r *SimulateTemplate) Priority(priority int64) *SimulateTemplate {
 // It may optionally include an `aliases`, `mappings`, or `settings`
 // configuration.
 // API name: template
-func (r *SimulateTemplate) Template(template *types.IndexTemplateSummary) *SimulateTemplate {
+func (r *SimulateTemplate) Template(template *types.IndexTemplateMapping) *SimulateTemplate {
 
 	r.req.Template = template
 

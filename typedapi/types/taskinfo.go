@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // TaskInfo type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/tasks/_types/TaskInfo.ts#L32-L47
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/tasks/_types/TaskInfo.ts#L32-L47
 type TaskInfo struct {
 	Action             string            `json:"action"`
 	Cancellable        bool              `json:"cancellable"`
@@ -66,7 +67,7 @@ func (s *TaskInfo) UnmarshalJSON(data []byte) error {
 		case "action":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Action", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -76,13 +77,13 @@ func (s *TaskInfo) UnmarshalJSON(data []byte) error {
 			s.Action = o
 
 		case "cancellable":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Cancellable", err)
 				}
 				s.Cancellable = value
 			case bool:
@@ -90,13 +91,13 @@ func (s *TaskInfo) UnmarshalJSON(data []byte) error {
 			}
 
 		case "cancelled":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Cancelled", err)
 				}
 				s.Cancelled = &value
 			case bool:
@@ -106,7 +107,7 @@ func (s *TaskInfo) UnmarshalJSON(data []byte) error {
 		case "description":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Description", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -120,17 +121,17 @@ func (s *TaskInfo) UnmarshalJSON(data []byte) error {
 				s.Headers = make(map[string]string, 0)
 			}
 			if err := dec.Decode(&s.Headers); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Headers", err)
 			}
 
 		case "id":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Id", err)
 				}
 				s.Id = value
 			case float64:
@@ -140,38 +141,38 @@ func (s *TaskInfo) UnmarshalJSON(data []byte) error {
 
 		case "node":
 			if err := dec.Decode(&s.Node); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Node", err)
 			}
 
 		case "parent_task_id":
 			if err := dec.Decode(&s.ParentTaskId); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "ParentTaskId", err)
 			}
 
 		case "running_time":
 			if err := dec.Decode(&s.RunningTime); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "RunningTime", err)
 			}
 
 		case "running_time_in_nanos":
 			if err := dec.Decode(&s.RunningTimeInNanos); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "RunningTimeInNanos", err)
 			}
 
 		case "start_time_in_millis":
 			if err := dec.Decode(&s.StartTimeInMillis); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "StartTimeInMillis", err)
 			}
 
 		case "status":
 			if err := dec.Decode(&s.Status); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Status", err)
 			}
 
 		case "type":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Type", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)

@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,6 +24,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 
@@ -34,7 +35,7 @@ import (
 
 // CompositeDateHistogramAggregation type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/aggregations/bucket.ts#L174-L182
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/aggregations/bucket.ts#L176-L184
 type CompositeDateHistogramAggregation struct {
 	// CalendarInterval Either `calendar_interval` or `fixed_interval` must be present
 	CalendarInterval *string `json:"calendar_interval,omitempty"`
@@ -70,23 +71,23 @@ func (s *CompositeDateHistogramAggregation) UnmarshalJSON(data []byte) error {
 
 		case "calendar_interval":
 			if err := dec.Decode(&s.CalendarInterval); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "CalendarInterval", err)
 			}
 
 		case "field":
 			if err := dec.Decode(&s.Field); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Field", err)
 			}
 
 		case "fixed_interval":
 			if err := dec.Decode(&s.FixedInterval); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "FixedInterval", err)
 			}
 
 		case "format":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Format", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -96,13 +97,13 @@ func (s *CompositeDateHistogramAggregation) UnmarshalJSON(data []byte) error {
 			s.Format = &o
 
 		case "missing_bucket":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "MissingBucket", err)
 				}
 				s.MissingBucket = &value
 			case bool:
@@ -111,32 +112,63 @@ func (s *CompositeDateHistogramAggregation) UnmarshalJSON(data []byte) error {
 
 		case "missing_order":
 			if err := dec.Decode(&s.MissingOrder); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "MissingOrder", err)
 			}
 
 		case "offset":
 			if err := dec.Decode(&s.Offset); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Offset", err)
 			}
 
 		case "order":
 			if err := dec.Decode(&s.Order); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Order", err)
 			}
 
 		case "script":
-			if err := dec.Decode(&s.Script); err != nil {
-				return err
+			message := json.RawMessage{}
+			if err := dec.Decode(&message); err != nil {
+				return fmt.Errorf("%s | %w", "Script", err)
+			}
+			keyDec := json.NewDecoder(bytes.NewReader(message))
+			for {
+				t, err := keyDec.Token()
+				if err != nil {
+					if errors.Is(err, io.EOF) {
+						break
+					}
+					return fmt.Errorf("%s | %w", "Script", err)
+				}
+
+				switch t {
+
+				case "lang", "options", "source":
+					o := NewInlineScript()
+					localDec := json.NewDecoder(bytes.NewReader(message))
+					if err := localDec.Decode(&o); err != nil {
+						return fmt.Errorf("%s | %w", "Script", err)
+					}
+					s.Script = o
+
+				case "id":
+					o := NewStoredScriptId()
+					localDec := json.NewDecoder(bytes.NewReader(message))
+					if err := localDec.Decode(&o); err != nil {
+						return fmt.Errorf("%s | %w", "Script", err)
+					}
+					s.Script = o
+
+				}
 			}
 
 		case "time_zone":
 			if err := dec.Decode(&s.TimeZone); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "TimeZone", err)
 			}
 
 		case "value_type":
 			if err := dec.Decode(&s.ValueType); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "ValueType", err)
 			}
 
 		}

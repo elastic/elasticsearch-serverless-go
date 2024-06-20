@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package datastreamsstats
 
@@ -26,8 +26,7 @@ import (
 
 // Response holds the response body struct for the package datastreamsstats
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/indices/data_streams_stats/IndicesDataStreamsStatsResponse.ts#L25-L43
-
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/indices/data_streams_stats/IndicesDataStreamsStatsResponse.ts#L25-L43
 type Response struct {
 
 	// BackingIndices Total number of backing indices for the selected data streams.
@@ -39,7 +38,7 @@ type Response struct {
 	// Shards_ Contains information about shards that attempted to execute the request.
 	Shards_ types.ShardStatistics `json:"_shards"`
 	// TotalStoreSizeBytes Total size, in bytes, of all shards for the selected data streams.
-	TotalStoreSizeBytes int `json:"total_store_size_bytes"`
+	TotalStoreSizeBytes int64 `json:"total_store_size_bytes"`
 	// TotalStoreSizes Total size of all shards for the selected data streams.
 	// This property is included only if the `human` query parameter is `true`
 	TotalStoreSizes types.ByteSize `json:"total_store_sizes,omitempty"`

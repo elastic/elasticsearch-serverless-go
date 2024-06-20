@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // ClusterRemoteProxyInfo type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/cluster/remote_info/ClusterRemoteInfoResponse.ts#L41-L50
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/cluster/remote_info/ClusterRemoteInfoResponse.ts#L42-L51
 type ClusterRemoteProxyInfo struct {
 	Connected                 bool     `json:"connected"`
 	InitialConnectTimeout     Duration `json:"initial_connect_timeout"`
@@ -58,13 +59,13 @@ func (s *ClusterRemoteProxyInfo) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "connected":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Connected", err)
 				}
 				s.Connected = value
 			case bool:
@@ -73,18 +74,18 @@ func (s *ClusterRemoteProxyInfo) UnmarshalJSON(data []byte) error {
 
 		case "initial_connect_timeout":
 			if err := dec.Decode(&s.InitialConnectTimeout); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "InitialConnectTimeout", err)
 			}
 
 		case "max_proxy_socket_connections":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "MaxProxySocketConnections", err)
 				}
 				s.MaxProxySocketConnections = value
 			case float64:
@@ -94,18 +95,18 @@ func (s *ClusterRemoteProxyInfo) UnmarshalJSON(data []byte) error {
 
 		case "mode":
 			if err := dec.Decode(&s.Mode); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Mode", err)
 			}
 
 		case "num_proxy_sockets_connected":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "NumProxySocketsConnected", err)
 				}
 				s.NumProxySocketsConnected = value
 			case float64:
@@ -116,7 +117,7 @@ func (s *ClusterRemoteProxyInfo) UnmarshalJSON(data []byte) error {
 		case "proxy_address":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "ProxyAddress", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -128,7 +129,7 @@ func (s *ClusterRemoteProxyInfo) UnmarshalJSON(data []byte) error {
 		case "server_name":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "ServerName", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -138,13 +139,13 @@ func (s *ClusterRemoteProxyInfo) UnmarshalJSON(data []byte) error {
 			s.ServerName = o
 
 		case "skip_unavailable":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "SkipUnavailable", err)
 				}
 				s.SkipUnavailable = value
 			case bool:

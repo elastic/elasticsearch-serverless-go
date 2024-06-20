@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // ExtendedMemoryStats type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/nodes/_types/Stats.ts#L622-L631
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/nodes/_types/Stats.ts#L622-L631
 type ExtendedMemoryStats struct {
 	// AdjustedTotalInBytes If the amount of physical memory has been overridden using the
 	// `es`.`total_memory_bytes` system property then this reports the overridden
@@ -71,13 +72,13 @@ func (s *ExtendedMemoryStats) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "adjusted_total_in_bytes":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "AdjustedTotalInBytes", err)
 				}
 				s.AdjustedTotalInBytes = &value
 			case float64:
@@ -86,13 +87,13 @@ func (s *ExtendedMemoryStats) UnmarshalJSON(data []byte) error {
 			}
 
 		case "free_in_bytes":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "FreeInBytes", err)
 				}
 				s.FreeInBytes = &value
 			case float64:
@@ -102,13 +103,13 @@ func (s *ExtendedMemoryStats) UnmarshalJSON(data []byte) error {
 
 		case "free_percent":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "FreePercent", err)
 				}
 				s.FreePercent = &value
 			case float64:
@@ -119,7 +120,7 @@ func (s *ExtendedMemoryStats) UnmarshalJSON(data []byte) error {
 		case "resident":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Resident", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -129,13 +130,13 @@ func (s *ExtendedMemoryStats) UnmarshalJSON(data []byte) error {
 			s.Resident = &o
 
 		case "resident_in_bytes":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "ResidentInBytes", err)
 				}
 				s.ResidentInBytes = &value
 			case float64:
@@ -146,7 +147,7 @@ func (s *ExtendedMemoryStats) UnmarshalJSON(data []byte) error {
 		case "share":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Share", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -156,13 +157,13 @@ func (s *ExtendedMemoryStats) UnmarshalJSON(data []byte) error {
 			s.Share = &o
 
 		case "share_in_bytes":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "ShareInBytes", err)
 				}
 				s.ShareInBytes = &value
 			case float64:
@@ -171,13 +172,13 @@ func (s *ExtendedMemoryStats) UnmarshalJSON(data []byte) error {
 			}
 
 		case "total_in_bytes":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "TotalInBytes", err)
 				}
 				s.TotalInBytes = &value
 			case float64:
@@ -188,7 +189,7 @@ func (s *ExtendedMemoryStats) UnmarshalJSON(data []byte) error {
 		case "total_virtual":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "TotalVirtual", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -198,13 +199,13 @@ func (s *ExtendedMemoryStats) UnmarshalJSON(data []byte) error {
 			s.TotalVirtual = &o
 
 		case "total_virtual_in_bytes":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "TotalVirtualInBytes", err)
 				}
 				s.TotalVirtualInBytes = &value
 			case float64:
@@ -213,13 +214,13 @@ func (s *ExtendedMemoryStats) UnmarshalJSON(data []byte) error {
 			}
 
 		case "used_in_bytes":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "UsedInBytes", err)
 				}
 				s.UsedInBytes = &value
 			case float64:
@@ -229,13 +230,13 @@ func (s *ExtendedMemoryStats) UnmarshalJSON(data []byte) error {
 
 		case "used_percent":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "UsedPercent", err)
 				}
 				s.UsedPercent = &value
 			case float64:

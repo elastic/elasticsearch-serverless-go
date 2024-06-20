@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // PipelineSettings type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/logstash/_types/Pipeline.ts#L28-L59
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/logstash/_types/Pipeline.ts#L28-L59
 type PipelineSettings struct {
 	// PipelineBatchDelay When creating pipeline event batches, how long in milliseconds to wait for
 	// each event before dispatching an undersized batch to pipeline workers.
@@ -70,13 +71,13 @@ func (s *PipelineSettings) UnmarshalJSON(data []byte) error {
 
 		case "pipeline.batch.delay":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "PipelineBatchDelay", err)
 				}
 				s.PipelineBatchDelay = value
 			case float64:
@@ -86,13 +87,13 @@ func (s *PipelineSettings) UnmarshalJSON(data []byte) error {
 
 		case "pipeline.batch.size":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "PipelineBatchSize", err)
 				}
 				s.PipelineBatchSize = value
 			case float64:
@@ -102,13 +103,13 @@ func (s *PipelineSettings) UnmarshalJSON(data []byte) error {
 
 		case "pipeline.workers":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "PipelineWorkers", err)
 				}
 				s.PipelineWorkers = value
 			case float64:
@@ -118,13 +119,13 @@ func (s *PipelineSettings) UnmarshalJSON(data []byte) error {
 
 		case "queue.checkpoint.writes":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "QueueCheckpointWrites", err)
 				}
 				s.QueueCheckpointWrites = value
 			case float64:
@@ -134,13 +135,13 @@ func (s *PipelineSettings) UnmarshalJSON(data []byte) error {
 
 		case "queue.max_bytes.number":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "QueueMaxBytesNumber", err)
 				}
 				s.QueueMaxBytesNumber = value
 			case float64:
@@ -151,7 +152,7 @@ func (s *PipelineSettings) UnmarshalJSON(data []byte) error {
 		case "queue.max_bytes.units":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "QueueMaxBytesUnits", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -163,7 +164,7 @@ func (s *PipelineSettings) UnmarshalJSON(data []byte) error {
 		case "queue.type":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "QueueType", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)

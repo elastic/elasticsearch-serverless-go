@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -29,19 +29,19 @@ import (
 
 // NumericDecayFunction type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/query_dsl/compound.ts#L182-L184
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/query_dsl/compound.ts#L182-L184
 type NumericDecayFunction struct {
 	// MultiValueMode Determines how the distance is calculated when a field used for computing the
 	// decay contains multiple values.
 	MultiValueMode       *multivaluemode.MultiValueMode        `json:"multi_value_mode,omitempty"`
-	NumericDecayFunction map[string]DecayPlacementdoubledouble `json:"NumericDecayFunction,omitempty"`
+	NumericDecayFunction map[string]DecayPlacementdoubledouble `json:"-"`
 }
 
 // MarhsalJSON overrides marshalling for types with additional properties
 func (s NumericDecayFunction) MarshalJSON() ([]byte, error) {
 	type opt NumericDecayFunction
 	// We transform the struct to a map without the embedded additional properties map
-	tmp := make(map[string]interface{}, 0)
+	tmp := make(map[string]any, 0)
 
 	data, err := json.Marshal(opt(s))
 	if err != nil {

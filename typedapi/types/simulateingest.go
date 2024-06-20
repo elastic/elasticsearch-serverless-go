@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,12 +24,13 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 )
 
 // SimulateIngest type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/ingest/simulate/types.ts#L28-L31
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/ingest/simulate/types.ts#L28-L31
 type SimulateIngest struct {
 	Pipeline  *string  `json:"pipeline,omitempty"`
 	Timestamp DateTime `json:"timestamp"`
@@ -52,12 +53,12 @@ func (s *SimulateIngest) UnmarshalJSON(data []byte) error {
 
 		case "pipeline":
 			if err := dec.Decode(&s.Pipeline); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Pipeline", err)
 			}
 
 		case "timestamp":
 			if err := dec.Decode(&s.Timestamp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Timestamp", err)
 			}
 
 		}

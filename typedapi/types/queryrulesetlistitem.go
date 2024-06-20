@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // QueryRulesetListItem type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/query_ruleset/list/types.ts#L22-L31
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/query_ruleset/list/types.ts#L22-L31
 type QueryRulesetListItem struct {
 	// RulesCount The number of rules associated with this ruleset
 	RulesCount int `json:"rules_count"`
@@ -55,13 +56,13 @@ func (s *QueryRulesetListItem) UnmarshalJSON(data []byte) error {
 
 		case "rules_count":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "RulesCount", err)
 				}
 				s.RulesCount = value
 			case float64:
@@ -71,7 +72,7 @@ func (s *QueryRulesetListItem) UnmarshalJSON(data []byte) error {
 
 		case "ruleset_id":
 			if err := dec.Decode(&s.RulesetId); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "RulesetId", err)
 			}
 
 		}

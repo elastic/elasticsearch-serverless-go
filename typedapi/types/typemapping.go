@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,6 +24,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 
@@ -32,7 +33,7 @@ import (
 
 // TypeMapping type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/mapping/TypeMapping.ts#L34-L56
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/mapping/TypeMapping.ts#L34-L57
 type TypeMapping struct {
 	AllField             *AllField                      `json:"all_field,omitempty"`
 	DataStreamTimestamp_ *DataStreamTimestamp           `json:"_data_stream_timestamp,omitempty"`
@@ -50,6 +51,7 @@ type TypeMapping struct {
 	Runtime              map[string]RuntimeField        `json:"runtime,omitempty"`
 	Size_                *SizeField                     `json:"_size,omitempty"`
 	Source_              *SourceField                   `json:"_source,omitempty"`
+	Subobjects           *bool                          `json:"subobjects,omitempty"`
 }
 
 func (s *TypeMapping) UnmarshalJSON(data []byte) error {
@@ -69,22 +71,22 @@ func (s *TypeMapping) UnmarshalJSON(data []byte) error {
 
 		case "all_field":
 			if err := dec.Decode(&s.AllField); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "AllField", err)
 			}
 
 		case "_data_stream_timestamp":
 			if err := dec.Decode(&s.DataStreamTimestamp_); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "DataStreamTimestamp_", err)
 			}
 
 		case "date_detection":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "DateDetection", err)
 				}
 				s.DateDetection = &value
 			case bool:
@@ -93,27 +95,27 @@ func (s *TypeMapping) UnmarshalJSON(data []byte) error {
 
 		case "dynamic":
 			if err := dec.Decode(&s.Dynamic); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Dynamic", err)
 			}
 
 		case "dynamic_date_formats":
 			if err := dec.Decode(&s.DynamicDateFormats); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "DynamicDateFormats", err)
 			}
 
 		case "dynamic_templates":
 			if err := dec.Decode(&s.DynamicTemplates); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "DynamicTemplates", err)
 			}
 
 		case "enabled":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Enabled", err)
 				}
 				s.Enabled = &value
 			case bool:
@@ -122,27 +124,27 @@ func (s *TypeMapping) UnmarshalJSON(data []byte) error {
 
 		case "_field_names":
 			if err := dec.Decode(&s.FieldNames_); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "FieldNames_", err)
 			}
 
 		case "index_field":
 			if err := dec.Decode(&s.IndexField); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "IndexField", err)
 			}
 
 		case "_meta":
 			if err := dec.Decode(&s.Meta_); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Meta_", err)
 			}
 
 		case "numeric_detection":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "NumericDetection", err)
 				}
 				s.NumericDetection = &value
 			case bool:
@@ -156,7 +158,7 @@ func (s *TypeMapping) UnmarshalJSON(data []byte) error {
 			refs := make(map[string]json.RawMessage, 0)
 			dec.Decode(&refs)
 			for key, message := range refs {
-				kind := make(map[string]interface{})
+				kind := make(map[string]any)
 				buf := bytes.NewReader(message)
 				localDec := json.NewDecoder(buf)
 				localDec.Decode(&kind)
@@ -177,7 +179,7 @@ func (s *TypeMapping) UnmarshalJSON(data []byte) error {
 						return err
 					}
 					s.Properties[key] = oo
-				case "{dynamic_property}":
+				case "{dynamic_type}":
 					oo := NewDynamicProperty()
 					if err := localDec.Decode(&oo); err != nil {
 						return err
@@ -281,6 +283,18 @@ func (s *TypeMapping) UnmarshalJSON(data []byte) error {
 					s.Properties[key] = oo
 				case "object":
 					oo := NewObjectProperty()
+					if err := localDec.Decode(&oo); err != nil {
+						return err
+					}
+					s.Properties[key] = oo
+				case "semantic_text":
+					oo := NewSemanticTextProperty()
+					if err := localDec.Decode(&oo); err != nil {
+						return err
+					}
+					s.Properties[key] = oo
+				case "sparse_vector":
+					oo := NewSparseVectorProperty()
 					if err := localDec.Decode(&oo); err != nil {
 						return err
 					}
@@ -441,6 +455,12 @@ func (s *TypeMapping) UnmarshalJSON(data []byte) error {
 						return err
 					}
 					s.Properties[key] = oo
+				case "icu_collation_keyword":
+					oo := NewIcuCollationProperty()
+					if err := localDec.Decode(&oo); err != nil {
+						return err
+					}
+					s.Properties[key] = oo
 				default:
 					oo := new(Property)
 					if err := localDec.Decode(&oo); err != nil {
@@ -452,7 +472,7 @@ func (s *TypeMapping) UnmarshalJSON(data []byte) error {
 
 		case "_routing":
 			if err := dec.Decode(&s.Routing_); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Routing_", err)
 			}
 
 		case "runtime":
@@ -460,17 +480,31 @@ func (s *TypeMapping) UnmarshalJSON(data []byte) error {
 				s.Runtime = make(map[string]RuntimeField, 0)
 			}
 			if err := dec.Decode(&s.Runtime); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Runtime", err)
 			}
 
 		case "_size":
 			if err := dec.Decode(&s.Size_); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Size_", err)
 			}
 
 		case "_source":
 			if err := dec.Decode(&s.Source_); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Source_", err)
+			}
+
+		case "subobjects":
+			var tmp any
+			dec.Decode(&tmp)
+			switch v := tmp.(type) {
+			case string:
+				value, err := strconv.ParseBool(v)
+				if err != nil {
+					return fmt.Errorf("%s | %w", "Subobjects", err)
+				}
+				s.Subobjects = &value
+			case bool:
+				s.Subobjects = &v
 			}
 
 		}

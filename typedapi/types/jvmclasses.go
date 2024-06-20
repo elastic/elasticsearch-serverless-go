@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // JvmClasses type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/nodes/_types/Stats.ts#L908-L921
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/nodes/_types/Stats.ts#L908-L921
 type JvmClasses struct {
 	// CurrentLoadedCount Number of classes currently loaded by JVM.
 	CurrentLoadedCount *int64 `json:"current_loaded_count,omitempty"`
@@ -56,13 +57,13 @@ func (s *JvmClasses) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "current_loaded_count":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "CurrentLoadedCount", err)
 				}
 				s.CurrentLoadedCount = &value
 			case float64:
@@ -71,13 +72,13 @@ func (s *JvmClasses) UnmarshalJSON(data []byte) error {
 			}
 
 		case "total_loaded_count":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "TotalLoadedCount", err)
 				}
 				s.TotalLoadedCount = &value
 			case float64:
@@ -86,13 +87,13 @@ func (s *JvmClasses) UnmarshalJSON(data []byte) error {
 			}
 
 		case "total_unloaded_count":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "TotalUnloadedCount", err)
 				}
 				s.TotalUnloadedCount = &value
 			case float64:

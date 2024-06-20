@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // DictionaryDecompounderTokenFilter type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/analysis/token_filters.ts#L54-L56
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/analysis/token_filters.ts#L54-L56
 type DictionaryDecompounderTokenFilter struct {
 	HyphenationPatternsPath *string  `json:"hyphenation_patterns_path,omitempty"`
 	MaxSubwordSize          *int     `json:"max_subword_size,omitempty"`
@@ -61,7 +62,7 @@ func (s *DictionaryDecompounderTokenFilter) UnmarshalJSON(data []byte) error {
 		case "hyphenation_patterns_path":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "HyphenationPatternsPath", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -72,13 +73,13 @@ func (s *DictionaryDecompounderTokenFilter) UnmarshalJSON(data []byte) error {
 
 		case "max_subword_size":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "MaxSubwordSize", err)
 				}
 				s.MaxSubwordSize = &value
 			case float64:
@@ -88,13 +89,13 @@ func (s *DictionaryDecompounderTokenFilter) UnmarshalJSON(data []byte) error {
 
 		case "min_subword_size":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "MinSubwordSize", err)
 				}
 				s.MinSubwordSize = &value
 			case float64:
@@ -104,13 +105,13 @@ func (s *DictionaryDecompounderTokenFilter) UnmarshalJSON(data []byte) error {
 
 		case "min_word_size":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "MinWordSize", err)
 				}
 				s.MinWordSize = &value
 			case float64:
@@ -119,13 +120,13 @@ func (s *DictionaryDecompounderTokenFilter) UnmarshalJSON(data []byte) error {
 			}
 
 		case "only_longest_match":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "OnlyLongestMatch", err)
 				}
 				s.OnlyLongestMatch = &value
 			case bool:
@@ -134,23 +135,23 @@ func (s *DictionaryDecompounderTokenFilter) UnmarshalJSON(data []byte) error {
 
 		case "type":
 			if err := dec.Decode(&s.Type); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Type", err)
 			}
 
 		case "version":
 			if err := dec.Decode(&s.Version); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Version", err)
 			}
 
 		case "word_list":
 			if err := dec.Decode(&s.WordList); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "WordList", err)
 			}
 
 		case "word_list_path":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "WordListPath", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)

@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,18 +24,20 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 )
 
-// SettingsSimilarityScriptedTfidf type.
+// S3Repository type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/indices/_types/IndexSettings.ts#L216-L219
-type SettingsSimilarityScriptedTfidf struct {
-	Script Script `json:"script"`
-	Type   string `json:"type,omitempty"`
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/snapshot/_types/SnapshotRepository.ts#L50-L53
+type S3Repository struct {
+	Settings S3RepositorySettings `json:"settings"`
+	Type     string               `json:"type,omitempty"`
+	Uuid     *string              `json:"uuid,omitempty"`
 }
 
-func (s *SettingsSimilarityScriptedTfidf) UnmarshalJSON(data []byte) error {
+func (s *S3Repository) UnmarshalJSON(data []byte) error {
 
 	dec := json.NewDecoder(bytes.NewReader(data))
 
@@ -50,14 +52,19 @@ func (s *SettingsSimilarityScriptedTfidf) UnmarshalJSON(data []byte) error {
 
 		switch t {
 
-		case "script":
-			if err := dec.Decode(&s.Script); err != nil {
-				return err
+		case "settings":
+			if err := dec.Decode(&s.Settings); err != nil {
+				return fmt.Errorf("%s | %w", "Settings", err)
 			}
 
 		case "type":
 			if err := dec.Decode(&s.Type); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Type", err)
+			}
+
+		case "uuid":
+			if err := dec.Decode(&s.Uuid); err != nil {
+				return fmt.Errorf("%s | %w", "Uuid", err)
 			}
 
 		}
@@ -66,21 +73,22 @@ func (s *SettingsSimilarityScriptedTfidf) UnmarshalJSON(data []byte) error {
 }
 
 // MarshalJSON override marshalling to include literal value
-func (s SettingsSimilarityScriptedTfidf) MarshalJSON() ([]byte, error) {
-	type innerSettingsSimilarityScriptedTfidf SettingsSimilarityScriptedTfidf
-	tmp := innerSettingsSimilarityScriptedTfidf{
-		Script: s.Script,
-		Type:   s.Type,
+func (s S3Repository) MarshalJSON() ([]byte, error) {
+	type innerS3Repository S3Repository
+	tmp := innerS3Repository{
+		Settings: s.Settings,
+		Type:     s.Type,
+		Uuid:     s.Uuid,
 	}
 
-	tmp.Type = "scripted"
+	tmp.Type = "s3"
 
 	return json.Marshal(tmp)
 }
 
-// NewSettingsSimilarityScriptedTfidf returns a SettingsSimilarityScriptedTfidf.
-func NewSettingsSimilarityScriptedTfidf() *SettingsSimilarityScriptedTfidf {
-	r := &SettingsSimilarityScriptedTfidf{}
+// NewS3Repository returns a S3Repository.
+func NewS3Repository() *S3Repository {
+	r := &S3Repository{}
 
 	return r
 }

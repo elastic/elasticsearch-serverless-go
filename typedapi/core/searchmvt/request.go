@@ -16,13 +16,17 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package searchmvt
 
 import (
+	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"io"
+	"strconv"
 
 	"github.com/elastic/elasticsearch-serverless-go/typedapi/types"
 	"github.com/elastic/elasticsearch-serverless-go/typedapi/types/enums/gridaggregationtype"
@@ -31,7 +35,7 @@ import (
 
 // Request holds the request body struct for the package searchmvt
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_global/search_mvt/SearchMvtRequest.ts#L33-L188
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_global/search_mvt/SearchMvtRequest.ts#L33-L188
 type Request struct {
 
 	// Aggs Sub-aggregations for the geotile_grid.
@@ -105,6 +109,7 @@ func NewRequest() *Request {
 	r := &Request{
 		Aggs: make(map[string]types.Aggregations, 0),
 	}
+
 	return r
 }
 
@@ -118,4 +123,180 @@ func (r *Request) FromJSON(data string) (*Request, error) {
 	}
 
 	return &req, nil
+}
+
+func (s *Request) UnmarshalJSON(data []byte) error {
+	dec := json.NewDecoder(bytes.NewReader(data))
+
+	for {
+		t, err := dec.Token()
+		if err != nil {
+			if errors.Is(err, io.EOF) {
+				break
+			}
+			return err
+		}
+
+		switch t {
+
+		case "aggs":
+			if s.Aggs == nil {
+				s.Aggs = make(map[string]types.Aggregations, 0)
+			}
+			if err := dec.Decode(&s.Aggs); err != nil {
+				return fmt.Errorf("%s | %w", "Aggs", err)
+			}
+
+		case "buffer":
+
+			var tmp any
+			dec.Decode(&tmp)
+			switch v := tmp.(type) {
+			case string:
+				value, err := strconv.Atoi(v)
+				if err != nil {
+					return fmt.Errorf("%s | %w", "Buffer", err)
+				}
+				s.Buffer = &value
+			case float64:
+				f := int(v)
+				s.Buffer = &f
+			}
+
+		case "exact_bounds":
+			var tmp any
+			dec.Decode(&tmp)
+			switch v := tmp.(type) {
+			case string:
+				value, err := strconv.ParseBool(v)
+				if err != nil {
+					return fmt.Errorf("%s | %w", "ExactBounds", err)
+				}
+				s.ExactBounds = &value
+			case bool:
+				s.ExactBounds = &v
+			}
+
+		case "extent":
+
+			var tmp any
+			dec.Decode(&tmp)
+			switch v := tmp.(type) {
+			case string:
+				value, err := strconv.Atoi(v)
+				if err != nil {
+					return fmt.Errorf("%s | %w", "Extent", err)
+				}
+				s.Extent = &value
+			case float64:
+				f := int(v)
+				s.Extent = &f
+			}
+
+		case "fields":
+			rawMsg := json.RawMessage{}
+			dec.Decode(&rawMsg)
+			if !bytes.HasPrefix(rawMsg, []byte("[")) {
+				o := new(string)
+				if err := json.NewDecoder(bytes.NewReader(rawMsg)).Decode(&o); err != nil {
+					return fmt.Errorf("%s | %w", "Fields", err)
+				}
+
+				s.Fields = append(s.Fields, *o)
+			} else {
+				if err := json.NewDecoder(bytes.NewReader(rawMsg)).Decode(&s.Fields); err != nil {
+					return fmt.Errorf("%s | %w", "Fields", err)
+				}
+			}
+
+		case "grid_agg":
+			if err := dec.Decode(&s.GridAgg); err != nil {
+				return fmt.Errorf("%s | %w", "GridAgg", err)
+			}
+
+		case "grid_precision":
+
+			var tmp any
+			dec.Decode(&tmp)
+			switch v := tmp.(type) {
+			case string:
+				value, err := strconv.Atoi(v)
+				if err != nil {
+					return fmt.Errorf("%s | %w", "GridPrecision", err)
+				}
+				s.GridPrecision = &value
+			case float64:
+				f := int(v)
+				s.GridPrecision = &f
+			}
+
+		case "grid_type":
+			if err := dec.Decode(&s.GridType); err != nil {
+				return fmt.Errorf("%s | %w", "GridType", err)
+			}
+
+		case "query":
+			if err := dec.Decode(&s.Query); err != nil {
+				return fmt.Errorf("%s | %w", "Query", err)
+			}
+
+		case "runtime_mappings":
+			if err := dec.Decode(&s.RuntimeMappings); err != nil {
+				return fmt.Errorf("%s | %w", "RuntimeMappings", err)
+			}
+
+		case "size":
+
+			var tmp any
+			dec.Decode(&tmp)
+			switch v := tmp.(type) {
+			case string:
+				value, err := strconv.Atoi(v)
+				if err != nil {
+					return fmt.Errorf("%s | %w", "Size", err)
+				}
+				s.Size = &value
+			case float64:
+				f := int(v)
+				s.Size = &f
+			}
+
+		case "sort":
+			rawMsg := json.RawMessage{}
+			dec.Decode(&rawMsg)
+			if !bytes.HasPrefix(rawMsg, []byte("[")) {
+				o := new(types.SortCombinations)
+				if err := json.NewDecoder(bytes.NewReader(rawMsg)).Decode(&o); err != nil {
+					return fmt.Errorf("%s | %w", "Sort", err)
+				}
+
+				s.Sort = append(s.Sort, *o)
+			} else {
+				if err := json.NewDecoder(bytes.NewReader(rawMsg)).Decode(&s.Sort); err != nil {
+					return fmt.Errorf("%s | %w", "Sort", err)
+				}
+			}
+
+		case "track_total_hits":
+			if err := dec.Decode(&s.TrackTotalHits); err != nil {
+				return fmt.Errorf("%s | %w", "TrackTotalHits", err)
+			}
+
+		case "with_labels":
+			var tmp any
+			dec.Decode(&tmp)
+			switch v := tmp.(type) {
+			case string:
+				value, err := strconv.ParseBool(v)
+				if err != nil {
+					return fmt.Errorf("%s | %w", "WithLabels", err)
+				}
+				s.WithLabels = &value
+			case bool:
+				s.WithLabels = &v
+			}
+
+		}
+	}
+	return nil
 }

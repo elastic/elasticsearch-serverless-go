@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,12 +24,13 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 )
 
 // CategorizationAnalyzerDefinition type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/ml/_types/Analysis.ts#L184-L197
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/ml/_types/Analysis.ts#L184-L197
 type CategorizationAnalyzerDefinition struct {
 	// CharFilter One or more character filters. In addition to the built-in character filters,
 	// other plugins can provide more character filters. If this property is not
@@ -122,7 +123,7 @@ func (s *CategorizationAnalyzerDefinition) UnmarshalJSON(data []byte) error {
 						}
 						s.CharFilter = append(s.CharFilter, *o)
 					default:
-						o := new(interface{})
+						o := new(any)
 						if err := localDec.Decode(&o); err != nil {
 							return err
 						}
@@ -130,9 +131,9 @@ func (s *CategorizationAnalyzerDefinition) UnmarshalJSON(data []byte) error {
 					}
 				default:
 					source := bytes.NewReader(rawMsg)
-					o := new(interface{})
+					o := new(any)
 					if err := json.NewDecoder(source).Decode(&o); err != nil {
-						return err
+						return fmt.Errorf("%s | %w", "CharFilter", err)
 					}
 					s.CharFilter = append(s.CharFilter, *o)
 				}
@@ -401,12 +402,6 @@ func (s *CategorizationAnalyzerDefinition) UnmarshalJSON(data []byte) error {
 							return err
 						}
 						s.Filter = append(s.Filter, *o)
-					case "icu_tokenizer":
-						o := NewIcuTokenizer()
-						if err := localDec.Decode(&o); err != nil {
-							return err
-						}
-						s.Filter = append(s.Filter, *o)
 					case "icu_collation":
 						o := NewIcuCollationTokenFilter()
 						if err := localDec.Decode(&o); err != nil {
@@ -444,7 +439,7 @@ func (s *CategorizationAnalyzerDefinition) UnmarshalJSON(data []byte) error {
 						}
 						s.Filter = append(s.Filter, *o)
 					default:
-						o := new(interface{})
+						o := new(any)
 						if err := localDec.Decode(&o); err != nil {
 							return err
 						}
@@ -452,9 +447,9 @@ func (s *CategorizationAnalyzerDefinition) UnmarshalJSON(data []byte) error {
 					}
 				default:
 					source := bytes.NewReader(rawMsg)
-					o := new(interface{})
+					o := new(any)
 					if err := json.NewDecoder(source).Decode(&o); err != nil {
-						return err
+						return fmt.Errorf("%s | %w", "Filter", err)
 					}
 					s.Filter = append(s.Filter, *o)
 				}
@@ -566,7 +561,7 @@ func (s *CategorizationAnalyzerDefinition) UnmarshalJSON(data []byte) error {
 				}
 			default:
 				if err := localDec.Decode(&s.Tokenizer); err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Tokenizer", err)
 				}
 			}
 

@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // ClusterRemoteSniffInfo type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/cluster/remote_info/ClusterRemoteInfoResponse.ts#L31-L39
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/cluster/remote_info/ClusterRemoteInfoResponse.ts#L32-L40
 type ClusterRemoteSniffInfo struct {
 	Connected                bool     `json:"connected"`
 	InitialConnectTimeout    Duration `json:"initial_connect_timeout"`
@@ -57,13 +58,13 @@ func (s *ClusterRemoteSniffInfo) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "connected":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Connected", err)
 				}
 				s.Connected = value
 			case bool:
@@ -72,18 +73,18 @@ func (s *ClusterRemoteSniffInfo) UnmarshalJSON(data []byte) error {
 
 		case "initial_connect_timeout":
 			if err := dec.Decode(&s.InitialConnectTimeout); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "InitialConnectTimeout", err)
 			}
 
 		case "max_connections_per_cluster":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "MaxConnectionsPerCluster", err)
 				}
 				s.MaxConnectionsPerCluster = value
 			case float64:
@@ -93,17 +94,17 @@ func (s *ClusterRemoteSniffInfo) UnmarshalJSON(data []byte) error {
 
 		case "mode":
 			if err := dec.Decode(&s.Mode); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Mode", err)
 			}
 
 		case "num_nodes_connected":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "NumNodesConnected", err)
 				}
 				s.NumNodesConnected = value
 			case float64:
@@ -113,17 +114,17 @@ func (s *ClusterRemoteSniffInfo) UnmarshalJSON(data []byte) error {
 
 		case "seeds":
 			if err := dec.Decode(&s.Seeds); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Seeds", err)
 			}
 
 		case "skip_unavailable":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "SkipUnavailable", err)
 				}
 				s.SkipUnavailable = value
 			case bool:

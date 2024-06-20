@@ -16,20 +16,23 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package createapikey
 
 import (
+	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"io"
 
 	"github.com/elastic/elasticsearch-serverless-go/typedapi/types"
 )
 
 // Request holds the request body struct for the package createapikey
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/security/create_api_key/SecurityCreateApiKeyRequest.ts#L26-L58
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/security/create_api_key/SecurityCreateApiKeyRequest.ts#L26-L58
 type Request struct {
 
 	// Expiration Expiration time for the API key. By default, API keys never expire.
@@ -56,6 +59,7 @@ func NewRequest() *Request {
 	r := &Request{
 		RoleDescriptors: make(map[string]types.RoleDescriptor, 0),
 	}
+
 	return r
 }
 
@@ -69,4 +73,46 @@ func (r *Request) FromJSON(data string) (*Request, error) {
 	}
 
 	return &req, nil
+}
+
+func (s *Request) UnmarshalJSON(data []byte) error {
+	dec := json.NewDecoder(bytes.NewReader(data))
+
+	for {
+		t, err := dec.Token()
+		if err != nil {
+			if errors.Is(err, io.EOF) {
+				break
+			}
+			return err
+		}
+
+		switch t {
+
+		case "expiration":
+			if err := dec.Decode(&s.Expiration); err != nil {
+				return fmt.Errorf("%s | %w", "Expiration", err)
+			}
+
+		case "metadata":
+			if err := dec.Decode(&s.Metadata); err != nil {
+				return fmt.Errorf("%s | %w", "Metadata", err)
+			}
+
+		case "name":
+			if err := dec.Decode(&s.Name); err != nil {
+				return fmt.Errorf("%s | %w", "Name", err)
+			}
+
+		case "role_descriptors":
+			if s.RoleDescriptors == nil {
+				s.RoleDescriptors = make(map[string]types.RoleDescriptor, 0)
+			}
+			if err := dec.Decode(&s.RoleDescriptors); err != nil {
+				return fmt.Errorf("%s | %w", "RoleDescriptors", err)
+			}
+
+		}
+	}
+	return nil
 }

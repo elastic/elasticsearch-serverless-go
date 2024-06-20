@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,6 +24,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 
@@ -32,12 +33,10 @@ import (
 
 // WeightedAverageAggregation type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/aggregations/metric.ts#L432-L446
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/aggregations/metric.ts#L437-L451
 type WeightedAverageAggregation struct {
 	// Format A numeric response formatter.
-	Format *string  `json:"format,omitempty"`
-	Meta   Metadata `json:"meta,omitempty"`
-	Name   *string  `json:"name,omitempty"`
+	Format *string `json:"format,omitempty"`
 	// Value Configuration for the field that provides the values.
 	Value     *WeightedAverageValue `json:"value,omitempty"`
 	ValueType *valuetype.ValueType  `json:"value_type,omitempty"`
@@ -63,7 +62,7 @@ func (s *WeightedAverageAggregation) UnmarshalJSON(data []byte) error {
 		case "format":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Format", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -72,36 +71,19 @@ func (s *WeightedAverageAggregation) UnmarshalJSON(data []byte) error {
 			}
 			s.Format = &o
 
-		case "meta":
-			if err := dec.Decode(&s.Meta); err != nil {
-				return err
-			}
-
-		case "name":
-			var tmp json.RawMessage
-			if err := dec.Decode(&tmp); err != nil {
-				return err
-			}
-			o := string(tmp[:])
-			o, err = strconv.Unquote(o)
-			if err != nil {
-				o = string(tmp[:])
-			}
-			s.Name = &o
-
 		case "value":
 			if err := dec.Decode(&s.Value); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Value", err)
 			}
 
 		case "value_type":
 			if err := dec.Decode(&s.ValueType); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "ValueType", err)
 			}
 
 		case "weight":
 			if err := dec.Decode(&s.Weight); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Weight", err)
 			}
 
 		}

@@ -16,14 +16,14 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 // Package clusterprivilege
 package clusterprivilege
 
 import "strings"
 
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/security/_types/Privileges.ts#L41-L80
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/security/_types/Privileges.ts#L41-L198
 type ClusterPrivilege struct {
 	Name string
 }
@@ -33,21 +33,17 @@ var (
 
 	Canceltask = ClusterPrivilege{"cancel_task"}
 
-	Createsnapshot = ClusterPrivilege{"create_snapshot"}
-
-	Grantapikey = ClusterPrivilege{"grant_api_key"}
-
 	Manage = ClusterPrivilege{"manage"}
 
 	Manageapikey = ClusterPrivilege{"manage_api_key"}
 
-	Manageccr = ClusterPrivilege{"manage_ccr"}
+	Managebehavioralanalytics = ClusterPrivilege{"manage_behavioral_analytics"}
 
 	Manageenrich = ClusterPrivilege{"manage_enrich"}
 
-	Manageilm = ClusterPrivilege{"manage_ilm"}
-
 	Manageindextemplates = ClusterPrivilege{"manage_index_templates"}
+
+	Manageinference = ClusterPrivilege{"manage_inference"}
 
 	Manageingestpipelines = ClusterPrivilege{"manage_ingest_pipelines"}
 
@@ -55,53 +51,37 @@ var (
 
 	Manageml = ClusterPrivilege{"manage_ml"}
 
-	Manageoidc = ClusterPrivilege{"manage_oidc"}
-
 	Manageownapikey = ClusterPrivilege{"manage_own_api_key"}
 
 	Managepipeline = ClusterPrivilege{"manage_pipeline"}
 
-	Managerollup = ClusterPrivilege{"manage_rollup"}
+	Managesearchapplication = ClusterPrivilege{"manage_search_application"}
 
-	Managesaml = ClusterPrivilege{"manage_saml"}
+	Managesearchqueryrules = ClusterPrivilege{"manage_search_query_rules"}
+
+	Managesearchsynonyms = ClusterPrivilege{"manage_search_synonyms"}
 
 	Managesecurity = ClusterPrivilege{"manage_security"}
 
-	Manageserviceaccount = ClusterPrivilege{"manage_service_account"}
-
-	Manageslm = ClusterPrivilege{"manage_slm"}
-
-	Managetoken = ClusterPrivilege{"manage_token"}
-
 	Managetransform = ClusterPrivilege{"manage_transform"}
-
-	Manageuserprofile = ClusterPrivilege{"manage_user_profile"}
-
-	Managewatcher = ClusterPrivilege{"manage_watcher"}
 
 	Monitor = ClusterPrivilege{"monitor"}
 
+	Monitorenrich = ClusterPrivilege{"monitor_enrich"}
+
+	Monitorinference = ClusterPrivilege{"monitor_inference"}
+
 	Monitorml = ClusterPrivilege{"monitor_ml"}
-
-	Monitorrollup = ClusterPrivilege{"monitor_rollup"}
-
-	Monitorsnapshot = ClusterPrivilege{"monitor_snapshot"}
-
-	Monitortextstructure = ClusterPrivilege{"monitor_text_structure"}
 
 	Monitortransform = ClusterPrivilege{"monitor_transform"}
 
-	Monitorwatcher = ClusterPrivilege{"monitor_watcher"}
+	None = ClusterPrivilege{"none"}
 
-	Readccr = ClusterPrivilege{"read_ccr"}
-
-	Readilm = ClusterPrivilege{"read_ilm"}
+	Postbehavioralanalyticsevent = ClusterPrivilege{"post_behavioral_analytics_event"}
 
 	Readpipeline = ClusterPrivilege{"read_pipeline"}
 
-	Readslm = ClusterPrivilege{"read_slm"}
-
-	Transportclient = ClusterPrivilege{"transport_client"}
+	Readsecurity = ClusterPrivilege{"read_security"}
 )
 
 func (c ClusterPrivilege) MarshalText() (text []byte, err error) {
@@ -115,76 +95,56 @@ func (c *ClusterPrivilege) UnmarshalText(text []byte) error {
 		*c = All
 	case "cancel_task":
 		*c = Canceltask
-	case "create_snapshot":
-		*c = Createsnapshot
-	case "grant_api_key":
-		*c = Grantapikey
 	case "manage":
 		*c = Manage
 	case "manage_api_key":
 		*c = Manageapikey
-	case "manage_ccr":
-		*c = Manageccr
+	case "manage_behavioral_analytics":
+		*c = Managebehavioralanalytics
 	case "manage_enrich":
 		*c = Manageenrich
-	case "manage_ilm":
-		*c = Manageilm
 	case "manage_index_templates":
 		*c = Manageindextemplates
+	case "manage_inference":
+		*c = Manageinference
 	case "manage_ingest_pipelines":
 		*c = Manageingestpipelines
 	case "manage_logstash_pipelines":
 		*c = Managelogstashpipelines
 	case "manage_ml":
 		*c = Manageml
-	case "manage_oidc":
-		*c = Manageoidc
 	case "manage_own_api_key":
 		*c = Manageownapikey
 	case "manage_pipeline":
 		*c = Managepipeline
-	case "manage_rollup":
-		*c = Managerollup
-	case "manage_saml":
-		*c = Managesaml
+	case "manage_search_application":
+		*c = Managesearchapplication
+	case "manage_search_query_rules":
+		*c = Managesearchqueryrules
+	case "manage_search_synonyms":
+		*c = Managesearchsynonyms
 	case "manage_security":
 		*c = Managesecurity
-	case "manage_service_account":
-		*c = Manageserviceaccount
-	case "manage_slm":
-		*c = Manageslm
-	case "manage_token":
-		*c = Managetoken
 	case "manage_transform":
 		*c = Managetransform
-	case "manage_user_profile":
-		*c = Manageuserprofile
-	case "manage_watcher":
-		*c = Managewatcher
 	case "monitor":
 		*c = Monitor
+	case "monitor_enrich":
+		*c = Monitorenrich
+	case "monitor_inference":
+		*c = Monitorinference
 	case "monitor_ml":
 		*c = Monitorml
-	case "monitor_rollup":
-		*c = Monitorrollup
-	case "monitor_snapshot":
-		*c = Monitorsnapshot
-	case "monitor_text_structure":
-		*c = Monitortextstructure
 	case "monitor_transform":
 		*c = Monitortransform
-	case "monitor_watcher":
-		*c = Monitorwatcher
-	case "read_ccr":
-		*c = Readccr
-	case "read_ilm":
-		*c = Readilm
+	case "none":
+		*c = None
+	case "post_behavioral_analytics_event":
+		*c = Postbehavioralanalyticsevent
 	case "read_pipeline":
 		*c = Readpipeline
-	case "read_slm":
-		*c = Readslm
-	case "transport_client":
-		*c = Transportclient
+	case "read_security":
+		*c = Readsecurity
 	default:
 		*c = ClusterPrivilege{string(text)}
 	}

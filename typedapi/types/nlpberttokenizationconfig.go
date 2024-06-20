@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,6 +24,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 
@@ -32,7 +33,7 @@ import (
 
 // NlpBertTokenizationConfig type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/ml/_types/inference.ts#L131-L158
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/ml/_types/inference.ts#L131-L158
 type NlpBertTokenizationConfig struct {
 	// DoLowerCase Should the tokenizer lower case the text
 	DoLowerCase *bool `json:"do_lower_case,omitempty"`
@@ -64,13 +65,13 @@ func (s *NlpBertTokenizationConfig) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "do_lower_case":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "DoLowerCase", err)
 				}
 				s.DoLowerCase = &value
 			case bool:
@@ -79,13 +80,13 @@ func (s *NlpBertTokenizationConfig) UnmarshalJSON(data []byte) error {
 
 		case "max_sequence_length":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "MaxSequenceLength", err)
 				}
 				s.MaxSequenceLength = &value
 			case float64:
@@ -95,13 +96,13 @@ func (s *NlpBertTokenizationConfig) UnmarshalJSON(data []byte) error {
 
 		case "span":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Span", err)
 				}
 				s.Span = &value
 			case float64:
@@ -111,17 +112,17 @@ func (s *NlpBertTokenizationConfig) UnmarshalJSON(data []byte) error {
 
 		case "truncate":
 			if err := dec.Decode(&s.Truncate); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Truncate", err)
 			}
 
 		case "with_special_tokens":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "WithSpecialTokens", err)
 				}
 				s.WithSpecialTokens = &value
 			case bool:

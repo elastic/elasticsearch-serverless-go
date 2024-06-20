@@ -16,9 +16,13 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 // Evaluates the data frame analytics for an annotated index.
+// The API packages together commonly used evaluation metrics for various types
+// of machine learning features. This has been designed for use on indexes
+// created by data frame analytics. Evaluation requires both a ground truth
+// field and an analytics result field to be present.
 package evaluatedataframe
 
 import (
@@ -30,6 +34,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 
 	"github.com/elastic/elastic-transport-go/v8/elastictransport"
@@ -46,13 +51,17 @@ type EvaluateDataFrame struct {
 	values  url.Values
 	path    url.URL
 
-	buf *gobytes.Buffer
+	raw io.Reader
 
 	req      *Request
 	deferred []func(request *Request) error
-	raw      io.Reader
+	buf      *gobytes.Buffer
 
 	paramSet int
+
+	spanStarted bool
+
+	instrument elastictransport.Instrumentation
 }
 
 // NewEvaluateDataFrame type alias for index.
@@ -69,6 +78,10 @@ func NewEvaluateDataFrameFunc(tp elastictransport.Interface) NewEvaluateDataFram
 }
 
 // Evaluates the data frame analytics for an annotated index.
+// The API packages together commonly used evaluation metrics for various types
+// of machine learning features. This has been designed for use on indexes
+// created by data frame analytics. Evaluation requires both a ground truth
+// field and an analytics result field to be present.
 //
 // https://www.elastic.co/guide/en/elasticsearch/reference/current/evaluate-dfanalytics.html
 func New(tp elastictransport.Interface) *EvaluateDataFrame {
@@ -76,9 +89,16 @@ func New(tp elastictransport.Interface) *EvaluateDataFrame {
 		transport: tp,
 		values:    make(url.Values),
 		headers:   make(http.Header),
-		buf:       gobytes.NewBuffer(nil),
+
+		buf: gobytes.NewBuffer(nil),
 
 		req: NewRequest(),
+	}
+
+	if instrumented, ok := r.transport.(elastictransport.Instrumented); ok {
+		if instrument := instrumented.InstrumentationEnabled(); instrument != nil {
+			r.instrument = instrument
+		}
 	}
 
 	return r
@@ -117,9 +137,7 @@ func (r *EvaluateDataFrame) HttpRequest(ctx context.Context) (*http.Request, err
 		}
 	}
 
-	if r.raw != nil {
-		r.buf.ReadFrom(r.raw)
-	} else if r.req != nil {
+	if r.raw == nil && r.req != nil {
 
 		data, err := json.Marshal(r.req)
 
@@ -129,6 +147,10 @@ func (r *EvaluateDataFrame) HttpRequest(ctx context.Context) (*http.Request, err
 
 		r.buf.Write(data)
 
+	}
+
+	if r.buf.Len() > 0 {
+		r.raw = r.buf
 	}
 
 	r.path.Scheme = "http"
@@ -153,20 +175,20 @@ func (r *EvaluateDataFrame) HttpRequest(ctx context.Context) (*http.Request, err
 	}
 
 	if ctx != nil {
-		req, err = http.NewRequestWithContext(ctx, method, r.path.String(), r.buf)
+		req, err = http.NewRequestWithContext(ctx, method, r.path.String(), r.raw)
 	} else {
-		req, err = http.NewRequest(method, r.path.String(), r.buf)
+		req, err = http.NewRequest(method, r.path.String(), r.raw)
 	}
 
 	req.Header = r.headers.Clone()
 
 	if req.Header.Get("Elastic-Api-Version") == "" {
-		if r.buf.Len() > 0 {
+		if r.raw != nil {
 			req.Header.Set("Elastic-Api-Version", "2023-10-31")
 		}
 	}
 	if req.Header.Get("Content-Type") == "" {
-		if r.buf.Len() > 0 {
+		if r.raw != nil {
 			req.Header.Set("Content-Type", "application/json")
 		}
 	}
@@ -183,27 +205,66 @@ func (r *EvaluateDataFrame) HttpRequest(ctx context.Context) (*http.Request, err
 }
 
 // Perform runs the http.Request through the provided transport and returns an http.Response.
-func (r EvaluateDataFrame) Perform(ctx context.Context) (*http.Response, error) {
+func (r EvaluateDataFrame) Perform(providedCtx context.Context) (*http.Response, error) {
+	var ctx context.Context
+	if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+		if r.spanStarted == false {
+			ctx := instrument.Start(providedCtx, "ml.evaluate_data_frame")
+			defer instrument.Close(ctx)
+		}
+	}
+	if ctx == nil {
+		ctx = providedCtx
+	}
+
 	req, err := r.HttpRequest(ctx)
 	if err != nil {
+		if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+			instrument.RecordError(ctx, err)
+		}
 		return nil, err
 	}
 
+	if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+		instrument.BeforeRequest(req, "ml.evaluate_data_frame")
+		if reader := instrument.RecordRequestBody(ctx, "ml.evaluate_data_frame", r.raw); reader != nil {
+			req.Body = reader
+		}
+	}
 	res, err := r.transport.Perform(req)
+	if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+		instrument.AfterRequest(req, "elasticsearch", "ml.evaluate_data_frame")
+	}
 	if err != nil {
-		return nil, fmt.Errorf("an error happened during the EvaluateDataFrame query execution: %w", err)
+		localErr := fmt.Errorf("an error happened during the EvaluateDataFrame query execution: %w", err)
+		if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+			instrument.RecordError(ctx, localErr)
+		}
+		return nil, localErr
 	}
 
 	return res, nil
 }
 
 // Do runs the request through the transport, handle the response and returns a evaluatedataframe.Response
-func (r EvaluateDataFrame) Do(ctx context.Context) (*Response, error) {
+func (r EvaluateDataFrame) Do(providedCtx context.Context) (*Response, error) {
+	var ctx context.Context
+	r.spanStarted = true
+	if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+		ctx = instrument.Start(providedCtx, "ml.evaluate_data_frame")
+		defer instrument.Close(ctx)
+	}
+	if ctx == nil {
+		ctx = providedCtx
+	}
 
 	response := NewResponse()
 
 	res, err := r.Perform(ctx)
 	if err != nil {
+		if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+			instrument.RecordError(ctx, err)
+		}
 		return nil, err
 	}
 	defer res.Body.Close()
@@ -211,6 +272,9 @@ func (r EvaluateDataFrame) Do(ctx context.Context) (*Response, error) {
 	if res.StatusCode < 299 {
 		err = json.NewDecoder(res.Body).Decode(response)
 		if err != nil {
+			if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+				instrument.RecordError(ctx, err)
+			}
 			return nil, err
 		}
 
@@ -220,6 +284,9 @@ func (r EvaluateDataFrame) Do(ctx context.Context) (*Response, error) {
 	errorResponse := types.NewElasticsearchError()
 	err = json.NewDecoder(res.Body).Decode(errorResponse)
 	if err != nil {
+		if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+			instrument.RecordError(ctx, err)
+		}
 		return nil, err
 	}
 
@@ -227,12 +294,59 @@ func (r EvaluateDataFrame) Do(ctx context.Context) (*Response, error) {
 		errorResponse.Status = res.StatusCode
 	}
 
+	if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+		instrument.RecordError(ctx, errorResponse)
+	}
 	return nil, errorResponse
 }
 
 // Header set a key, value pair in the EvaluateDataFrame headers map.
 func (r *EvaluateDataFrame) Header(key, value string) *EvaluateDataFrame {
 	r.headers.Set(key, value)
+
+	return r
+}
+
+// ErrorTrace When set to `true` Elasticsearch will include the full stack trace of errors
+// when they occur.
+// API name: error_trace
+func (r *EvaluateDataFrame) ErrorTrace(errortrace bool) *EvaluateDataFrame {
+	r.values.Set("error_trace", strconv.FormatBool(errortrace))
+
+	return r
+}
+
+// FilterPath Comma-separated list of filters in dot notation which reduce the response
+// returned by Elasticsearch.
+// API name: filter_path
+func (r *EvaluateDataFrame) FilterPath(filterpaths ...string) *EvaluateDataFrame {
+	tmp := []string{}
+	for _, item := range filterpaths {
+		tmp = append(tmp, fmt.Sprintf("%v", item))
+	}
+	r.values.Set("filter_path", strings.Join(tmp, ","))
+
+	return r
+}
+
+// Human When set to `true` will return statistics in a format suitable for humans.
+// For example `"exists_time": "1h"` for humans and
+// `"eixsts_time_in_millis": 3600000` for computers. When disabled the human
+// readable values will be omitted. This makes sense for responses being
+// consumed
+// only by machines.
+// API name: human
+func (r *EvaluateDataFrame) Human(human bool) *EvaluateDataFrame {
+	r.values.Set("human", strconv.FormatBool(human))
+
+	return r
+}
+
+// Pretty If set to `true` the returned JSON will be "pretty-formatted". Only use
+// this option for debugging only.
+// API name: pretty
+func (r *EvaluateDataFrame) Pretty(pretty bool) *EvaluateDataFrame {
+	r.values.Set("pretty", strconv.FormatBool(pretty))
 
 	return r
 }

@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,16 +24,17 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // SettingsSimilarityLmj type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/indices/_types/IndexSettings.ts#L211-L214
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/indices/_types/IndexSettings.ts#L217-L220
 type SettingsSimilarityLmj struct {
-	Lambda Float64 `json:"lambda"`
-	Type   string  `json:"type,omitempty"`
+	Lambda *Float64 `json:"lambda,omitempty"`
+	Type   string   `json:"type,omitempty"`
 }
 
 func (s *SettingsSimilarityLmj) UnmarshalJSON(data []byte) error {
@@ -52,24 +53,24 @@ func (s *SettingsSimilarityLmj) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "lambda":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseFloat(v, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Lambda", err)
 				}
 				f := Float64(value)
-				s.Lambda = f
+				s.Lambda = &f
 			case float64:
 				f := Float64(v)
-				s.Lambda = f
+				s.Lambda = &f
 			}
 
 		case "type":
 			if err := dec.Decode(&s.Type); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Type", err)
 			}
 
 		}

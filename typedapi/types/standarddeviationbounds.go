@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,19 +24,20 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 )
 
 // StandardDeviationBounds type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/aggregations/Aggregate.ts#L260-L267
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/aggregations/Aggregate.ts#L260-L267
 type StandardDeviationBounds struct {
-	Lower           Float64 `json:"lower,omitempty"`
-	LowerPopulation Float64 `json:"lower_population,omitempty"`
-	LowerSampling   Float64 `json:"lower_sampling,omitempty"`
-	Upper           Float64 `json:"upper,omitempty"`
-	UpperPopulation Float64 `json:"upper_population,omitempty"`
-	UpperSampling   Float64 `json:"upper_sampling,omitempty"`
+	Lower           *Float64 `json:"lower,omitempty"`
+	LowerPopulation *Float64 `json:"lower_population,omitempty"`
+	LowerSampling   *Float64 `json:"lower_sampling,omitempty"`
+	Upper           *Float64 `json:"upper,omitempty"`
+	UpperPopulation *Float64 `json:"upper_population,omitempty"`
+	UpperSampling   *Float64 `json:"upper_sampling,omitempty"`
 }
 
 func (s *StandardDeviationBounds) UnmarshalJSON(data []byte) error {
@@ -56,32 +57,32 @@ func (s *StandardDeviationBounds) UnmarshalJSON(data []byte) error {
 
 		case "lower":
 			if err := dec.Decode(&s.Lower); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Lower", err)
 			}
 
 		case "lower_population":
 			if err := dec.Decode(&s.LowerPopulation); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "LowerPopulation", err)
 			}
 
 		case "lower_sampling":
 			if err := dec.Decode(&s.LowerSampling); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "LowerSampling", err)
 			}
 
 		case "upper":
 			if err := dec.Decode(&s.Upper); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Upper", err)
 			}
 
 		case "upper_population":
 			if err := dec.Decode(&s.UpperPopulation); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "UpperPopulation", err)
 			}
 
 		case "upper_sampling":
 			if err := dec.Decode(&s.UpperSampling); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "UpperSampling", err)
 			}
 
 		}

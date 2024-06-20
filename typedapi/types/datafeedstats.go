@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,6 +24,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 
@@ -32,7 +33,7 @@ import (
 
 // DatafeedStats type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/ml/_types/Datafeed.ts#L140-L169
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/ml/_types/Datafeed.ts#L139-L168
 type DatafeedStats struct {
 	// AssignmentExplanation For started datafeeds only, contains messages relating to the selection of a
 	// node.
@@ -71,7 +72,7 @@ func (s *DatafeedStats) UnmarshalJSON(data []byte) error {
 		case "assignment_explanation":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "AssignmentExplanation", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -82,22 +83,22 @@ func (s *DatafeedStats) UnmarshalJSON(data []byte) error {
 
 		case "datafeed_id":
 			if err := dec.Decode(&s.DatafeedId); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "DatafeedId", err)
 			}
 
 		case "running_state":
 			if err := dec.Decode(&s.RunningState); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "RunningState", err)
 			}
 
 		case "state":
 			if err := dec.Decode(&s.State); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "State", err)
 			}
 
 		case "timing_stats":
 			if err := dec.Decode(&s.TimingStats); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "TimingStats", err)
 			}
 
 		}

@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // TrainedModelDeploymentNodesStats type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/ml/_types/TrainedModel.ts#L133-L163
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/ml/_types/TrainedModel.ts#L133-L163
 type TrainedModelDeploymentNodesStats struct {
 	// AverageInferenceTimeMs The average time for each inference call to complete on this node.
 	AverageInferenceTimeMs Float64 `json:"average_inference_time_ms"`
@@ -75,18 +76,18 @@ func (s *TrainedModelDeploymentNodesStats) UnmarshalJSON(data []byte) error {
 
 		case "average_inference_time_ms":
 			if err := dec.Decode(&s.AverageInferenceTimeMs); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "AverageInferenceTimeMs", err)
 			}
 
 		case "error_count":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "ErrorCount", err)
 				}
 				s.ErrorCount = value
 			case float64:
@@ -96,13 +97,13 @@ func (s *TrainedModelDeploymentNodesStats) UnmarshalJSON(data []byte) error {
 
 		case "inference_count":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "InferenceCount", err)
 				}
 				s.InferenceCount = value
 			case float64:
@@ -111,13 +112,13 @@ func (s *TrainedModelDeploymentNodesStats) UnmarshalJSON(data []byte) error {
 			}
 
 		case "last_access":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "LastAccess", err)
 				}
 				s.LastAccess = value
 			case float64:
@@ -127,13 +128,13 @@ func (s *TrainedModelDeploymentNodesStats) UnmarshalJSON(data []byte) error {
 
 		case "number_of_allocations":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "NumberOfAllocations", err)
 				}
 				s.NumberOfAllocations = value
 			case float64:
@@ -143,13 +144,13 @@ func (s *TrainedModelDeploymentNodesStats) UnmarshalJSON(data []byte) error {
 
 		case "number_of_pending_requests":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "NumberOfPendingRequests", err)
 				}
 				s.NumberOfPendingRequests = value
 			case float64:
@@ -159,13 +160,13 @@ func (s *TrainedModelDeploymentNodesStats) UnmarshalJSON(data []byte) error {
 
 		case "rejection_execution_count":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "RejectionExecutionCount", err)
 				}
 				s.RejectionExecutionCount = value
 			case float64:
@@ -175,23 +176,23 @@ func (s *TrainedModelDeploymentNodesStats) UnmarshalJSON(data []byte) error {
 
 		case "routing_state":
 			if err := dec.Decode(&s.RoutingState); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "RoutingState", err)
 			}
 
 		case "start_time":
 			if err := dec.Decode(&s.StartTime); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "StartTime", err)
 			}
 
 		case "threads_per_allocation":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "ThreadsPerAllocation", err)
 				}
 				s.ThreadsPerAllocation = value
 			case float64:
@@ -201,13 +202,13 @@ func (s *TrainedModelDeploymentNodesStats) UnmarshalJSON(data []byte) error {
 
 		case "timeout_count":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "TimeoutCount", err)
 				}
 				s.TimeoutCount = value
 			case float64:

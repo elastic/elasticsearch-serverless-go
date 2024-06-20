@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -31,7 +31,7 @@ import (
 
 // InferenceAggregate type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/aggregations/Aggregate.ts#L659-L670
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/aggregations/Aggregate.ts#L659-L670
 type InferenceAggregate struct {
 	Data              map[string]json.RawMessage   `json:"-"`
 	FeatureImportance []InferenceFeatureImportance `json:"feature_importance,omitempty"`
@@ -58,28 +58,28 @@ func (s *InferenceAggregate) UnmarshalJSON(data []byte) error {
 
 		case "feature_importance":
 			if err := dec.Decode(&s.FeatureImportance); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "FeatureImportance", err)
 			}
 
 		case "meta":
 			if err := dec.Decode(&s.Meta); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Meta", err)
 			}
 
 		case "top_classes":
 			if err := dec.Decode(&s.TopClasses); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "TopClasses", err)
 			}
 
 		case "value":
 			if err := dec.Decode(&s.Value); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Value", err)
 			}
 
 		case "warning":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Warning", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -96,7 +96,7 @@ func (s *InferenceAggregate) UnmarshalJSON(data []byte) error {
 				}
 				raw := new(json.RawMessage)
 				if err := dec.Decode(&raw); err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Data", err)
 				}
 				s.Data[key] = *raw
 			}
@@ -110,7 +110,7 @@ func (s *InferenceAggregate) UnmarshalJSON(data []byte) error {
 func (s InferenceAggregate) MarshalJSON() ([]byte, error) {
 	type opt InferenceAggregate
 	// We transform the struct to a map without the embedded additional properties map
-	tmp := make(map[string]interface{}, 0)
+	tmp := make(map[string]any, 0)
 
 	data, err := json.Marshal(opt(s))
 	if err != nil {

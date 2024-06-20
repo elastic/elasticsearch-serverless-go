@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,25 +24,24 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // RangeAggregation type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/aggregations/bucket.ts#L650-L670
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/aggregations/bucket.ts#L652-L672
 type RangeAggregation struct {
 	// Field The date field whose values are use to build ranges.
 	Field  *string `json:"field,omitempty"`
 	Format *string `json:"format,omitempty"`
 	// Keyed Set to `true` to associate a unique string key with each bucket and return
 	// the ranges as a hash rather than an array.
-	Keyed *bool    `json:"keyed,omitempty"`
-	Meta  Metadata `json:"meta,omitempty"`
+	Keyed *bool `json:"keyed,omitempty"`
 	// Missing The value to apply to documents that do not have a value.
 	// By default, documents without a value are ignored.
-	Missing *int    `json:"missing,omitempty"`
-	Name    *string `json:"name,omitempty"`
+	Missing *int `json:"missing,omitempty"`
 	// Ranges An array of ranges used to bucket documents.
 	Ranges []AggregationRange `json:"ranges,omitempty"`
 	Script Script             `json:"script,omitempty"`
@@ -65,13 +64,13 @@ func (s *RangeAggregation) UnmarshalJSON(data []byte) error {
 
 		case "field":
 			if err := dec.Decode(&s.Field); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Field", err)
 			}
 
 		case "format":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Format", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -81,33 +80,28 @@ func (s *RangeAggregation) UnmarshalJSON(data []byte) error {
 			s.Format = &o
 
 		case "keyed":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Keyed", err)
 				}
 				s.Keyed = &value
 			case bool:
 				s.Keyed = &v
 			}
 
-		case "meta":
-			if err := dec.Decode(&s.Meta); err != nil {
-				return err
-			}
-
 		case "missing":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Missing", err)
 				}
 				s.Missing = &value
 			case float64:
@@ -115,26 +109,45 @@ func (s *RangeAggregation) UnmarshalJSON(data []byte) error {
 				s.Missing = &f
 			}
 
-		case "name":
-			var tmp json.RawMessage
-			if err := dec.Decode(&tmp); err != nil {
-				return err
-			}
-			o := string(tmp[:])
-			o, err = strconv.Unquote(o)
-			if err != nil {
-				o = string(tmp[:])
-			}
-			s.Name = &o
-
 		case "ranges":
 			if err := dec.Decode(&s.Ranges); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Ranges", err)
 			}
 
 		case "script":
-			if err := dec.Decode(&s.Script); err != nil {
-				return err
+			message := json.RawMessage{}
+			if err := dec.Decode(&message); err != nil {
+				return fmt.Errorf("%s | %w", "Script", err)
+			}
+			keyDec := json.NewDecoder(bytes.NewReader(message))
+			for {
+				t, err := keyDec.Token()
+				if err != nil {
+					if errors.Is(err, io.EOF) {
+						break
+					}
+					return fmt.Errorf("%s | %w", "Script", err)
+				}
+
+				switch t {
+
+				case "lang", "options", "source":
+					o := NewInlineScript()
+					localDec := json.NewDecoder(bytes.NewReader(message))
+					if err := localDec.Decode(&o); err != nil {
+						return fmt.Errorf("%s | %w", "Script", err)
+					}
+					s.Script = o
+
+				case "id":
+					o := NewStoredScriptId()
+					localDec := json.NewDecoder(bytes.NewReader(message))
+					if err := localDec.Decode(&o); err != nil {
+						return fmt.Errorf("%s | %w", "Script", err)
+					}
+					s.Script = o
+
+				}
 			}
 
 		}

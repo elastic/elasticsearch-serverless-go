@@ -16,84 +16,24 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
 import (
-	"bytes"
-	"encoding/json"
-	"errors"
-	"io"
-	"strconv"
-
 	"github.com/elastic/elasticsearch-serverless-go/typedapi/types/enums/ttesttype"
 )
 
 // TTestAggregation type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/aggregations/metric.ts#L294-L308
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/aggregations/metric.ts#L294-L308
 type TTestAggregation struct {
 	// A Test population A.
 	A *TestPopulation `json:"a,omitempty"`
 	// B Test population B.
-	B    *TestPopulation `json:"b,omitempty"`
-	Meta Metadata        `json:"meta,omitempty"`
-	Name *string         `json:"name,omitempty"`
+	B *TestPopulation `json:"b,omitempty"`
 	// Type The type of test.
 	Type *ttesttype.TTestType `json:"type,omitempty"`
-}
-
-func (s *TTestAggregation) UnmarshalJSON(data []byte) error {
-
-	dec := json.NewDecoder(bytes.NewReader(data))
-
-	for {
-		t, err := dec.Token()
-		if err != nil {
-			if errors.Is(err, io.EOF) {
-				break
-			}
-			return err
-		}
-
-		switch t {
-
-		case "a":
-			if err := dec.Decode(&s.A); err != nil {
-				return err
-			}
-
-		case "b":
-			if err := dec.Decode(&s.B); err != nil {
-				return err
-			}
-
-		case "meta":
-			if err := dec.Decode(&s.Meta); err != nil {
-				return err
-			}
-
-		case "name":
-			var tmp json.RawMessage
-			if err := dec.Decode(&tmp); err != nil {
-				return err
-			}
-			o := string(tmp[:])
-			o, err = strconv.Unquote(o)
-			if err != nil {
-				o = string(tmp[:])
-			}
-			s.Name = &o
-
-		case "type":
-			if err := dec.Decode(&s.Type); err != nil {
-				return err
-			}
-
-		}
-	}
-	return nil
 }
 
 // NewTTestAggregation returns a TTestAggregation.

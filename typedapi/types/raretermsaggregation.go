@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // RareTermsAggregation type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/aggregations/bucket.ts#L687-L717
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/aggregations/bucket.ts#L689-L719
 type RareTermsAggregation struct {
 	// Exclude Terms that should be excluded from the aggregation.
 	Exclude []string `json:"exclude,omitempty"`
@@ -39,12 +40,10 @@ type RareTermsAggregation struct {
 	// Include Terms that should be included in the aggregation.
 	Include TermsInclude `json:"include,omitempty"`
 	// MaxDocCount The maximum number of documents a term should appear in.
-	MaxDocCount *int64   `json:"max_doc_count,omitempty"`
-	Meta        Metadata `json:"meta,omitempty"`
+	MaxDocCount *int64 `json:"max_doc_count,omitempty"`
 	// Missing The value to apply to documents that do not have a value.
 	// By default, documents without a value are ignored.
 	Missing Missing `json:"missing,omitempty"`
-	Name    *string `json:"name,omitempty"`
 	// Precision The precision of the internal CuckooFilters.
 	// Smaller precision leads to better approximation, but higher memory usage.
 	Precision *Float64 `json:"precision,omitempty"`
@@ -72,34 +71,34 @@ func (s *RareTermsAggregation) UnmarshalJSON(data []byte) error {
 			if !bytes.HasPrefix(rawMsg, []byte("[")) {
 				o := new(string)
 				if err := json.NewDecoder(bytes.NewReader(rawMsg)).Decode(&o); err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Exclude", err)
 				}
 
 				s.Exclude = append(s.Exclude, *o)
 			} else {
 				if err := json.NewDecoder(bytes.NewReader(rawMsg)).Decode(&s.Exclude); err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Exclude", err)
 				}
 			}
 
 		case "field":
 			if err := dec.Decode(&s.Field); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Field", err)
 			}
 
 		case "include":
 			if err := dec.Decode(&s.Include); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Include", err)
 			}
 
 		case "max_doc_count":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "MaxDocCount", err)
 				}
 				s.MaxDocCount = &value
 			case float64:
@@ -107,36 +106,19 @@ func (s *RareTermsAggregation) UnmarshalJSON(data []byte) error {
 				s.MaxDocCount = &f
 			}
 
-		case "meta":
-			if err := dec.Decode(&s.Meta); err != nil {
-				return err
-			}
-
 		case "missing":
 			if err := dec.Decode(&s.Missing); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Missing", err)
 			}
-
-		case "name":
-			var tmp json.RawMessage
-			if err := dec.Decode(&tmp); err != nil {
-				return err
-			}
-			o := string(tmp[:])
-			o, err = strconv.Unquote(o)
-			if err != nil {
-				o = string(tmp[:])
-			}
-			s.Name = &o
 
 		case "precision":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseFloat(v, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Precision", err)
 				}
 				f := Float64(value)
 				s.Precision = &f
@@ -148,7 +130,7 @@ func (s *RareTermsAggregation) UnmarshalJSON(data []byte) error {
 		case "value_type":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "ValueType", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)

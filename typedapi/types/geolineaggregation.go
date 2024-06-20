@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,6 +24,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 
@@ -32,7 +33,7 @@ import (
 
 // GeoLineAggregation type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/aggregations/metric.ts#L121-L146
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/aggregations/metric.ts#L121-L146
 type GeoLineAggregation struct {
 	// IncludeSort When `true`, returns an additional array of the sort values in the feature
 	// properties.
@@ -67,13 +68,13 @@ func (s *GeoLineAggregation) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "include_sort":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "IncludeSort", err)
 				}
 				s.IncludeSort = &value
 			case bool:
@@ -82,18 +83,18 @@ func (s *GeoLineAggregation) UnmarshalJSON(data []byte) error {
 
 		case "point":
 			if err := dec.Decode(&s.Point); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Point", err)
 			}
 
 		case "size":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Size", err)
 				}
 				s.Size = &value
 			case float64:
@@ -103,12 +104,12 @@ func (s *GeoLineAggregation) UnmarshalJSON(data []byte) error {
 
 		case "sort":
 			if err := dec.Decode(&s.Sort); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Sort", err)
 			}
 
 		case "sort_order":
 			if err := dec.Decode(&s.SortOrder); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "SortOrder", err)
 			}
 
 		}

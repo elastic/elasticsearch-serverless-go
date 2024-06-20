@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // SegmentsStats type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/Stats.ts#L273-L366
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/Stats.ts#L273-L366
 type SegmentsStats struct {
 	// Count Total number of segments across all shards assigned to selected nodes.
 	Count int `json:"count"`
@@ -120,13 +121,13 @@ func (s *SegmentsStats) UnmarshalJSON(data []byte) error {
 
 		case "count":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Count", err)
 				}
 				s.Count = value
 			case float64:
@@ -136,17 +137,17 @@ func (s *SegmentsStats) UnmarshalJSON(data []byte) error {
 
 		case "doc_values_memory":
 			if err := dec.Decode(&s.DocValuesMemory); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "DocValuesMemory", err)
 			}
 
 		case "doc_values_memory_in_bytes":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "DocValuesMemoryInBytes", err)
 				}
 				s.DocValuesMemoryInBytes = value
 			case float64:
@@ -159,22 +160,22 @@ func (s *SegmentsStats) UnmarshalJSON(data []byte) error {
 				s.FileSizes = make(map[string]ShardFileSizeInfo, 0)
 			}
 			if err := dec.Decode(&s.FileSizes); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "FileSizes", err)
 			}
 
 		case "fixed_bit_set":
 			if err := dec.Decode(&s.FixedBitSet); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "FixedBitSet", err)
 			}
 
 		case "fixed_bit_set_memory_in_bytes":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "FixedBitSetMemoryInBytes", err)
 				}
 				s.FixedBitSetMemoryInBytes = value
 			case float64:
@@ -183,13 +184,13 @@ func (s *SegmentsStats) UnmarshalJSON(data []byte) error {
 			}
 
 		case "index_writer_max_memory_in_bytes":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "IndexWriterMaxMemoryInBytes", err)
 				}
 				s.IndexWriterMaxMemoryInBytes = &value
 			case float64:
@@ -199,17 +200,17 @@ func (s *SegmentsStats) UnmarshalJSON(data []byte) error {
 
 		case "index_writer_memory":
 			if err := dec.Decode(&s.IndexWriterMemory); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "IndexWriterMemory", err)
 			}
 
 		case "index_writer_memory_in_bytes":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "IndexWriterMemoryInBytes", err)
 				}
 				s.IndexWriterMemoryInBytes = value
 			case float64:
@@ -218,13 +219,13 @@ func (s *SegmentsStats) UnmarshalJSON(data []byte) error {
 			}
 
 		case "max_unsafe_auto_id_timestamp":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "MaxUnsafeAutoIdTimestamp", err)
 				}
 				s.MaxUnsafeAutoIdTimestamp = value
 			case float64:
@@ -234,17 +235,17 @@ func (s *SegmentsStats) UnmarshalJSON(data []byte) error {
 
 		case "memory":
 			if err := dec.Decode(&s.Memory); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Memory", err)
 			}
 
 		case "memory_in_bytes":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "MemoryInBytes", err)
 				}
 				s.MemoryInBytes = value
 			case float64:
@@ -254,17 +255,17 @@ func (s *SegmentsStats) UnmarshalJSON(data []byte) error {
 
 		case "norms_memory":
 			if err := dec.Decode(&s.NormsMemory); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "NormsMemory", err)
 			}
 
 		case "norms_memory_in_bytes":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "NormsMemoryInBytes", err)
 				}
 				s.NormsMemoryInBytes = value
 			case float64:
@@ -274,17 +275,17 @@ func (s *SegmentsStats) UnmarshalJSON(data []byte) error {
 
 		case "points_memory":
 			if err := dec.Decode(&s.PointsMemory); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "PointsMemory", err)
 			}
 
 		case "points_memory_in_bytes":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "PointsMemoryInBytes", err)
 				}
 				s.PointsMemoryInBytes = value
 			case float64:
@@ -293,13 +294,13 @@ func (s *SegmentsStats) UnmarshalJSON(data []byte) error {
 			}
 
 		case "stored_fields_memory_in_bytes":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "StoredFieldsMemoryInBytes", err)
 				}
 				s.StoredFieldsMemoryInBytes = value
 			case float64:
@@ -309,17 +310,17 @@ func (s *SegmentsStats) UnmarshalJSON(data []byte) error {
 
 		case "stored_memory":
 			if err := dec.Decode(&s.StoredMemory); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "StoredMemory", err)
 			}
 
 		case "term_vectors_memory_in_bytes":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "TermVectorsMemoryInBytes", err)
 				}
 				s.TermVectorsMemoryInBytes = value
 			case float64:
@@ -329,22 +330,22 @@ func (s *SegmentsStats) UnmarshalJSON(data []byte) error {
 
 		case "term_vectory_memory":
 			if err := dec.Decode(&s.TermVectoryMemory); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "TermVectoryMemory", err)
 			}
 
 		case "terms_memory":
 			if err := dec.Decode(&s.TermsMemory); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "TermsMemory", err)
 			}
 
 		case "terms_memory_in_bytes":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "TermsMemoryInBytes", err)
 				}
 				s.TermsMemoryInBytes = value
 			case float64:
@@ -354,17 +355,17 @@ func (s *SegmentsStats) UnmarshalJSON(data []byte) error {
 
 		case "version_map_memory":
 			if err := dec.Decode(&s.VersionMapMemory); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "VersionMapMemory", err)
 			}
 
 		case "version_map_memory_in_bytes":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "VersionMapMemoryInBytes", err)
 				}
 				s.VersionMapMemoryInBytes = value
 			case float64:

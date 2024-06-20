@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package putsettings
 
@@ -26,5 +26,12 @@ import (
 
 // Request holds the request body struct for the package putsettings
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/indices/put_settings/IndicesPutSettingsRequest.ts#L25-L92
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/indices/put_settings/IndicesPutSettingsRequest.ts#L25-L92
 type Request = types.IndexSettings
+
+// NewRequest returns a Request
+func NewRequest() *Request {
+	r := types.NewIndexSettings()
+
+	return r
+}

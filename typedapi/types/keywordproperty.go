@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,16 +24,18 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 
 	"github.com/elastic/elasticsearch-serverless-go/typedapi/types/enums/dynamicmapping"
 	"github.com/elastic/elasticsearch-serverless-go/typedapi/types/enums/indexoptions"
+	"github.com/elastic/elasticsearch-serverless-go/typedapi/types/enums/onscripterror"
 )
 
 // KeywordProperty type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/mapping/core.ts#L89-L105
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/mapping/core.ts#L95-L113
 type KeywordProperty struct {
 	Boost               *Float64                       `json:"boost,omitempty"`
 	CopyTo              []string                       `json:"copy_to,omitempty"`
@@ -45,14 +47,16 @@ type KeywordProperty struct {
 	Index               *bool                          `json:"index,omitempty"`
 	IndexOptions        *indexoptions.IndexOptions     `json:"index_options,omitempty"`
 	// Meta Metadata about the field.
-	Meta                     map[string]string   `json:"meta,omitempty"`
-	Normalizer               *string             `json:"normalizer,omitempty"`
-	Norms                    *bool               `json:"norms,omitempty"`
-	NullValue                *string             `json:"null_value,omitempty"`
-	Properties               map[string]Property `json:"properties,omitempty"`
-	Similarity               *string             `json:"similarity,omitempty"`
-	SplitQueriesOnWhitespace *bool               `json:"split_queries_on_whitespace,omitempty"`
-	Store                    *bool               `json:"store,omitempty"`
+	Meta                     map[string]string            `json:"meta,omitempty"`
+	Normalizer               *string                      `json:"normalizer,omitempty"`
+	Norms                    *bool                        `json:"norms,omitempty"`
+	NullValue                *string                      `json:"null_value,omitempty"`
+	OnScriptError            *onscripterror.OnScriptError `json:"on_script_error,omitempty"`
+	Properties               map[string]Property          `json:"properties,omitempty"`
+	Script                   Script                       `json:"script,omitempty"`
+	Similarity               *string                      `json:"similarity,omitempty"`
+	SplitQueriesOnWhitespace *bool                        `json:"split_queries_on_whitespace,omitempty"`
+	Store                    *bool                        `json:"store,omitempty"`
 	// TimeSeriesDimension For internal use by Elastic only. Marks the field as a time series dimension.
 	// Defaults to false.
 	TimeSeriesDimension *bool  `json:"time_series_dimension,omitempty"`
@@ -75,13 +79,13 @@ func (s *KeywordProperty) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "boost":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseFloat(v, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Boost", err)
 				}
 				f := Float64(value)
 				s.Boost = &f
@@ -96,24 +100,24 @@ func (s *KeywordProperty) UnmarshalJSON(data []byte) error {
 			if !bytes.HasPrefix(rawMsg, []byte("[")) {
 				o := new(string)
 				if err := json.NewDecoder(bytes.NewReader(rawMsg)).Decode(&o); err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "CopyTo", err)
 				}
 
 				s.CopyTo = append(s.CopyTo, *o)
 			} else {
 				if err := json.NewDecoder(bytes.NewReader(rawMsg)).Decode(&s.CopyTo); err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "CopyTo", err)
 				}
 			}
 
 		case "doc_values":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "DocValues", err)
 				}
 				s.DocValues = &value
 			case bool:
@@ -122,17 +126,17 @@ func (s *KeywordProperty) UnmarshalJSON(data []byte) error {
 
 		case "dynamic":
 			if err := dec.Decode(&s.Dynamic); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Dynamic", err)
 			}
 
 		case "eager_global_ordinals":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "EagerGlobalOrdinals", err)
 				}
 				s.EagerGlobalOrdinals = &value
 			case bool:
@@ -146,7 +150,7 @@ func (s *KeywordProperty) UnmarshalJSON(data []byte) error {
 			refs := make(map[string]json.RawMessage, 0)
 			dec.Decode(&refs)
 			for key, message := range refs {
-				kind := make(map[string]interface{})
+				kind := make(map[string]any)
 				buf := bytes.NewReader(message)
 				localDec := json.NewDecoder(buf)
 				localDec.Decode(&kind)
@@ -167,7 +171,7 @@ func (s *KeywordProperty) UnmarshalJSON(data []byte) error {
 						return err
 					}
 					s.Fields[key] = oo
-				case "{dynamic_property}":
+				case "{dynamic_type}":
 					oo := NewDynamicProperty()
 					if err := localDec.Decode(&oo); err != nil {
 						return err
@@ -271,6 +275,18 @@ func (s *KeywordProperty) UnmarshalJSON(data []byte) error {
 					s.Fields[key] = oo
 				case "object":
 					oo := NewObjectProperty()
+					if err := localDec.Decode(&oo); err != nil {
+						return err
+					}
+					s.Fields[key] = oo
+				case "semantic_text":
+					oo := NewSemanticTextProperty()
+					if err := localDec.Decode(&oo); err != nil {
+						return err
+					}
+					s.Fields[key] = oo
+				case "sparse_vector":
+					oo := NewSparseVectorProperty()
 					if err := localDec.Decode(&oo); err != nil {
 						return err
 					}
@@ -427,6 +443,12 @@ func (s *KeywordProperty) UnmarshalJSON(data []byte) error {
 					s.Fields[key] = oo
 				case "long_range":
 					oo := NewLongRangeProperty()
+					if err := localDec.Decode(&oo); err != nil {
+						return err
+					}
+					s.Fields[key] = oo
+				case "icu_collation_keyword":
+					oo := NewIcuCollationProperty()
 					if err := localDec.Decode(&oo); err != nil {
 						return err
 					}
@@ -442,13 +464,13 @@ func (s *KeywordProperty) UnmarshalJSON(data []byte) error {
 
 		case "ignore_above":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "IgnoreAbove", err)
 				}
 				s.IgnoreAbove = &value
 			case float64:
@@ -457,13 +479,13 @@ func (s *KeywordProperty) UnmarshalJSON(data []byte) error {
 			}
 
 		case "index":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Index", err)
 				}
 				s.Index = &value
 			case bool:
@@ -472,7 +494,7 @@ func (s *KeywordProperty) UnmarshalJSON(data []byte) error {
 
 		case "index_options":
 			if err := dec.Decode(&s.IndexOptions); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "IndexOptions", err)
 			}
 
 		case "meta":
@@ -480,13 +502,13 @@ func (s *KeywordProperty) UnmarshalJSON(data []byte) error {
 				s.Meta = make(map[string]string, 0)
 			}
 			if err := dec.Decode(&s.Meta); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Meta", err)
 			}
 
 		case "normalizer":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Normalizer", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -496,13 +518,13 @@ func (s *KeywordProperty) UnmarshalJSON(data []byte) error {
 			s.Normalizer = &o
 
 		case "norms":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Norms", err)
 				}
 				s.Norms = &value
 			case bool:
@@ -512,7 +534,7 @@ func (s *KeywordProperty) UnmarshalJSON(data []byte) error {
 		case "null_value":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "NullValue", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -521,6 +543,11 @@ func (s *KeywordProperty) UnmarshalJSON(data []byte) error {
 			}
 			s.NullValue = &o
 
+		case "on_script_error":
+			if err := dec.Decode(&s.OnScriptError); err != nil {
+				return fmt.Errorf("%s | %w", "OnScriptError", err)
+			}
+
 		case "properties":
 			if s.Properties == nil {
 				s.Properties = make(map[string]Property, 0)
@@ -528,7 +555,7 @@ func (s *KeywordProperty) UnmarshalJSON(data []byte) error {
 			refs := make(map[string]json.RawMessage, 0)
 			dec.Decode(&refs)
 			for key, message := range refs {
-				kind := make(map[string]interface{})
+				kind := make(map[string]any)
 				buf := bytes.NewReader(message)
 				localDec := json.NewDecoder(buf)
 				localDec.Decode(&kind)
@@ -549,7 +576,7 @@ func (s *KeywordProperty) UnmarshalJSON(data []byte) error {
 						return err
 					}
 					s.Properties[key] = oo
-				case "{dynamic_property}":
+				case "{dynamic_type}":
 					oo := NewDynamicProperty()
 					if err := localDec.Decode(&oo); err != nil {
 						return err
@@ -653,6 +680,18 @@ func (s *KeywordProperty) UnmarshalJSON(data []byte) error {
 					s.Properties[key] = oo
 				case "object":
 					oo := NewObjectProperty()
+					if err := localDec.Decode(&oo); err != nil {
+						return err
+					}
+					s.Properties[key] = oo
+				case "semantic_text":
+					oo := NewSemanticTextProperty()
+					if err := localDec.Decode(&oo); err != nil {
+						return err
+					}
+					s.Properties[key] = oo
+				case "sparse_vector":
+					oo := NewSparseVectorProperty()
 					if err := localDec.Decode(&oo); err != nil {
 						return err
 					}
@@ -813,6 +852,12 @@ func (s *KeywordProperty) UnmarshalJSON(data []byte) error {
 						return err
 					}
 					s.Properties[key] = oo
+				case "icu_collation_keyword":
+					oo := NewIcuCollationProperty()
+					if err := localDec.Decode(&oo); err != nil {
+						return err
+					}
+					s.Properties[key] = oo
 				default:
 					oo := new(Property)
 					if err := localDec.Decode(&oo); err != nil {
@@ -822,10 +867,46 @@ func (s *KeywordProperty) UnmarshalJSON(data []byte) error {
 				}
 			}
 
+		case "script":
+			message := json.RawMessage{}
+			if err := dec.Decode(&message); err != nil {
+				return fmt.Errorf("%s | %w", "Script", err)
+			}
+			keyDec := json.NewDecoder(bytes.NewReader(message))
+			for {
+				t, err := keyDec.Token()
+				if err != nil {
+					if errors.Is(err, io.EOF) {
+						break
+					}
+					return fmt.Errorf("%s | %w", "Script", err)
+				}
+
+				switch t {
+
+				case "lang", "options", "source":
+					o := NewInlineScript()
+					localDec := json.NewDecoder(bytes.NewReader(message))
+					if err := localDec.Decode(&o); err != nil {
+						return fmt.Errorf("%s | %w", "Script", err)
+					}
+					s.Script = o
+
+				case "id":
+					o := NewStoredScriptId()
+					localDec := json.NewDecoder(bytes.NewReader(message))
+					if err := localDec.Decode(&o); err != nil {
+						return fmt.Errorf("%s | %w", "Script", err)
+					}
+					s.Script = o
+
+				}
+			}
+
 		case "similarity":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Similarity", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -835,13 +916,13 @@ func (s *KeywordProperty) UnmarshalJSON(data []byte) error {
 			s.Similarity = &o
 
 		case "split_queries_on_whitespace":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "SplitQueriesOnWhitespace", err)
 				}
 				s.SplitQueriesOnWhitespace = &value
 			case bool:
@@ -849,13 +930,13 @@ func (s *KeywordProperty) UnmarshalJSON(data []byte) error {
 			}
 
 		case "store":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Store", err)
 				}
 				s.Store = &value
 			case bool:
@@ -863,13 +944,13 @@ func (s *KeywordProperty) UnmarshalJSON(data []byte) error {
 			}
 
 		case "time_series_dimension":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "TimeSeriesDimension", err)
 				}
 				s.TimeSeriesDimension = &value
 			case bool:
@@ -878,7 +959,7 @@ func (s *KeywordProperty) UnmarshalJSON(data []byte) error {
 
 		case "type":
 			if err := dec.Decode(&s.Type); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Type", err)
 			}
 
 		}
@@ -903,7 +984,9 @@ func (s KeywordProperty) MarshalJSON() ([]byte, error) {
 		Normalizer:               s.Normalizer,
 		Norms:                    s.Norms,
 		NullValue:                s.NullValue,
+		OnScriptError:            s.OnScriptError,
 		Properties:               s.Properties,
+		Script:                   s.Script,
 		Similarity:               s.Similarity,
 		SplitQueriesOnWhitespace: s.SplitQueriesOnWhitespace,
 		Store:                    s.Store,

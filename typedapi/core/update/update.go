@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 // Updates a document with a script or partial document.
 package update
@@ -54,16 +54,20 @@ type Update struct {
 	values  url.Values
 	path    url.URL
 
-	buf *gobytes.Buffer
+	raw io.Reader
 
 	req      *Request
 	deferred []func(request *Request) error
-	raw      io.Reader
+	buf      *gobytes.Buffer
 
 	paramSet int
 
 	id    string
 	index string
+
+	spanStarted bool
+
+	instrument elastictransport.Instrumentation
 }
 
 // NewUpdate type alias for index.
@@ -85,15 +89,22 @@ func NewUpdateFunc(tp elastictransport.Interface) NewUpdate {
 
 // Updates a document with a script or partial document.
 //
-// https://www.elastic.co/guide/en/elasticsearch/reference/master/docs-update.html
+// https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.html
 func New(tp elastictransport.Interface) *Update {
 	r := &Update{
 		transport: tp,
 		values:    make(url.Values),
 		headers:   make(http.Header),
-		buf:       gobytes.NewBuffer(nil),
+
+		buf: gobytes.NewBuffer(nil),
 
 		req: NewRequest(),
+	}
+
+	if instrumented, ok := r.transport.(elastictransport.Instrumented); ok {
+		if instrument := instrumented.InstrumentationEnabled(); instrument != nil {
+			r.instrument = instrument
+		}
 	}
 
 	return r
@@ -132,9 +143,7 @@ func (r *Update) HttpRequest(ctx context.Context) (*http.Request, error) {
 		}
 	}
 
-	if r.raw != nil {
-		r.buf.ReadFrom(r.raw)
-	} else if r.req != nil {
+	if r.raw == nil && r.req != nil {
 
 		data, err := json.Marshal(r.req)
 
@@ -146,17 +155,27 @@ func (r *Update) HttpRequest(ctx context.Context) (*http.Request, error) {
 
 	}
 
+	if r.buf.Len() > 0 {
+		r.raw = r.buf
+	}
+
 	r.path.Scheme = "http"
 
 	switch {
 	case r.paramSet == indexMask|idMask:
 		path.WriteString("/")
 
+		if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+			instrument.RecordPathPart(ctx, "index", r.index)
+		}
 		path.WriteString(r.index)
 		path.WriteString("/")
 		path.WriteString("_update")
 		path.WriteString("/")
 
+		if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+			instrument.RecordPathPart(ctx, "id", r.id)
+		}
 		path.WriteString(r.id)
 
 		method = http.MethodPost
@@ -170,20 +189,20 @@ func (r *Update) HttpRequest(ctx context.Context) (*http.Request, error) {
 	}
 
 	if ctx != nil {
-		req, err = http.NewRequestWithContext(ctx, method, r.path.String(), r.buf)
+		req, err = http.NewRequestWithContext(ctx, method, r.path.String(), r.raw)
 	} else {
-		req, err = http.NewRequest(method, r.path.String(), r.buf)
+		req, err = http.NewRequest(method, r.path.String(), r.raw)
 	}
 
 	req.Header = r.headers.Clone()
 
 	if req.Header.Get("Elastic-Api-Version") == "" {
-		if r.buf.Len() > 0 {
+		if r.raw != nil {
 			req.Header.Set("Elastic-Api-Version", "2023-10-31")
 		}
 	}
 	if req.Header.Get("Content-Type") == "" {
-		if r.buf.Len() > 0 {
+		if r.raw != nil {
 			req.Header.Set("Content-Type", "application/json")
 		}
 	}
@@ -200,27 +219,66 @@ func (r *Update) HttpRequest(ctx context.Context) (*http.Request, error) {
 }
 
 // Perform runs the http.Request through the provided transport and returns an http.Response.
-func (r Update) Perform(ctx context.Context) (*http.Response, error) {
+func (r Update) Perform(providedCtx context.Context) (*http.Response, error) {
+	var ctx context.Context
+	if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+		if r.spanStarted == false {
+			ctx := instrument.Start(providedCtx, "update")
+			defer instrument.Close(ctx)
+		}
+	}
+	if ctx == nil {
+		ctx = providedCtx
+	}
+
 	req, err := r.HttpRequest(ctx)
 	if err != nil {
+		if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+			instrument.RecordError(ctx, err)
+		}
 		return nil, err
 	}
 
+	if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+		instrument.BeforeRequest(req, "update")
+		if reader := instrument.RecordRequestBody(ctx, "update", r.raw); reader != nil {
+			req.Body = reader
+		}
+	}
 	res, err := r.transport.Perform(req)
+	if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+		instrument.AfterRequest(req, "elasticsearch", "update")
+	}
 	if err != nil {
-		return nil, fmt.Errorf("an error happened during the Update query execution: %w", err)
+		localErr := fmt.Errorf("an error happened during the Update query execution: %w", err)
+		if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+			instrument.RecordError(ctx, localErr)
+		}
+		return nil, localErr
 	}
 
 	return res, nil
 }
 
 // Do runs the request through the transport, handle the response and returns a update.Response
-func (r Update) Do(ctx context.Context) (*Response, error) {
+func (r Update) Do(providedCtx context.Context) (*Response, error) {
+	var ctx context.Context
+	r.spanStarted = true
+	if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+		ctx = instrument.Start(providedCtx, "update")
+		defer instrument.Close(ctx)
+	}
+	if ctx == nil {
+		ctx = providedCtx
+	}
 
 	response := NewResponse()
 
 	res, err := r.Perform(ctx)
 	if err != nil {
+		if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+			instrument.RecordError(ctx, err)
+		}
 		return nil, err
 	}
 	defer res.Body.Close()
@@ -228,6 +286,9 @@ func (r Update) Do(ctx context.Context) (*Response, error) {
 	if res.StatusCode < 299 {
 		err = json.NewDecoder(res.Body).Decode(response)
 		if err != nil {
+			if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+				instrument.RecordError(ctx, err)
+			}
 			return nil, err
 		}
 
@@ -237,6 +298,9 @@ func (r Update) Do(ctx context.Context) (*Response, error) {
 	errorResponse := types.NewElasticsearchError()
 	err = json.NewDecoder(res.Body).Decode(errorResponse)
 	if err != nil {
+		if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+			instrument.RecordError(ctx, err)
+		}
 		return nil, err
 	}
 
@@ -244,6 +308,9 @@ func (r Update) Do(ctx context.Context) (*Response, error) {
 		errorResponse.Status = res.StatusCode
 	}
 
+	if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+		instrument.RecordError(ctx, errorResponse)
+	}
 	return nil, errorResponse
 }
 
@@ -370,6 +437,50 @@ func (r *Update) SourceIncludes_(fields ...string) *Update {
 	return r
 }
 
+// ErrorTrace When set to `true` Elasticsearch will include the full stack trace of errors
+// when they occur.
+// API name: error_trace
+func (r *Update) ErrorTrace(errortrace bool) *Update {
+	r.values.Set("error_trace", strconv.FormatBool(errortrace))
+
+	return r
+}
+
+// FilterPath Comma-separated list of filters in dot notation which reduce the response
+// returned by Elasticsearch.
+// API name: filter_path
+func (r *Update) FilterPath(filterpaths ...string) *Update {
+	tmp := []string{}
+	for _, item := range filterpaths {
+		tmp = append(tmp, fmt.Sprintf("%v", item))
+	}
+	r.values.Set("filter_path", strings.Join(tmp, ","))
+
+	return r
+}
+
+// Human When set to `true` will return statistics in a format suitable for humans.
+// For example `"exists_time": "1h"` for humans and
+// `"eixsts_time_in_millis": 3600000` for computers. When disabled the human
+// readable values will be omitted. This makes sense for responses being
+// consumed
+// only by machines.
+// API name: human
+func (r *Update) Human(human bool) *Update {
+	r.values.Set("human", strconv.FormatBool(human))
+
+	return r
+}
+
+// Pretty If set to `true` the returned JSON will be "pretty-formatted". Only use
+// this option for debugging only.
+// API name: pretty
+func (r *Update) Pretty(pretty bool) *Update {
+	r.values.Set("pretty", strconv.FormatBool(pretty))
+
+	return r
+}
+
 // DetectNoop Set to false to disable setting 'result' in the response
 // to 'noop' if no change to the document occurred.
 // API name: detect_noop
@@ -385,7 +496,7 @@ func (r *Update) DetectNoop(detectnoop bool) *Update {
 // doc should be a json.RawMessage or a structure
 // if a structure is provided, the client will defer a json serialization
 // prior to sending the payload to Elasticsearch.
-func (r *Update) Doc(doc interface{}) *Update {
+func (r *Update) Doc(doc any) *Update {
 	switch casted := doc.(type) {
 	case json.RawMessage:
 		r.req.Doc = casted
@@ -445,7 +556,7 @@ func (r *Update) Source_(sourceconfig types.SourceConfig) *Update {
 // upsert should be a json.RawMessage or a structure
 // if a structure is provided, the client will defer a json serialization
 // prior to sending the payload to Elasticsearch.
-func (r *Update) Upsert(upsert interface{}) *Update {
+func (r *Update) Upsert(upsert any) *Update {
 	switch casted := upsert.(type) {
 	case json.RawMessage:
 		r.req.Upsert = casted

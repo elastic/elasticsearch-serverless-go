@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // TargetMeanEncodingPreprocessor type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/ml/put_trained_model/types.ts#L49-L54
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/ml/put_trained_model/types.ts#L49-L54
 type TargetMeanEncodingPreprocessor struct {
 	DefaultValue Float64            `json:"default_value"`
 	FeatureName  string             `json:"feature_name"`
@@ -54,13 +55,13 @@ func (s *TargetMeanEncodingPreprocessor) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "default_value":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseFloat(v, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "DefaultValue", err)
 				}
 				f := Float64(value)
 				s.DefaultValue = f
@@ -72,7 +73,7 @@ func (s *TargetMeanEncodingPreprocessor) UnmarshalJSON(data []byte) error {
 		case "feature_name":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "FeatureName", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -84,7 +85,7 @@ func (s *TargetMeanEncodingPreprocessor) UnmarshalJSON(data []byte) error {
 		case "field":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Field", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -98,7 +99,7 @@ func (s *TargetMeanEncodingPreprocessor) UnmarshalJSON(data []byte) error {
 				s.TargetMap = make(map[string]Float64, 0)
 			}
 			if err := dec.Decode(&s.TargetMap); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "TargetMap", err)
 			}
 
 		}

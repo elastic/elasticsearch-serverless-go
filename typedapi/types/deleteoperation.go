@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,6 +24,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 
@@ -32,7 +33,7 @@ import (
 
 // DeleteOperation type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_global/bulk/types.ts#L134-L134
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_global/bulk/types.ts#L134-L134
 type DeleteOperation struct {
 	// Id_ The document ID.
 	Id_           *string `json:"_id,omitempty"`
@@ -63,17 +64,17 @@ func (s *DeleteOperation) UnmarshalJSON(data []byte) error {
 
 		case "_id":
 			if err := dec.Decode(&s.Id_); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Id_", err)
 			}
 
 		case "if_primary_term":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "IfPrimaryTerm", err)
 				}
 				s.IfPrimaryTerm = &value
 			case float64:
@@ -83,27 +84,27 @@ func (s *DeleteOperation) UnmarshalJSON(data []byte) error {
 
 		case "if_seq_no":
 			if err := dec.Decode(&s.IfSeqNo); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "IfSeqNo", err)
 			}
 
 		case "_index":
 			if err := dec.Decode(&s.Index_); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Index_", err)
 			}
 
 		case "routing":
 			if err := dec.Decode(&s.Routing); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Routing", err)
 			}
 
 		case "version":
 			if err := dec.Decode(&s.Version); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Version", err)
 			}
 
 		case "version_type":
 			if err := dec.Decode(&s.VersionType); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "VersionType", err)
 			}
 
 		}

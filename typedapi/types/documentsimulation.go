@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -33,7 +33,7 @@ import (
 
 // DocumentSimulation type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/ingest/simulate/types.ts#L57-L85
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/ingest/simulate/types.ts#L57-L85
 type DocumentSimulation struct {
 	DocumentSimulation map[string]string `json:"-"`
 	// Id_ Unique identifier for the document. This ID must be unique within the
@@ -67,23 +67,23 @@ func (s *DocumentSimulation) UnmarshalJSON(data []byte) error {
 
 		case "_id":
 			if err := dec.Decode(&s.Id_); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Id_", err)
 			}
 
 		case "_index":
 			if err := dec.Decode(&s.Index_); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Index_", err)
 			}
 
 		case "_ingest":
 			if err := dec.Decode(&s.Ingest_); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Ingest_", err)
 			}
 
 		case "_routing":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Routing_", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -97,17 +97,17 @@ func (s *DocumentSimulation) UnmarshalJSON(data []byte) error {
 				s.Source_ = make(map[string]json.RawMessage, 0)
 			}
 			if err := dec.Decode(&s.Source_); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Source_", err)
 			}
 
 		case "_version_type":
 			if err := dec.Decode(&s.VersionType_); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "VersionType_", err)
 			}
 
 		case "_version":
 			if err := dec.Decode(&s.Version_); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Version_", err)
 			}
 
 		default:
@@ -118,7 +118,7 @@ func (s *DocumentSimulation) UnmarshalJSON(data []byte) error {
 				}
 				raw := new(string)
 				if err := dec.Decode(&raw); err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "DocumentSimulation", err)
 				}
 				s.DocumentSimulation[key] = *raw
 			}
@@ -132,7 +132,7 @@ func (s *DocumentSimulation) UnmarshalJSON(data []byte) error {
 func (s DocumentSimulation) MarshalJSON() ([]byte, error) {
 	type opt DocumentSimulation
 	// We transform the struct to a map without the embedded additional properties map
-	tmp := make(map[string]interface{}, 0)
+	tmp := make(map[string]any, 0)
 
 	data, err := json.Marshal(opt(s))
 	if err != nil {

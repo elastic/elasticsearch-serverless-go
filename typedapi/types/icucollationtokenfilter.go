@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,6 +24,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 
@@ -35,20 +36,20 @@ import (
 
 // IcuCollationTokenFilter type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/analysis/icu-plugin.ts#L51-L65
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/analysis/icu-plugin.ts#L51-L65
 type IcuCollationTokenFilter struct {
 	Alternate              *icucollationalternate.IcuCollationAlternate         `json:"alternate,omitempty"`
-	CaseFirst              *icucollationcasefirst.IcuCollationCaseFirst         `json:"caseFirst,omitempty"`
-	CaseLevel              *bool                                                `json:"caseLevel,omitempty"`
+	CaseFirst              *icucollationcasefirst.IcuCollationCaseFirst         `json:"case_first,omitempty"`
+	CaseLevel              *bool                                                `json:"case_level,omitempty"`
 	Country                *string                                              `json:"country,omitempty"`
 	Decomposition          *icucollationdecomposition.IcuCollationDecomposition `json:"decomposition,omitempty"`
-	HiraganaQuaternaryMode *bool                                                `json:"hiraganaQuaternaryMode,omitempty"`
+	HiraganaQuaternaryMode *bool                                                `json:"hiragana_quaternary_mode,omitempty"`
 	Language               *string                                              `json:"language,omitempty"`
 	Numeric                *bool                                                `json:"numeric,omitempty"`
 	Rules                  *string                                              `json:"rules,omitempty"`
 	Strength               *icucollationstrength.IcuCollationStrength           `json:"strength,omitempty"`
 	Type                   string                                               `json:"type,omitempty"`
-	VariableTop            *string                                              `json:"variableTop,omitempty"`
+	VariableTop            *string                                              `json:"variable_top,omitempty"`
 	Variant                *string                                              `json:"variant,omitempty"`
 	Version                *string                                              `json:"version,omitempty"`
 }
@@ -70,22 +71,22 @@ func (s *IcuCollationTokenFilter) UnmarshalJSON(data []byte) error {
 
 		case "alternate":
 			if err := dec.Decode(&s.Alternate); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Alternate", err)
 			}
 
-		case "caseFirst":
+		case "case_first":
 			if err := dec.Decode(&s.CaseFirst); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "CaseFirst", err)
 			}
 
-		case "caseLevel":
-			var tmp interface{}
+		case "case_level":
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "CaseLevel", err)
 				}
 				s.CaseLevel = &value
 			case bool:
@@ -95,7 +96,7 @@ func (s *IcuCollationTokenFilter) UnmarshalJSON(data []byte) error {
 		case "country":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Country", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -106,17 +107,17 @@ func (s *IcuCollationTokenFilter) UnmarshalJSON(data []byte) error {
 
 		case "decomposition":
 			if err := dec.Decode(&s.Decomposition); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Decomposition", err)
 			}
 
-		case "hiraganaQuaternaryMode":
-			var tmp interface{}
+		case "hiragana_quaternary_mode":
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "HiraganaQuaternaryMode", err)
 				}
 				s.HiraganaQuaternaryMode = &value
 			case bool:
@@ -126,7 +127,7 @@ func (s *IcuCollationTokenFilter) UnmarshalJSON(data []byte) error {
 		case "language":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Language", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -136,13 +137,13 @@ func (s *IcuCollationTokenFilter) UnmarshalJSON(data []byte) error {
 			s.Language = &o
 
 		case "numeric":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Numeric", err)
 				}
 				s.Numeric = &value
 			case bool:
@@ -152,7 +153,7 @@ func (s *IcuCollationTokenFilter) UnmarshalJSON(data []byte) error {
 		case "rules":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Rules", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -163,18 +164,18 @@ func (s *IcuCollationTokenFilter) UnmarshalJSON(data []byte) error {
 
 		case "strength":
 			if err := dec.Decode(&s.Strength); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Strength", err)
 			}
 
 		case "type":
 			if err := dec.Decode(&s.Type); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Type", err)
 			}
 
-		case "variableTop":
+		case "variable_top":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "VariableTop", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -186,7 +187,7 @@ func (s *IcuCollationTokenFilter) UnmarshalJSON(data []byte) error {
 		case "variant":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Variant", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -197,7 +198,7 @@ func (s *IcuCollationTokenFilter) UnmarshalJSON(data []byte) error {
 
 		case "version":
 			if err := dec.Decode(&s.Version); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Version", err)
 			}
 
 		}

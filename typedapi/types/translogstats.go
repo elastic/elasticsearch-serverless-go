@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // TranslogStats type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/Stats.ts#L397-L405
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/Stats.ts#L397-L405
 type TranslogStats struct {
 	EarliestLastModifiedAge int64   `json:"earliest_last_modified_age"`
 	Operations              int64   `json:"operations"`
@@ -57,13 +58,13 @@ func (s *TranslogStats) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "earliest_last_modified_age":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "EarliestLastModifiedAge", err)
 				}
 				s.EarliestLastModifiedAge = value
 			case float64:
@@ -72,13 +73,13 @@ func (s *TranslogStats) UnmarshalJSON(data []byte) error {
 			}
 
 		case "operations":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Operations", err)
 				}
 				s.Operations = value
 			case float64:
@@ -89,7 +90,7 @@ func (s *TranslogStats) UnmarshalJSON(data []byte) error {
 		case "size":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Size", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -99,13 +100,13 @@ func (s *TranslogStats) UnmarshalJSON(data []byte) error {
 			s.Size = &o
 
 		case "size_in_bytes":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "SizeInBytes", err)
 				}
 				s.SizeInBytes = value
 			case float64:
@@ -115,13 +116,13 @@ func (s *TranslogStats) UnmarshalJSON(data []byte) error {
 
 		case "uncommitted_operations":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "UncommittedOperations", err)
 				}
 				s.UncommittedOperations = value
 			case float64:
@@ -132,7 +133,7 @@ func (s *TranslogStats) UnmarshalJSON(data []byte) error {
 		case "uncommitted_size":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "UncommittedSize", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -142,13 +143,13 @@ func (s *TranslogStats) UnmarshalJSON(data []byte) error {
 			s.UncommittedSize = &o
 
 		case "uncommitted_size_in_bytes":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "UncommittedSizeInBytes", err)
 				}
 				s.UncommittedSizeInBytes = value
 			case float64:

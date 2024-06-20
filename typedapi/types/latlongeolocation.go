@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // LatLonGeoLocation type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/Geo.ts#L129-L138
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/Geo.ts#L120-L129
 type LatLonGeoLocation struct {
 	// Lat Latitude
 	Lat Float64 `json:"lat"`
@@ -54,13 +55,13 @@ func (s *LatLonGeoLocation) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "lat":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseFloat(v, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Lat", err)
 				}
 				f := Float64(value)
 				s.Lat = f
@@ -70,13 +71,13 @@ func (s *LatLonGeoLocation) UnmarshalJSON(data []byte) error {
 			}
 
 		case "lon":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseFloat(v, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Lon", err)
 				}
 				f := Float64(value)
 				s.Lon = f

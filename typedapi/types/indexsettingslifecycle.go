@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // IndexSettingsLifecycle type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/indices/_types/IndexSettings.ts#L267-L300
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/indices/_types/IndexSettings.ts#L274-L307
 type IndexSettingsLifecycle struct {
 	// IndexingComplete Indicates whether or not the index has been rolled over. Automatically set to
 	// true when ILM completes the rollover action.
@@ -38,7 +39,7 @@ type IndexSettingsLifecycle struct {
 	IndexingComplete Stringifiedboolean `json:"indexing_complete,omitempty"`
 	// Name The name of the policy to use to manage the index. For information about how
 	// Elasticsearch applies policy changes, see Policy updates.
-	Name string `json:"name"`
+	Name *string `json:"name,omitempty"`
 	// OriginationDate If specified, this is the timestamp used to calculate the index age for its
 	// phase transitions. Use this setting
 	// if you create a new index that contains old data and want to use the original
@@ -80,22 +81,22 @@ func (s *IndexSettingsLifecycle) UnmarshalJSON(data []byte) error {
 
 		case "indexing_complete":
 			if err := dec.Decode(&s.IndexingComplete); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "IndexingComplete", err)
 			}
 
 		case "name":
 			if err := dec.Decode(&s.Name); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Name", err)
 			}
 
 		case "origination_date":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "OriginationDate", err)
 				}
 				s.OriginationDate = &value
 			case float64:
@@ -104,13 +105,13 @@ func (s *IndexSettingsLifecycle) UnmarshalJSON(data []byte) error {
 			}
 
 		case "parse_origination_date":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "ParseOriginationDate", err)
 				}
 				s.ParseOriginationDate = &value
 			case bool:
@@ -120,7 +121,7 @@ func (s *IndexSettingsLifecycle) UnmarshalJSON(data []byte) error {
 		case "rollover_alias":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "RolloverAlias", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -131,7 +132,7 @@ func (s *IndexSettingsLifecycle) UnmarshalJSON(data []byte) error {
 
 		case "step":
 			if err := dec.Decode(&s.Step); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Step", err)
 			}
 
 		}

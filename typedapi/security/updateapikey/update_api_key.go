@@ -16,9 +16,32 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 // Updates attributes of an existing API key.
+// Users can only update API keys that they created or that were granted to
+// them.
+// Use this API to update API keys created by the create API Key or grant API
+// Key APIs.
+// If you need to apply the same update to many API keys, you can use bulk
+// update API Keys to reduce overhead.
+// It’s not possible to update expired API keys, or API keys that have been
+// invalidated by invalidate API Key.
+// This API supports updates to an API key’s access scope and metadata.
+// The access scope of an API key is derived from the `role_descriptors` you
+// specify in the request, and a snapshot of the owner user’s permissions at the
+// time of the request.
+// The snapshot of the owner’s permissions is updated automatically on every
+// call.
+// If you don’t specify `role_descriptors` in the request, a call to this API
+// might still change the API key’s access scope.
+// This change can occur if the owner user’s permissions have changed since the
+// API key was created or last modified.
+// To update another user’s API key, use the `run_as` feature to submit a
+// request on behalf of another user.
+// IMPORTANT: It’s not possible to use an API key as the authentication
+// credential for this API.
+// To update an API key, the owner user’s credentials are required.
 package updateapikey
 
 import (
@@ -30,6 +53,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 
 	"github.com/elastic/elastic-transport-go/v8/elastictransport"
@@ -50,15 +74,19 @@ type UpdateApiKey struct {
 	values  url.Values
 	path    url.URL
 
-	buf *gobytes.Buffer
+	raw io.Reader
 
 	req      *Request
 	deferred []func(request *Request) error
-	raw      io.Reader
+	buf      *gobytes.Buffer
 
 	paramSet int
 
 	id string
+
+	spanStarted bool
+
+	instrument elastictransport.Instrumentation
 }
 
 // NewUpdateApiKey type alias for index.
@@ -77,6 +105,29 @@ func NewUpdateApiKeyFunc(tp elastictransport.Interface) NewUpdateApiKey {
 }
 
 // Updates attributes of an existing API key.
+// Users can only update API keys that they created or that were granted to
+// them.
+// Use this API to update API keys created by the create API Key or grant API
+// Key APIs.
+// If you need to apply the same update to many API keys, you can use bulk
+// update API Keys to reduce overhead.
+// It’s not possible to update expired API keys, or API keys that have been
+// invalidated by invalidate API Key.
+// This API supports updates to an API key’s access scope and metadata.
+// The access scope of an API key is derived from the `role_descriptors` you
+// specify in the request, and a snapshot of the owner user’s permissions at the
+// time of the request.
+// The snapshot of the owner’s permissions is updated automatically on every
+// call.
+// If you don’t specify `role_descriptors` in the request, a call to this API
+// might still change the API key’s access scope.
+// This change can occur if the owner user’s permissions have changed since the
+// API key was created or last modified.
+// To update another user’s API key, use the `run_as` feature to submit a
+// request on behalf of another user.
+// IMPORTANT: It’s not possible to use an API key as the authentication
+// credential for this API.
+// To update an API key, the owner user’s credentials are required.
 //
 // https://www.elastic.co/guide/en/elasticsearch/reference/current/security-api-update-api-key.html
 func New(tp elastictransport.Interface) *UpdateApiKey {
@@ -84,9 +135,16 @@ func New(tp elastictransport.Interface) *UpdateApiKey {
 		transport: tp,
 		values:    make(url.Values),
 		headers:   make(http.Header),
-		buf:       gobytes.NewBuffer(nil),
+
+		buf: gobytes.NewBuffer(nil),
 
 		req: NewRequest(),
+	}
+
+	if instrumented, ok := r.transport.(elastictransport.Instrumented); ok {
+		if instrument := instrumented.InstrumentationEnabled(); instrument != nil {
+			r.instrument = instrument
+		}
 	}
 
 	return r
@@ -125,9 +183,7 @@ func (r *UpdateApiKey) HttpRequest(ctx context.Context) (*http.Request, error) {
 		}
 	}
 
-	if r.raw != nil {
-		r.buf.ReadFrom(r.raw)
-	} else if r.req != nil {
+	if r.raw == nil && r.req != nil {
 
 		data, err := json.Marshal(r.req)
 
@@ -137,6 +193,10 @@ func (r *UpdateApiKey) HttpRequest(ctx context.Context) (*http.Request, error) {
 
 		r.buf.Write(data)
 
+	}
+
+	if r.buf.Len() > 0 {
+		r.raw = r.buf
 	}
 
 	r.path.Scheme = "http"
@@ -149,6 +209,9 @@ func (r *UpdateApiKey) HttpRequest(ctx context.Context) (*http.Request, error) {
 		path.WriteString("api_key")
 		path.WriteString("/")
 
+		if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+			instrument.RecordPathPart(ctx, "id", r.id)
+		}
 		path.WriteString(r.id)
 
 		method = http.MethodPut
@@ -162,20 +225,20 @@ func (r *UpdateApiKey) HttpRequest(ctx context.Context) (*http.Request, error) {
 	}
 
 	if ctx != nil {
-		req, err = http.NewRequestWithContext(ctx, method, r.path.String(), r.buf)
+		req, err = http.NewRequestWithContext(ctx, method, r.path.String(), r.raw)
 	} else {
-		req, err = http.NewRequest(method, r.path.String(), r.buf)
+		req, err = http.NewRequest(method, r.path.String(), r.raw)
 	}
 
 	req.Header = r.headers.Clone()
 
 	if req.Header.Get("Elastic-Api-Version") == "" {
-		if r.buf.Len() > 0 {
+		if r.raw != nil {
 			req.Header.Set("Elastic-Api-Version", "2023-10-31")
 		}
 	}
 	if req.Header.Get("Content-Type") == "" {
-		if r.buf.Len() > 0 {
+		if r.raw != nil {
 			req.Header.Set("Content-Type", "application/json")
 		}
 	}
@@ -192,27 +255,66 @@ func (r *UpdateApiKey) HttpRequest(ctx context.Context) (*http.Request, error) {
 }
 
 // Perform runs the http.Request through the provided transport and returns an http.Response.
-func (r UpdateApiKey) Perform(ctx context.Context) (*http.Response, error) {
+func (r UpdateApiKey) Perform(providedCtx context.Context) (*http.Response, error) {
+	var ctx context.Context
+	if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+		if r.spanStarted == false {
+			ctx := instrument.Start(providedCtx, "security.update_api_key")
+			defer instrument.Close(ctx)
+		}
+	}
+	if ctx == nil {
+		ctx = providedCtx
+	}
+
 	req, err := r.HttpRequest(ctx)
 	if err != nil {
+		if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+			instrument.RecordError(ctx, err)
+		}
 		return nil, err
 	}
 
+	if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+		instrument.BeforeRequest(req, "security.update_api_key")
+		if reader := instrument.RecordRequestBody(ctx, "security.update_api_key", r.raw); reader != nil {
+			req.Body = reader
+		}
+	}
 	res, err := r.transport.Perform(req)
+	if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+		instrument.AfterRequest(req, "elasticsearch", "security.update_api_key")
+	}
 	if err != nil {
-		return nil, fmt.Errorf("an error happened during the UpdateApiKey query execution: %w", err)
+		localErr := fmt.Errorf("an error happened during the UpdateApiKey query execution: %w", err)
+		if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+			instrument.RecordError(ctx, localErr)
+		}
+		return nil, localErr
 	}
 
 	return res, nil
 }
 
 // Do runs the request through the transport, handle the response and returns a updateapikey.Response
-func (r UpdateApiKey) Do(ctx context.Context) (*Response, error) {
+func (r UpdateApiKey) Do(providedCtx context.Context) (*Response, error) {
+	var ctx context.Context
+	r.spanStarted = true
+	if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+		ctx = instrument.Start(providedCtx, "security.update_api_key")
+		defer instrument.Close(ctx)
+	}
+	if ctx == nil {
+		ctx = providedCtx
+	}
 
 	response := NewResponse()
 
 	res, err := r.Perform(ctx)
 	if err != nil {
+		if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+			instrument.RecordError(ctx, err)
+		}
 		return nil, err
 	}
 	defer res.Body.Close()
@@ -220,6 +322,9 @@ func (r UpdateApiKey) Do(ctx context.Context) (*Response, error) {
 	if res.StatusCode < 299 {
 		err = json.NewDecoder(res.Body).Decode(response)
 		if err != nil {
+			if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+				instrument.RecordError(ctx, err)
+			}
 			return nil, err
 		}
 
@@ -229,6 +334,9 @@ func (r UpdateApiKey) Do(ctx context.Context) (*Response, error) {
 	errorResponse := types.NewElasticsearchError()
 	err = json.NewDecoder(res.Body).Decode(errorResponse)
 	if err != nil {
+		if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+			instrument.RecordError(ctx, err)
+		}
 		return nil, err
 	}
 
@@ -236,6 +344,9 @@ func (r UpdateApiKey) Do(ctx context.Context) (*Response, error) {
 		errorResponse.Status = res.StatusCode
 	}
 
+	if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+		instrument.RecordError(ctx, errorResponse)
+	}
 	return nil, errorResponse
 }
 
@@ -251,6 +362,58 @@ func (r *UpdateApiKey) Header(key, value string) *UpdateApiKey {
 func (r *UpdateApiKey) _id(id string) *UpdateApiKey {
 	r.paramSet |= idMask
 	r.id = id
+
+	return r
+}
+
+// ErrorTrace When set to `true` Elasticsearch will include the full stack trace of errors
+// when they occur.
+// API name: error_trace
+func (r *UpdateApiKey) ErrorTrace(errortrace bool) *UpdateApiKey {
+	r.values.Set("error_trace", strconv.FormatBool(errortrace))
+
+	return r
+}
+
+// FilterPath Comma-separated list of filters in dot notation which reduce the response
+// returned by Elasticsearch.
+// API name: filter_path
+func (r *UpdateApiKey) FilterPath(filterpaths ...string) *UpdateApiKey {
+	tmp := []string{}
+	for _, item := range filterpaths {
+		tmp = append(tmp, fmt.Sprintf("%v", item))
+	}
+	r.values.Set("filter_path", strings.Join(tmp, ","))
+
+	return r
+}
+
+// Human When set to `true` will return statistics in a format suitable for humans.
+// For example `"exists_time": "1h"` for humans and
+// `"eixsts_time_in_millis": 3600000` for computers. When disabled the human
+// readable values will be omitted. This makes sense for responses being
+// consumed
+// only by machines.
+// API name: human
+func (r *UpdateApiKey) Human(human bool) *UpdateApiKey {
+	r.values.Set("human", strconv.FormatBool(human))
+
+	return r
+}
+
+// Pretty If set to `true` the returned JSON will be "pretty-formatted". Only use
+// this option for debugging only.
+// API name: pretty
+func (r *UpdateApiKey) Pretty(pretty bool) *UpdateApiKey {
+	r.values.Set("pretty", strconv.FormatBool(pretty))
+
+	return r
+}
+
+// Expiration Expiration time for the API key.
+// API name: expiration
+func (r *UpdateApiKey) Expiration(duration types.Duration) *UpdateApiKey {
+	r.req.Expiration = duration
 
 	return r
 }

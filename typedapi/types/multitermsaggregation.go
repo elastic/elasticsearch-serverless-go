@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,6 +24,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 
@@ -33,14 +34,12 @@ import (
 
 // MultiTermsAggregation type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/aggregations/bucket.ts#L582-L622
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/aggregations/bucket.ts#L584-L624
 type MultiTermsAggregation struct {
 	// CollectMode Specifies the strategy for data collection.
 	CollectMode *termsaggregationcollectmode.TermsAggregationCollectMode `json:"collect_mode,omitempty"`
-	Meta        Metadata                                                 `json:"meta,omitempty"`
 	// MinDocCount The minimum number of documents in a bucket for it to be returned.
-	MinDocCount *int64  `json:"min_doc_count,omitempty"`
-	Name        *string `json:"name,omitempty"`
+	MinDocCount *int64 `json:"min_doc_count,omitempty"`
 	// Order Specifies the sort order of the buckets.
 	// Defaults to sorting by descending document count.
 	Order AggregateOrder `json:"order,omitempty"`
@@ -76,40 +75,23 @@ func (s *MultiTermsAggregation) UnmarshalJSON(data []byte) error {
 
 		case "collect_mode":
 			if err := dec.Decode(&s.CollectMode); err != nil {
-				return err
-			}
-
-		case "meta":
-			if err := dec.Decode(&s.Meta); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "CollectMode", err)
 			}
 
 		case "min_doc_count":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "MinDocCount", err)
 				}
 				s.MinDocCount = &value
 			case float64:
 				f := int64(v)
 				s.MinDocCount = &f
 			}
-
-		case "name":
-			var tmp json.RawMessage
-			if err := dec.Decode(&tmp); err != nil {
-				return err
-			}
-			o := string(tmp[:])
-			o, err = strconv.Unquote(o)
-			if err != nil {
-				o = string(tmp[:])
-			}
-			s.Name = &o
 
 		case "order":
 
@@ -121,25 +103,25 @@ func (s *MultiTermsAggregation) UnmarshalJSON(data []byte) error {
 			case '{':
 				o := make(map[string]sortorder.SortOrder, 0)
 				if err := localDec.Decode(&o); err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Order", err)
 				}
 				s.Order = o
 			case '[':
 				o := make([]map[string]sortorder.SortOrder, 0)
 				if err := localDec.Decode(&o); err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Order", err)
 				}
 				s.Order = o
 			}
 
 		case "shard_min_doc_count":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "ShardMinDocCount", err)
 				}
 				s.ShardMinDocCount = &value
 			case float64:
@@ -149,13 +131,13 @@ func (s *MultiTermsAggregation) UnmarshalJSON(data []byte) error {
 
 		case "shard_size":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "ShardSize", err)
 				}
 				s.ShardSize = &value
 			case float64:
@@ -164,13 +146,13 @@ func (s *MultiTermsAggregation) UnmarshalJSON(data []byte) error {
 			}
 
 		case "show_term_doc_count_error":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "ShowTermDocCountError", err)
 				}
 				s.ShowTermDocCountError = &value
 			case bool:
@@ -179,13 +161,13 @@ func (s *MultiTermsAggregation) UnmarshalJSON(data []byte) error {
 
 		case "size":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Size", err)
 				}
 				s.Size = &value
 			case float64:
@@ -195,7 +177,7 @@ func (s *MultiTermsAggregation) UnmarshalJSON(data []byte) error {
 
 		case "terms":
 			if err := dec.Decode(&s.Terms); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Terms", err)
 			}
 
 		}

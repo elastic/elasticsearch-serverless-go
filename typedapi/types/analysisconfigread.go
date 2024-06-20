@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // AnalysisConfigRead type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/ml/_types/Analysis.ts#L79-L148
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/ml/_types/Analysis.ts#L79-L148
 type AnalysisConfigRead struct {
 	// BucketSpan The size of the interval that the analysis is aggregated into, typically
 	// between `5m` and `1h`.
@@ -116,7 +117,7 @@ func (s *AnalysisConfigRead) UnmarshalJSON(data []byte) error {
 
 		case "bucket_span":
 			if err := dec.Decode(&s.BucketSpan); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "BucketSpan", err)
 			}
 
 		case "categorization_analyzer":
@@ -135,48 +136,48 @@ func (s *AnalysisConfigRead) UnmarshalJSON(data []byte) error {
 
 			default:
 				if err := localDec.Decode(&s.CategorizationAnalyzer); err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "CategorizationAnalyzer", err)
 				}
 			}
 
 		case "categorization_field_name":
 			if err := dec.Decode(&s.CategorizationFieldName); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "CategorizationFieldName", err)
 			}
 
 		case "categorization_filters":
 			if err := dec.Decode(&s.CategorizationFilters); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "CategorizationFilters", err)
 			}
 
 		case "detectors":
 			if err := dec.Decode(&s.Detectors); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Detectors", err)
 			}
 
 		case "influencers":
 			if err := dec.Decode(&s.Influencers); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Influencers", err)
 			}
 
 		case "latency":
 			if err := dec.Decode(&s.Latency); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Latency", err)
 			}
 
 		case "model_prune_window":
 			if err := dec.Decode(&s.ModelPruneWindow); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "ModelPruneWindow", err)
 			}
 
 		case "multivariate_by_fields":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "MultivariateByFields", err)
 				}
 				s.MultivariateByFields = &value
 			case bool:
@@ -185,12 +186,12 @@ func (s *AnalysisConfigRead) UnmarshalJSON(data []byte) error {
 
 		case "per_partition_categorization":
 			if err := dec.Decode(&s.PerPartitionCategorization); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "PerPartitionCategorization", err)
 			}
 
 		case "summary_count_field_name":
 			if err := dec.Decode(&s.SummaryCountFieldName); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "SummaryCountFieldName", err)
 			}
 
 		}

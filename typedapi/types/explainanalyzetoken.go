@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -31,7 +31,7 @@ import (
 
 // ExplainAnalyzeToken type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/indices/analyze/types.ts#L52-L64
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/indices/analyze/types.ts#L52-L64
 type ExplainAnalyzeToken struct {
 	Bytes               string                     `json:"bytes"`
 	EndOffset           int64                      `json:"end_offset"`
@@ -63,7 +63,7 @@ func (s *ExplainAnalyzeToken) UnmarshalJSON(data []byte) error {
 		case "bytes":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Bytes", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -73,13 +73,13 @@ func (s *ExplainAnalyzeToken) UnmarshalJSON(data []byte) error {
 			s.Bytes = o
 
 		case "end_offset":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "EndOffset", err)
 				}
 				s.EndOffset = value
 			case float64:
@@ -88,13 +88,13 @@ func (s *ExplainAnalyzeToken) UnmarshalJSON(data []byte) error {
 			}
 
 		case "keyword":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Keyword", err)
 				}
 				s.Keyword = &value
 			case bool:
@@ -102,13 +102,13 @@ func (s *ExplainAnalyzeToken) UnmarshalJSON(data []byte) error {
 			}
 
 		case "position":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Position", err)
 				}
 				s.Position = value
 			case float64:
@@ -117,13 +117,13 @@ func (s *ExplainAnalyzeToken) UnmarshalJSON(data []byte) error {
 			}
 
 		case "positionLength":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "PositionLength", err)
 				}
 				s.PositionLength = value
 			case float64:
@@ -132,13 +132,13 @@ func (s *ExplainAnalyzeToken) UnmarshalJSON(data []byte) error {
 			}
 
 		case "start_offset":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "StartOffset", err)
 				}
 				s.StartOffset = value
 			case float64:
@@ -147,13 +147,13 @@ func (s *ExplainAnalyzeToken) UnmarshalJSON(data []byte) error {
 			}
 
 		case "termFrequency":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "TermFrequency", err)
 				}
 				s.TermFrequency = value
 			case float64:
@@ -164,7 +164,7 @@ func (s *ExplainAnalyzeToken) UnmarshalJSON(data []byte) error {
 		case "token":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Token", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -176,7 +176,7 @@ func (s *ExplainAnalyzeToken) UnmarshalJSON(data []byte) error {
 		case "type":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Type", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -193,7 +193,7 @@ func (s *ExplainAnalyzeToken) UnmarshalJSON(data []byte) error {
 				}
 				raw := new(json.RawMessage)
 				if err := dec.Decode(&raw); err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "ExplainAnalyzeToken", err)
 				}
 				s.ExplainAnalyzeToken[key] = *raw
 			}
@@ -207,7 +207,7 @@ func (s *ExplainAnalyzeToken) UnmarshalJSON(data []byte) error {
 func (s ExplainAnalyzeToken) MarshalJSON() ([]byte, error) {
 	type opt ExplainAnalyzeToken
 	// We transform the struct to a map without the embedded additional properties map
-	tmp := make(map[string]interface{}, 0)
+	tmp := make(map[string]any, 0)
 
 	data, err := json.Marshal(opt(s))
 	if err != nil {

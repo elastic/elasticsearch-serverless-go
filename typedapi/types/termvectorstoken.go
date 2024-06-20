@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // TermVectorsToken type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_global/termvectors/types.ts#L42-L47
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_global/termvectors/types.ts#L42-L47
 type TermVectorsToken struct {
 	EndOffset   *int    `json:"end_offset,omitempty"`
 	Payload     *string `json:"payload,omitempty"`
@@ -55,13 +56,13 @@ func (s *TermVectorsToken) UnmarshalJSON(data []byte) error {
 
 		case "end_offset":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "EndOffset", err)
 				}
 				s.EndOffset = &value
 			case float64:
@@ -72,7 +73,7 @@ func (s *TermVectorsToken) UnmarshalJSON(data []byte) error {
 		case "payload":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Payload", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -83,13 +84,13 @@ func (s *TermVectorsToken) UnmarshalJSON(data []byte) error {
 
 		case "position":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Position", err)
 				}
 				s.Position = value
 			case float64:
@@ -99,13 +100,13 @@ func (s *TermVectorsToken) UnmarshalJSON(data []byte) error {
 
 		case "start_offset":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "StartOffset", err)
 				}
 				s.StartOffset = &value
 			case float64:

@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,24 +24,25 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // StringStatsAggregate type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/aggregations/Aggregate.ts#L693-L704
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/aggregations/Aggregate.ts#L693-L704
 type StringStatsAggregate struct {
-	AvgLength         Float64            `json:"avg_length,omitempty"`
-	AvgLengthAsString *string            `json:"avg_length_as_string,omitempty"`
-	Count             int64              `json:"count"`
-	Distribution      map[string]Float64 `json:"distribution,omitempty"`
-	Entropy           Float64            `json:"entropy,omitempty"`
-	MaxLength         int                `json:"max_length,omitempty"`
-	MaxLengthAsString *string            `json:"max_length_as_string,omitempty"`
-	Meta              Metadata           `json:"meta,omitempty"`
-	MinLength         int                `json:"min_length,omitempty"`
-	MinLengthAsString *string            `json:"min_length_as_string,omitempty"`
+	AvgLength         *Float64            `json:"avg_length,omitempty"`
+	AvgLengthAsString *string             `json:"avg_length_as_string,omitempty"`
+	Count             int64               `json:"count"`
+	Distribution      *map[string]Float64 `json:"distribution,omitempty"`
+	Entropy           *Float64            `json:"entropy,omitempty"`
+	MaxLength         *int                `json:"max_length,omitempty"`
+	MaxLengthAsString *string             `json:"max_length_as_string,omitempty"`
+	Meta              Metadata            `json:"meta,omitempty"`
+	MinLength         *int                `json:"min_length,omitempty"`
+	MinLengthAsString *string             `json:"min_length_as_string,omitempty"`
 }
 
 func (s *StringStatsAggregate) UnmarshalJSON(data []byte) error {
@@ -61,13 +62,13 @@ func (s *StringStatsAggregate) UnmarshalJSON(data []byte) error {
 
 		case "avg_length":
 			if err := dec.Decode(&s.AvgLength); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "AvgLength", err)
 			}
 
 		case "avg_length_as_string":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "AvgLengthAsString", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -77,13 +78,13 @@ func (s *StringStatsAggregate) UnmarshalJSON(data []byte) error {
 			s.AvgLengthAsString = &o
 
 		case "count":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Count", err)
 				}
 				s.Count = value
 			case float64:
@@ -93,23 +94,23 @@ func (s *StringStatsAggregate) UnmarshalJSON(data []byte) error {
 
 		case "distribution":
 			if err := dec.Decode(&s.Distribution); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Distribution", err)
 			}
 
 		case "entropy":
 			if err := dec.Decode(&s.Entropy); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Entropy", err)
 			}
 
 		case "max_length":
 			if err := dec.Decode(&s.MaxLength); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "MaxLength", err)
 			}
 
 		case "max_length_as_string":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "MaxLengthAsString", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -120,18 +121,18 @@ func (s *StringStatsAggregate) UnmarshalJSON(data []byte) error {
 
 		case "meta":
 			if err := dec.Decode(&s.Meta); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Meta", err)
 			}
 
 		case "min_length":
 			if err := dec.Decode(&s.MinLength); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "MinLength", err)
 			}
 
 		case "min_length_as_string":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "MinLengthAsString", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)

@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // RankFeatureQuery type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/query_dsl/specialized.ts#L293-L316
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/query_dsl/specialized.ts#L293-L316
 type RankFeatureQuery struct {
 	// Boost Floating point number used to decrease or increase the relevance scores of
 	// the query.
@@ -71,13 +72,13 @@ func (s *RankFeatureQuery) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "boost":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseFloat(v, 32)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Boost", err)
 				}
 				f := float32(value)
 				s.Boost = &f
@@ -88,23 +89,23 @@ func (s *RankFeatureQuery) UnmarshalJSON(data []byte) error {
 
 		case "field":
 			if err := dec.Decode(&s.Field); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Field", err)
 			}
 
 		case "linear":
 			if err := dec.Decode(&s.Linear); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Linear", err)
 			}
 
 		case "log":
 			if err := dec.Decode(&s.Log); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Log", err)
 			}
 
 		case "_name":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "QueryName_", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -115,12 +116,12 @@ func (s *RankFeatureQuery) UnmarshalJSON(data []byte) error {
 
 		case "saturation":
 			if err := dec.Decode(&s.Saturation); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Saturation", err)
 			}
 
 		case "sigmoid":
 			if err := dec.Decode(&s.Sigmoid); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Sigmoid", err)
 			}
 
 		}

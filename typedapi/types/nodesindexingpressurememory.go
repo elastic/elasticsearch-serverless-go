@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // NodesIndexingPressureMemory type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/nodes/_types/Stats.ts#L123-L142
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/nodes/_types/Stats.ts#L123-L142
 type NodesIndexingPressureMemory struct {
 	// Current Contains statistics for current indexing load.
 	Current *PressureMemory `json:"current,omitempty"`
@@ -61,22 +62,22 @@ func (s *NodesIndexingPressureMemory) UnmarshalJSON(data []byte) error {
 
 		case "current":
 			if err := dec.Decode(&s.Current); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Current", err)
 			}
 
 		case "limit":
 			if err := dec.Decode(&s.Limit); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Limit", err)
 			}
 
 		case "limit_in_bytes":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "LimitInBytes", err)
 				}
 				s.LimitInBytes = &value
 			case float64:
@@ -86,7 +87,7 @@ func (s *NodesIndexingPressureMemory) UnmarshalJSON(data []byte) error {
 
 		case "total":
 			if err := dec.Decode(&s.Total); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Total", err)
 			}
 
 		}

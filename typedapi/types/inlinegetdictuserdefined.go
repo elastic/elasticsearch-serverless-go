@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -31,7 +31,7 @@ import (
 
 // InlineGetDictUserDefined type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/common.ts#L321-L330
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/common.ts#L321-L330
 type InlineGetDictUserDefined struct {
 	Fields                   map[string]json.RawMessage `json:"fields,omitempty"`
 	Found                    bool                       `json:"found"`
@@ -39,7 +39,7 @@ type InlineGetDictUserDefined struct {
 	PrimaryTerm_             *int64                     `json:"_primary_term,omitempty"`
 	Routing_                 *string                    `json:"_routing,omitempty"`
 	SeqNo_                   *int64                     `json:"_seq_no,omitempty"`
-	Source_                  map[string]json.RawMessage `json:"_source"`
+	Source_                  map[string]json.RawMessage `json:"_source,omitempty"`
 }
 
 func (s *InlineGetDictUserDefined) UnmarshalJSON(data []byte) error {
@@ -62,17 +62,17 @@ func (s *InlineGetDictUserDefined) UnmarshalJSON(data []byte) error {
 				s.Fields = make(map[string]json.RawMessage, 0)
 			}
 			if err := dec.Decode(&s.Fields); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Fields", err)
 			}
 
 		case "found":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Found", err)
 				}
 				s.Found = value
 			case bool:
@@ -80,13 +80,13 @@ func (s *InlineGetDictUserDefined) UnmarshalJSON(data []byte) error {
 			}
 
 		case "_primary_term":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "PrimaryTerm_", err)
 				}
 				s.PrimaryTerm_ = &value
 			case float64:
@@ -96,12 +96,12 @@ func (s *InlineGetDictUserDefined) UnmarshalJSON(data []byte) error {
 
 		case "_routing":
 			if err := dec.Decode(&s.Routing_); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Routing_", err)
 			}
 
 		case "_seq_no":
 			if err := dec.Decode(&s.SeqNo_); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "SeqNo_", err)
 			}
 
 		case "_source":
@@ -109,7 +109,7 @@ func (s *InlineGetDictUserDefined) UnmarshalJSON(data []byte) error {
 				s.Source_ = make(map[string]json.RawMessage, 0)
 			}
 			if err := dec.Decode(&s.Source_); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Source_", err)
 			}
 
 		default:
@@ -120,7 +120,7 @@ func (s *InlineGetDictUserDefined) UnmarshalJSON(data []byte) error {
 				}
 				raw := new(json.RawMessage)
 				if err := dec.Decode(&raw); err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "InlineGetDictUserDefined", err)
 				}
 				s.InlineGetDictUserDefined[key] = *raw
 			}
@@ -134,7 +134,7 @@ func (s *InlineGetDictUserDefined) UnmarshalJSON(data []byte) error {
 func (s InlineGetDictUserDefined) MarshalJSON() ([]byte, error) {
 	type opt InlineGetDictUserDefined
 	// We transform the struct to a map without the embedded additional properties map
-	tmp := make(map[string]interface{}, 0)
+	tmp := make(map[string]any, 0)
 
 	data, err := json.Marshal(opt(s))
 	if err != nil {

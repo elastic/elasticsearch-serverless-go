@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // ShardSequenceNumber type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/indices/stats/types.ts#L176-L180
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/indices/stats/types.ts#L176-L180
 type ShardSequenceNumber struct {
 	GlobalCheckpoint int64 `json:"global_checkpoint"`
 	LocalCheckpoint  int64 `json:"local_checkpoint"`
@@ -53,13 +54,13 @@ func (s *ShardSequenceNumber) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "global_checkpoint":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "GlobalCheckpoint", err)
 				}
 				s.GlobalCheckpoint = value
 			case float64:
@@ -68,13 +69,13 @@ func (s *ShardSequenceNumber) UnmarshalJSON(data []byte) error {
 			}
 
 		case "local_checkpoint":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "LocalCheckpoint", err)
 				}
 				s.LocalCheckpoint = value
 			case float64:
@@ -84,7 +85,7 @@ func (s *ShardSequenceNumber) UnmarshalJSON(data []byte) error {
 
 		case "max_seq_no":
 			if err := dec.Decode(&s.MaxSeqNo); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "MaxSeqNo", err)
 			}
 
 		}

@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // Jvm type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/nodes/_types/Stats.ts#L811-L845
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/nodes/_types/Stats.ts#L811-L845
 type Jvm struct {
 	// BufferPools Contains statistics about JVM buffer pools for the node.
 	BufferPools map[string]NodeBufferPool `json:"buffer_pools,omitempty"`
@@ -71,37 +72,37 @@ func (s *Jvm) UnmarshalJSON(data []byte) error {
 				s.BufferPools = make(map[string]NodeBufferPool, 0)
 			}
 			if err := dec.Decode(&s.BufferPools); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "BufferPools", err)
 			}
 
 		case "classes":
 			if err := dec.Decode(&s.Classes); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Classes", err)
 			}
 
 		case "gc":
 			if err := dec.Decode(&s.Gc); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Gc", err)
 			}
 
 		case "mem":
 			if err := dec.Decode(&s.Mem); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Mem", err)
 			}
 
 		case "threads":
 			if err := dec.Decode(&s.Threads); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Threads", err)
 			}
 
 		case "timestamp":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Timestamp", err)
 				}
 				s.Timestamp = &value
 			case float64:
@@ -112,7 +113,7 @@ func (s *Jvm) UnmarshalJSON(data []byte) error {
 		case "uptime":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Uptime", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -122,13 +123,13 @@ func (s *Jvm) UnmarshalJSON(data []byte) error {
 			s.Uptime = &o
 
 		case "uptime_in_millis":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "UptimeInMillis", err)
 				}
 				s.UptimeInMillis = &value
 			case float64:

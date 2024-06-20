@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,19 +24,18 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // CompositeAggregation type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/aggregations/bucket.ts#L120-L136
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/aggregations/bucket.ts#L122-L138
 type CompositeAggregation struct {
 	// After When paginating, use the `after_key` value returned in the previous response
 	// to retrieve the next page.
 	After CompositeAggregateKey `json:"after,omitempty"`
-	Meta  Metadata              `json:"meta,omitempty"`
-	Name  *string               `json:"name,omitempty"`
 	// Size The number of composite buckets that should be returned.
 	Size *int `json:"size,omitempty"`
 	// Sources The value sources used to build composite buckets.
@@ -61,35 +60,18 @@ func (s *CompositeAggregation) UnmarshalJSON(data []byte) error {
 
 		case "after":
 			if err := dec.Decode(&s.After); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "After", err)
 			}
-
-		case "meta":
-			if err := dec.Decode(&s.Meta); err != nil {
-				return err
-			}
-
-		case "name":
-			var tmp json.RawMessage
-			if err := dec.Decode(&tmp); err != nil {
-				return err
-			}
-			o := string(tmp[:])
-			o, err = strconv.Unquote(o)
-			if err != nil {
-				o = string(tmp[:])
-			}
-			s.Name = &o
 
 		case "size":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Size", err)
 				}
 				s.Size = &value
 			case float64:
@@ -99,7 +81,7 @@ func (s *CompositeAggregation) UnmarshalJSON(data []byte) error {
 
 		case "sources":
 			if err := dec.Decode(&s.Sources); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Sources", err)
 			}
 
 		}

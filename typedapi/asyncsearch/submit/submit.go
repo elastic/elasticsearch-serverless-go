@@ -16,9 +16,19 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
-// Executes a search request asynchronously.
+// Runs a search request asynchronously.
+// When the primary sort of the results is an indexed field, shards get sorted
+// based on minimum and maximum value that they hold for that field, hence
+// partial results become available following the sort criteria that was
+// requested.
+// Warning: Async search does not support scroll nor search requests that only
+// include the suggest section.
+// By default, Elasticsearch doesn’t allow you to store an async search response
+// larger than 10Mb and an attempt to do this results in an error.
+// The maximum allowed size for a stored async search response can be set by
+// changing the `search.max_async_search_response_size` cluster level setting.
 package submit
 
 import (
@@ -55,15 +65,19 @@ type Submit struct {
 	values  url.Values
 	path    url.URL
 
-	buf *gobytes.Buffer
+	raw io.Reader
 
 	req      *Request
 	deferred []func(request *Request) error
-	raw      io.Reader
+	buf      *gobytes.Buffer
 
 	paramSet int
 
 	index string
+
+	spanStarted bool
+
+	instrument elastictransport.Instrumentation
 }
 
 // NewSubmit type alias for index.
@@ -79,17 +93,34 @@ func NewSubmitFunc(tp elastictransport.Interface) NewSubmit {
 	}
 }
 
-// Executes a search request asynchronously.
+// Runs a search request asynchronously.
+// When the primary sort of the results is an indexed field, shards get sorted
+// based on minimum and maximum value that they hold for that field, hence
+// partial results become available following the sort criteria that was
+// requested.
+// Warning: Async search does not support scroll nor search requests that only
+// include the suggest section.
+// By default, Elasticsearch doesn’t allow you to store an async search response
+// larger than 10Mb and an attempt to do this results in an error.
+// The maximum allowed size for a stored async search response can be set by
+// changing the `search.max_async_search_response_size` cluster level setting.
 //
-// https://www.elastic.co/guide/en/elasticsearch/reference/{branch}/async-search.html
+// https://www.elastic.co/guide/en/elasticsearch/reference/current/async-search.html
 func New(tp elastictransport.Interface) *Submit {
 	r := &Submit{
 		transport: tp,
 		values:    make(url.Values),
 		headers:   make(http.Header),
-		buf:       gobytes.NewBuffer(nil),
+
+		buf: gobytes.NewBuffer(nil),
 
 		req: NewRequest(),
+	}
+
+	if instrumented, ok := r.transport.(elastictransport.Instrumented); ok {
+		if instrument := instrumented.InstrumentationEnabled(); instrument != nil {
+			r.instrument = instrument
+		}
 	}
 
 	return r
@@ -128,9 +159,7 @@ func (r *Submit) HttpRequest(ctx context.Context) (*http.Request, error) {
 		}
 	}
 
-	if r.raw != nil {
-		r.buf.ReadFrom(r.raw)
-	} else if r.req != nil {
+	if r.raw == nil && r.req != nil {
 
 		data, err := json.Marshal(r.req)
 
@@ -140,6 +169,10 @@ func (r *Submit) HttpRequest(ctx context.Context) (*http.Request, error) {
 
 		r.buf.Write(data)
 
+	}
+
+	if r.buf.Len() > 0 {
+		r.raw = r.buf
 	}
 
 	r.path.Scheme = "http"
@@ -153,6 +186,9 @@ func (r *Submit) HttpRequest(ctx context.Context) (*http.Request, error) {
 	case r.paramSet == indexMask:
 		path.WriteString("/")
 
+		if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+			instrument.RecordPathPart(ctx, "index", r.index)
+		}
 		path.WriteString(r.index)
 		path.WriteString("/")
 		path.WriteString("_async_search")
@@ -168,20 +204,20 @@ func (r *Submit) HttpRequest(ctx context.Context) (*http.Request, error) {
 	}
 
 	if ctx != nil {
-		req, err = http.NewRequestWithContext(ctx, method, r.path.String(), r.buf)
+		req, err = http.NewRequestWithContext(ctx, method, r.path.String(), r.raw)
 	} else {
-		req, err = http.NewRequest(method, r.path.String(), r.buf)
+		req, err = http.NewRequest(method, r.path.String(), r.raw)
 	}
 
 	req.Header = r.headers.Clone()
 
 	if req.Header.Get("Elastic-Api-Version") == "" {
-		if r.buf.Len() > 0 {
+		if r.raw != nil {
 			req.Header.Set("Elastic-Api-Version", "2023-10-31")
 		}
 	}
 	if req.Header.Get("Content-Type") == "" {
-		if r.buf.Len() > 0 {
+		if r.raw != nil {
 			req.Header.Set("Content-Type", "application/json")
 		}
 	}
@@ -198,22 +234,58 @@ func (r *Submit) HttpRequest(ctx context.Context) (*http.Request, error) {
 }
 
 // Perform runs the http.Request through the provided transport and returns an http.Response.
-func (r Submit) Perform(ctx context.Context) (*http.Response, error) {
+func (r Submit) Perform(providedCtx context.Context) (*http.Response, error) {
+	var ctx context.Context
+	if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+		if r.spanStarted == false {
+			ctx := instrument.Start(providedCtx, "async_search.submit")
+			defer instrument.Close(ctx)
+		}
+	}
+	if ctx == nil {
+		ctx = providedCtx
+	}
+
 	req, err := r.HttpRequest(ctx)
 	if err != nil {
+		if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+			instrument.RecordError(ctx, err)
+		}
 		return nil, err
 	}
 
+	if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+		instrument.BeforeRequest(req, "async_search.submit")
+		if reader := instrument.RecordRequestBody(ctx, "async_search.submit", r.raw); reader != nil {
+			req.Body = reader
+		}
+	}
 	res, err := r.transport.Perform(req)
+	if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+		instrument.AfterRequest(req, "elasticsearch", "async_search.submit")
+	}
 	if err != nil {
-		return nil, fmt.Errorf("an error happened during the Submit query execution: %w", err)
+		localErr := fmt.Errorf("an error happened during the Submit query execution: %w", err)
+		if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+			instrument.RecordError(ctx, localErr)
+		}
+		return nil, localErr
 	}
 
 	return res, nil
 }
 
 // Do runs the request through the transport, handle the response and returns a submit.Response
-func (r Submit) Do(ctx context.Context) (*Response, error) {
+func (r Submit) Do(providedCtx context.Context) (*Response, error) {
+	var ctx context.Context
+	r.spanStarted = true
+	if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+		ctx = instrument.Start(providedCtx, "async_search.submit")
+		defer instrument.Close(ctx)
+	}
+	if ctx == nil {
+		ctx = providedCtx
+	}
 
 	response := NewResponse()
 
@@ -221,6 +293,9 @@ func (r Submit) Do(ctx context.Context) (*Response, error) {
 
 	res, err := r.Perform(ctx)
 	if err != nil {
+		if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+			instrument.RecordError(ctx, err)
+		}
 		return nil, err
 	}
 	defer res.Body.Close()
@@ -228,6 +303,9 @@ func (r Submit) Do(ctx context.Context) (*Response, error) {
 	if res.StatusCode < 299 {
 		err = json.NewDecoder(res.Body).Decode(response)
 		if err != nil {
+			if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+				instrument.RecordError(ctx, err)
+			}
 			return nil, err
 		}
 
@@ -237,6 +315,9 @@ func (r Submit) Do(ctx context.Context) (*Response, error) {
 	errorResponse := types.NewElasticsearchError()
 	err = json.NewDecoder(res.Body).Decode(errorResponse)
 	if err != nil {
+		if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+			instrument.RecordError(ctx, err)
+		}
 		return nil, err
 	}
 
@@ -244,6 +325,9 @@ func (r Submit) Do(ctx context.Context) (*Response, error) {
 		errorResponse.Status = res.StatusCode
 	}
 
+	if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+		instrument.RecordError(ctx, errorResponse)
+	}
 	return nil, errorResponse
 }
 
@@ -544,6 +628,50 @@ func (r *Submit) Q(q string) *Submit {
 	return r
 }
 
+// ErrorTrace When set to `true` Elasticsearch will include the full stack trace of errors
+// when they occur.
+// API name: error_trace
+func (r *Submit) ErrorTrace(errortrace bool) *Submit {
+	r.values.Set("error_trace", strconv.FormatBool(errortrace))
+
+	return r
+}
+
+// FilterPath Comma-separated list of filters in dot notation which reduce the response
+// returned by Elasticsearch.
+// API name: filter_path
+func (r *Submit) FilterPath(filterpaths ...string) *Submit {
+	tmp := []string{}
+	for _, item := range filterpaths {
+		tmp = append(tmp, fmt.Sprintf("%v", item))
+	}
+	r.values.Set("filter_path", strings.Join(tmp, ","))
+
+	return r
+}
+
+// Human When set to `true` will return statistics in a format suitable for humans.
+// For example `"exists_time": "1h"` for humans and
+// `"eixsts_time_in_millis": 3600000` for computers. When disabled the human
+// readable values will be omitted. This makes sense for responses being
+// consumed
+// only by machines.
+// API name: human
+func (r *Submit) Human(human bool) *Submit {
+	r.values.Set("human", strconv.FormatBool(human))
+
+	return r
+}
+
+// Pretty If set to `true` the returned JSON will be "pretty-formatted". Only use
+// this option for debugging only.
+// API name: pretty
+func (r *Submit) Pretty(pretty bool) *Submit {
+	r.values.Set("pretty", strconv.FormatBool(pretty))
+
+	return r
+}
+
 // API name: aggregations
 func (r *Submit) Aggregations(aggregations map[string]types.Aggregations) *Submit {
 
@@ -625,7 +753,7 @@ func (r *Submit) IndicesBoost(indicesboosts ...map[string]types.Float64) *Submit
 
 // Knn Defines the approximate kNN search to run.
 // API name: knn
-func (r *Submit) Knn(knns ...types.KnnQuery) *Submit {
+func (r *Submit) Knn(knns ...types.KnnSearch) *Submit {
 	r.req.Knn = knns
 
 	return r

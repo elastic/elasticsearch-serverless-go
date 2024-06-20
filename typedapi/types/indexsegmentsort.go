@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,6 +24,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 
 	"github.com/elastic/elasticsearch-serverless-go/typedapi/types/enums/segmentsortmissing"
@@ -33,7 +34,7 @@ import (
 
 // IndexSegmentSort type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/indices/_types/IndexSegmentSort.ts#L22-L27
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/indices/_types/IndexSegmentSort.ts#L22-L27
 type IndexSegmentSort struct {
 	Field   []string                                `json:"field,omitempty"`
 	Missing []segmentsortmissing.SegmentSortMissing `json:"missing,omitempty"`
@@ -62,13 +63,13 @@ func (s *IndexSegmentSort) UnmarshalJSON(data []byte) error {
 			if !bytes.HasPrefix(rawMsg, []byte("[")) {
 				o := new(string)
 				if err := json.NewDecoder(bytes.NewReader(rawMsg)).Decode(&o); err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Field", err)
 				}
 
 				s.Field = append(s.Field, *o)
 			} else {
 				if err := json.NewDecoder(bytes.NewReader(rawMsg)).Decode(&s.Field); err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Field", err)
 				}
 			}
 
@@ -78,13 +79,13 @@ func (s *IndexSegmentSort) UnmarshalJSON(data []byte) error {
 			if !bytes.HasPrefix(rawMsg, []byte("[")) {
 				o := &segmentsortmissing.SegmentSortMissing{}
 				if err := json.NewDecoder(bytes.NewReader(rawMsg)).Decode(&o); err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Missing", err)
 				}
 
 				s.Missing = append(s.Missing, *o)
 			} else {
 				if err := json.NewDecoder(bytes.NewReader(rawMsg)).Decode(&s.Missing); err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Missing", err)
 				}
 			}
 
@@ -94,13 +95,13 @@ func (s *IndexSegmentSort) UnmarshalJSON(data []byte) error {
 			if !bytes.HasPrefix(rawMsg, []byte("[")) {
 				o := &segmentsortmode.SegmentSortMode{}
 				if err := json.NewDecoder(bytes.NewReader(rawMsg)).Decode(&o); err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Mode", err)
 				}
 
 				s.Mode = append(s.Mode, *o)
 			} else {
 				if err := json.NewDecoder(bytes.NewReader(rawMsg)).Decode(&s.Mode); err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Mode", err)
 				}
 			}
 
@@ -110,13 +111,13 @@ func (s *IndexSegmentSort) UnmarshalJSON(data []byte) error {
 			if !bytes.HasPrefix(rawMsg, []byte("[")) {
 				o := &segmentsortorder.SegmentSortOrder{}
 				if err := json.NewDecoder(bytes.NewReader(rawMsg)).Decode(&o); err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Order", err)
 				}
 
 				s.Order = append(s.Order, *o)
 			} else {
 				if err := json.NewDecoder(bytes.NewReader(rawMsg)).Decode(&s.Order); err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Order", err)
 				}
 			}
 

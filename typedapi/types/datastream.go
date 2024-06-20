@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,15 +24,17 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 
 	"github.com/elastic/elasticsearch-serverless-go/typedapi/types/enums/healthstatus"
+	"github.com/elastic/elasticsearch-serverless-go/typedapi/types/enums/managedby"
 )
 
 // DataStream type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/indices/_types/DataStream.ts#L32-L96
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/indices/_types/DataStream.ts#L39-L112
 type DataStream struct {
 	// AllowCustomRouting If `true`, the data stream allows custom routing on write request.
 	AllowCustomRouting *bool `json:"allow_custom_routing,omitempty"`
@@ -64,6 +66,12 @@ type DataStream struct {
 	Meta_ Metadata `json:"_meta,omitempty"`
 	// Name Name of the data stream.
 	Name string `json:"name"`
+	// NextGenerationManagedBy Name of the lifecycle system that'll manage the next generation of the data
+	// stream.
+	NextGenerationManagedBy managedby.ManagedBy `json:"next_generation_managed_by"`
+	// PreferIlm Indicates if ILM should take precedence over DSL in case both are configured
+	// to managed this data stream.
+	PreferIlm bool `json:"prefer_ilm"`
 	// Replicated If `true`, the data stream is created and managed by cross-cluster
 	// replication and the local cluster can not write into this data stream or
 	// change its mappings.
@@ -98,13 +106,13 @@ func (s *DataStream) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "allow_custom_routing":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "AllowCustomRouting", err)
 				}
 				s.AllowCustomRouting = &value
 			case bool:
@@ -113,13 +121,13 @@ func (s *DataStream) UnmarshalJSON(data []byte) error {
 
 		case "generation":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Generation", err)
 				}
 				s.Generation = value
 			case float64:
@@ -128,13 +136,13 @@ func (s *DataStream) UnmarshalJSON(data []byte) error {
 			}
 
 		case "hidden":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Hidden", err)
 				}
 				s.Hidden = value
 			case bool:
@@ -143,37 +151,56 @@ func (s *DataStream) UnmarshalJSON(data []byte) error {
 
 		case "ilm_policy":
 			if err := dec.Decode(&s.IlmPolicy); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "IlmPolicy", err)
 			}
 
 		case "indices":
 			if err := dec.Decode(&s.Indices); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Indices", err)
 			}
 
 		case "lifecycle":
 			if err := dec.Decode(&s.Lifecycle); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Lifecycle", err)
 			}
 
 		case "_meta":
 			if err := dec.Decode(&s.Meta_); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Meta_", err)
 			}
 
 		case "name":
 			if err := dec.Decode(&s.Name); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Name", err)
 			}
 
-		case "replicated":
-			var tmp interface{}
+		case "next_generation_managed_by":
+			if err := dec.Decode(&s.NextGenerationManagedBy); err != nil {
+				return fmt.Errorf("%s | %w", "NextGenerationManagedBy", err)
+			}
+
+		case "prefer_ilm":
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "PreferIlm", err)
+				}
+				s.PreferIlm = value
+			case bool:
+				s.PreferIlm = v
+			}
+
+		case "replicated":
+			var tmp any
+			dec.Decode(&tmp)
+			switch v := tmp.(type) {
+			case string:
+				value, err := strconv.ParseBool(v)
+				if err != nil {
+					return fmt.Errorf("%s | %w", "Replicated", err)
 				}
 				s.Replicated = &value
 			case bool:
@@ -182,17 +209,17 @@ func (s *DataStream) UnmarshalJSON(data []byte) error {
 
 		case "status":
 			if err := dec.Decode(&s.Status); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Status", err)
 			}
 
 		case "system":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "System", err)
 				}
 				s.System = &value
 			case bool:
@@ -201,12 +228,12 @@ func (s *DataStream) UnmarshalJSON(data []byte) error {
 
 		case "template":
 			if err := dec.Decode(&s.Template); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Template", err)
 			}
 
 		case "timestamp_field":
 			if err := dec.Decode(&s.TimestampField); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "TimestampField", err)
 			}
 
 		}

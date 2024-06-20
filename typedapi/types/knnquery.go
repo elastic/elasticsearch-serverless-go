@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,24 +24,28 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // KnnQuery type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/Knn.ts#L26-L43
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/Knn.ts#L54-L67
 type KnnQuery struct {
-	// Boost Boost value to apply to kNN scores
+	// Boost Floating point number used to decrease or increase the relevance scores of
+	// the query.
+	// Boost values are relative to the default value of 1.0.
+	// A boost value between 0 and 1.0 decreases the relevance score.
+	// A value greater than 1.0 increases the relevance score.
 	Boost *float32 `json:"boost,omitempty"`
 	// Field The name of the vector field to search against
 	Field string `json:"field"`
 	// Filter Filters for the kNN search query
 	Filter []Query `json:"filter,omitempty"`
-	// K The final number of nearest neighbors to return as top hits
-	K int64 `json:"k"`
 	// NumCandidates The number of nearest neighbor candidates to consider per shard
-	NumCandidates int64 `json:"num_candidates"`
+	NumCandidates *int    `json:"num_candidates,omitempty"`
+	QueryName_    *string `json:"_name,omitempty"`
 	// QueryVector The query vector
 	QueryVector []float32 `json:"query_vector,omitempty"`
 	// QueryVectorBuilder The query vector builder. You must provide a query_vector_builder or
@@ -67,13 +71,13 @@ func (s *KnnQuery) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "boost":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseFloat(v, 32)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Boost", err)
 				}
 				f := float32(value)
 				s.Boost = &f
@@ -84,7 +88,7 @@ func (s *KnnQuery) UnmarshalJSON(data []byte) error {
 
 		case "field":
 			if err := dec.Decode(&s.Field); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Field", err)
 			}
 
 		case "filter":
@@ -93,64 +97,62 @@ func (s *KnnQuery) UnmarshalJSON(data []byte) error {
 			if !bytes.HasPrefix(rawMsg, []byte("[")) {
 				o := NewQuery()
 				if err := json.NewDecoder(bytes.NewReader(rawMsg)).Decode(&o); err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Filter", err)
 				}
 
 				s.Filter = append(s.Filter, *o)
 			} else {
 				if err := json.NewDecoder(bytes.NewReader(rawMsg)).Decode(&s.Filter); err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Filter", err)
 				}
-			}
-
-		case "k":
-			var tmp interface{}
-			dec.Decode(&tmp)
-			switch v := tmp.(type) {
-			case string:
-				value, err := strconv.ParseInt(v, 10, 64)
-				if err != nil {
-					return err
-				}
-				s.K = value
-			case float64:
-				f := int64(v)
-				s.K = f
 			}
 
 		case "num_candidates":
-			var tmp interface{}
+
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
-				value, err := strconv.ParseInt(v, 10, 64)
+				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "NumCandidates", err)
 				}
-				s.NumCandidates = value
+				s.NumCandidates = &value
 			case float64:
-				f := int64(v)
-				s.NumCandidates = f
+				f := int(v)
+				s.NumCandidates = &f
 			}
+
+		case "_name":
+			var tmp json.RawMessage
+			if err := dec.Decode(&tmp); err != nil {
+				return fmt.Errorf("%s | %w", "QueryName_", err)
+			}
+			o := string(tmp[:])
+			o, err = strconv.Unquote(o)
+			if err != nil {
+				o = string(tmp[:])
+			}
+			s.QueryName_ = &o
 
 		case "query_vector":
 			if err := dec.Decode(&s.QueryVector); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "QueryVector", err)
 			}
 
 		case "query_vector_builder":
 			if err := dec.Decode(&s.QueryVectorBuilder); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "QueryVectorBuilder", err)
 			}
 
 		case "similarity":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseFloat(v, 32)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Similarity", err)
 				}
 				f := float32(value)
 				s.Similarity = &f

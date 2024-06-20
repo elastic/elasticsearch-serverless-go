@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,6 +24,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 
@@ -32,7 +33,7 @@ import (
 
 // NumberRangeQuery type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/query_dsl/term.ts#L145-L164
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/query_dsl/term.ts#L145-L164
 type NumberRangeQuery struct {
 	// Boost Floating point number used to decrease or increase the relevance scores of
 	// the query.
@@ -40,7 +41,7 @@ type NumberRangeQuery struct {
 	// A boost value between 0 and 1.0 decreases the relevance score.
 	// A value greater than 1.0 increases the relevance score.
 	Boost *float32 `json:"boost,omitempty"`
-	From  Float64  `json:"from,omitempty"`
+	From  *Float64 `json:"from,omitempty"`
 	// Gt Greater than.
 	Gt *Float64 `json:"gt,omitempty"`
 	// Gte Greater than or equal to.
@@ -52,7 +53,7 @@ type NumberRangeQuery struct {
 	QueryName_ *string  `json:"_name,omitempty"`
 	// Relation Indicates how the range query matches values for `range` fields.
 	Relation *rangerelation.RangeRelation `json:"relation,omitempty"`
-	To       Float64                      `json:"to,omitempty"`
+	To       *Float64                     `json:"to,omitempty"`
 }
 
 func (s *NumberRangeQuery) UnmarshalJSON(data []byte) error {
@@ -71,13 +72,13 @@ func (s *NumberRangeQuery) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "boost":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseFloat(v, 32)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Boost", err)
 				}
 				f := float32(value)
 				s.Boost = &f
@@ -88,17 +89,17 @@ func (s *NumberRangeQuery) UnmarshalJSON(data []byte) error {
 
 		case "from":
 			if err := dec.Decode(&s.From); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "From", err)
 			}
 
 		case "gt":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseFloat(v, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Gt", err)
 				}
 				f := Float64(value)
 				s.Gt = &f
@@ -108,13 +109,13 @@ func (s *NumberRangeQuery) UnmarshalJSON(data []byte) error {
 			}
 
 		case "gte":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseFloat(v, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Gte", err)
 				}
 				f := Float64(value)
 				s.Gte = &f
@@ -124,13 +125,13 @@ func (s *NumberRangeQuery) UnmarshalJSON(data []byte) error {
 			}
 
 		case "lt":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseFloat(v, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Lt", err)
 				}
 				f := Float64(value)
 				s.Lt = &f
@@ -140,13 +141,13 @@ func (s *NumberRangeQuery) UnmarshalJSON(data []byte) error {
 			}
 
 		case "lte":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseFloat(v, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Lte", err)
 				}
 				f := Float64(value)
 				s.Lte = &f
@@ -158,7 +159,7 @@ func (s *NumberRangeQuery) UnmarshalJSON(data []byte) error {
 		case "_name":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "QueryName_", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -169,12 +170,12 @@ func (s *NumberRangeQuery) UnmarshalJSON(data []byte) error {
 
 		case "relation":
 			if err := dec.Decode(&s.Relation); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Relation", err)
 			}
 
 		case "to":
 			if err := dec.Decode(&s.To); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "To", err)
 			}
 
 		}

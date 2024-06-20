@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package delete
 
@@ -27,15 +27,14 @@ import (
 
 // Response holds the response body struct for the package delete
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_global/delete/DeleteResponse.ts#L22-L34
-
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_global/delete/DeleteResponse.ts#L22-L34
 type Response struct {
 	ForcedRefresh *bool                 `json:"forced_refresh,omitempty"`
 	Id_           string                `json:"_id"`
 	Index_        string                `json:"_index"`
-	PrimaryTerm_  int64                 `json:"_primary_term"`
+	PrimaryTerm_  *int64                `json:"_primary_term,omitempty"`
 	Result        result.Result         `json:"result"`
-	SeqNo_        int64                 `json:"_seq_no"`
+	SeqNo_        *int64                `json:"_seq_no,omitempty"`
 	Shards_       types.ShardStatistics `json:"_shards"`
 	Version_      int64                 `json:"_version"`
 }

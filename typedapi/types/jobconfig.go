@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // JobConfig type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/ml/_types/Job.ts#L182-L283
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/ml/_types/Job.ts#L182-L283
 type JobConfig struct {
 	// AllowLazyOpen Advanced configuration option. Specifies whether this job can open when there
 	// is insufficient machine learning node capacity for it to be immediately
@@ -134,13 +135,13 @@ func (s *JobConfig) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "allow_lazy_open":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "AllowLazyOpen", err)
 				}
 				s.AllowLazyOpen = &value
 			case bool:
@@ -149,32 +150,32 @@ func (s *JobConfig) UnmarshalJSON(data []byte) error {
 
 		case "analysis_config":
 			if err := dec.Decode(&s.AnalysisConfig); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "AnalysisConfig", err)
 			}
 
 		case "analysis_limits":
 			if err := dec.Decode(&s.AnalysisLimits); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "AnalysisLimits", err)
 			}
 
 		case "background_persist_interval":
 			if err := dec.Decode(&s.BackgroundPersistInterval); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "BackgroundPersistInterval", err)
 			}
 
 		case "custom_settings":
 			if err := dec.Decode(&s.CustomSettings); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "CustomSettings", err)
 			}
 
 		case "daily_model_snapshot_retention_after_days":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "DailyModelSnapshotRetentionAfterDays", err)
 				}
 				s.DailyModelSnapshotRetentionAfterDays = &value
 			case float64:
@@ -184,18 +185,18 @@ func (s *JobConfig) UnmarshalJSON(data []byte) error {
 
 		case "data_description":
 			if err := dec.Decode(&s.DataDescription); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "DataDescription", err)
 			}
 
 		case "datafeed_config":
 			if err := dec.Decode(&s.DatafeedConfig); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "DatafeedConfig", err)
 			}
 
 		case "description":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Description", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -206,18 +207,18 @@ func (s *JobConfig) UnmarshalJSON(data []byte) error {
 
 		case "groups":
 			if err := dec.Decode(&s.Groups); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Groups", err)
 			}
 
 		case "job_id":
 			if err := dec.Decode(&s.JobId); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "JobId", err)
 			}
 
 		case "job_type":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "JobType", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -228,17 +229,17 @@ func (s *JobConfig) UnmarshalJSON(data []byte) error {
 
 		case "model_plot_config":
 			if err := dec.Decode(&s.ModelPlotConfig); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "ModelPlotConfig", err)
 			}
 
 		case "model_snapshot_retention_days":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "ModelSnapshotRetentionDays", err)
 				}
 				s.ModelSnapshotRetentionDays = &value
 			case float64:
@@ -247,13 +248,13 @@ func (s *JobConfig) UnmarshalJSON(data []byte) error {
 			}
 
 		case "renormalization_window_days":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "RenormalizationWindowDays", err)
 				}
 				s.RenormalizationWindowDays = &value
 			case float64:
@@ -263,17 +264,17 @@ func (s *JobConfig) UnmarshalJSON(data []byte) error {
 
 		case "results_index_name":
 			if err := dec.Decode(&s.ResultsIndexName); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "ResultsIndexName", err)
 			}
 
 		case "results_retention_days":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "ResultsRetentionDays", err)
 				}
 				s.ResultsRetentionDays = &value
 			case float64:

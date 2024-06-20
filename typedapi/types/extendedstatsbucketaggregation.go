@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,6 +24,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 
@@ -32,7 +33,7 @@ import (
 
 // ExtendedStatsBucketAggregation type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/aggregations/pipeline.ts#L198-L203
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/aggregations/pipeline.ts#L198-L203
 type ExtendedStatsBucketAggregation struct {
 	// BucketsPath Path to the buckets that contain one set of values to correlate.
 	BucketsPath BucketsPath `json:"buckets_path,omitempty"`
@@ -42,8 +43,6 @@ type ExtendedStatsBucketAggregation struct {
 	Format *string `json:"format,omitempty"`
 	// GapPolicy Policy to apply when gaps are found in the data.
 	GapPolicy *gappolicy.GapPolicy `json:"gap_policy,omitempty"`
-	Meta      Metadata             `json:"meta,omitempty"`
-	Name      *string              `json:"name,omitempty"`
 	// Sigma The number of standard deviations above/below the mean to display.
 	Sigma *Float64 `json:"sigma,omitempty"`
 }
@@ -65,13 +64,13 @@ func (s *ExtendedStatsBucketAggregation) UnmarshalJSON(data []byte) error {
 
 		case "buckets_path":
 			if err := dec.Decode(&s.BucketsPath); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "BucketsPath", err)
 			}
 
 		case "format":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Format", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -82,34 +81,17 @@ func (s *ExtendedStatsBucketAggregation) UnmarshalJSON(data []byte) error {
 
 		case "gap_policy":
 			if err := dec.Decode(&s.GapPolicy); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "GapPolicy", err)
 			}
-
-		case "meta":
-			if err := dec.Decode(&s.Meta); err != nil {
-				return err
-			}
-
-		case "name":
-			var tmp json.RawMessage
-			if err := dec.Decode(&tmp); err != nil {
-				return err
-			}
-			o := string(tmp[:])
-			o, err = strconv.Unquote(o)
-			if err != nil {
-				o = string(tmp[:])
-			}
-			s.Name = &o
 
 		case "sigma":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseFloat(v, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Sigma", err)
 				}
 				f := Float64(value)
 				s.Sigma = &f

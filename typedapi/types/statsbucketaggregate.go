@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,21 +24,22 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // StatsBucketAggregate type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/aggregations/Aggregate.ts#L257-L258
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/aggregations/Aggregate.ts#L257-L258
 type StatsBucketAggregate struct {
-	Avg         Float64  `json:"avg,omitempty"`
+	Avg         *Float64 `json:"avg,omitempty"`
 	AvgAsString *string  `json:"avg_as_string,omitempty"`
 	Count       int64    `json:"count"`
-	Max         Float64  `json:"max,omitempty"`
+	Max         *Float64 `json:"max,omitempty"`
 	MaxAsString *string  `json:"max_as_string,omitempty"`
 	Meta        Metadata `json:"meta,omitempty"`
-	Min         Float64  `json:"min,omitempty"`
+	Min         *Float64 `json:"min,omitempty"`
 	MinAsString *string  `json:"min_as_string,omitempty"`
 	Sum         Float64  `json:"sum"`
 	SumAsString *string  `json:"sum_as_string,omitempty"`
@@ -61,13 +62,13 @@ func (s *StatsBucketAggregate) UnmarshalJSON(data []byte) error {
 
 		case "avg":
 			if err := dec.Decode(&s.Avg); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Avg", err)
 			}
 
 		case "avg_as_string":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "AvgAsString", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -77,13 +78,13 @@ func (s *StatsBucketAggregate) UnmarshalJSON(data []byte) error {
 			s.AvgAsString = &o
 
 		case "count":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Count", err)
 				}
 				s.Count = value
 			case float64:
@@ -93,13 +94,13 @@ func (s *StatsBucketAggregate) UnmarshalJSON(data []byte) error {
 
 		case "max":
 			if err := dec.Decode(&s.Max); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Max", err)
 			}
 
 		case "max_as_string":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "MaxAsString", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -110,18 +111,18 @@ func (s *StatsBucketAggregate) UnmarshalJSON(data []byte) error {
 
 		case "meta":
 			if err := dec.Decode(&s.Meta); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Meta", err)
 			}
 
 		case "min":
 			if err := dec.Decode(&s.Min); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Min", err)
 			}
 
 		case "min_as_string":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "MinAsString", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -131,13 +132,13 @@ func (s *StatsBucketAggregate) UnmarshalJSON(data []byte) error {
 			s.MinAsString = &o
 
 		case "sum":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseFloat(v, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Sum", err)
 				}
 				f := Float64(value)
 				s.Sum = f
@@ -149,7 +150,7 @@ func (s *StatsBucketAggregate) UnmarshalJSON(data []byte) error {
 		case "sum_as_string":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "SumAsString", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)

@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package puttrainedmodel
 
@@ -30,7 +30,7 @@ import (
 
 // Request holds the request body struct for the package puttrainedmodel
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/ml/put_trained_model/MlPutTrainedModelRequest.ts#L28-L106
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/ml/put_trained_model/MlPutTrainedModelRequest.ts#L29-L124
 type Request struct {
 
 	// CompressedDefinition The compressed (GZipped and Base64 encoded) inference definition of the
@@ -68,6 +68,8 @@ type Request struct {
 	// processor
 	// architecture or OS features), leave this field unset.
 	PlatformArchitecture *string `json:"platform_architecture,omitempty"`
+	// PrefixStrings Optional prefix strings applied at inference
+	PrefixStrings *types.TrainedModelPrefixStrings `json:"prefix_strings,omitempty"`
 	// Tags An array of tags to organize the model.
 	Tags []string `json:"tags,omitempty"`
 }
@@ -75,6 +77,7 @@ type Request struct {
 // NewRequest returns a Request
 func NewRequest() *Request {
 	r := &Request{}
+
 	return r
 }
 

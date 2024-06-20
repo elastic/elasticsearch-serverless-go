@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // Term type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_global/termvectors/types.ts#L34-L40
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_global/termvectors/types.ts#L34-L40
 type Term struct {
 	DocFreq  *int               `json:"doc_freq,omitempty"`
 	Score    *Float64           `json:"score,omitempty"`
@@ -56,13 +57,13 @@ func (s *Term) UnmarshalJSON(data []byte) error {
 
 		case "doc_freq":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "DocFreq", err)
 				}
 				s.DocFreq = &value
 			case float64:
@@ -71,13 +72,13 @@ func (s *Term) UnmarshalJSON(data []byte) error {
 			}
 
 		case "score":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseFloat(v, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Score", err)
 				}
 				f := Float64(value)
 				s.Score = &f
@@ -88,13 +89,13 @@ func (s *Term) UnmarshalJSON(data []byte) error {
 
 		case "term_freq":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "TermFreq", err)
 				}
 				s.TermFreq = value
 			case float64:
@@ -104,18 +105,18 @@ func (s *Term) UnmarshalJSON(data []byte) error {
 
 		case "tokens":
 			if err := dec.Decode(&s.Tokens); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Tokens", err)
 			}
 
 		case "ttf":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Ttf", err)
 				}
 				s.Ttf = &value
 			case float64:

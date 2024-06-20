@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package putcalendarjob
 
@@ -24,14 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // Response holds the response body struct for the package putcalendarjob
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/ml/put_calendar_job/MlPutCalendarJobResponse.ts#L22-L31
-
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/ml/put_calendar_job/MlPutCalendarJobResponse.ts#L22-L31
 type Response struct {
 
 	// CalendarId A string that uniquely identifies a calendar.
@@ -64,13 +64,13 @@ func (s *Response) UnmarshalJSON(data []byte) error {
 
 		case "calendar_id":
 			if err := dec.Decode(&s.CalendarId); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "CalendarId", err)
 			}
 
 		case "description":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Description", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -85,13 +85,13 @@ func (s *Response) UnmarshalJSON(data []byte) error {
 			if !bytes.HasPrefix(rawMsg, []byte("[")) {
 				o := new(string)
 				if err := json.NewDecoder(bytes.NewReader(rawMsg)).Decode(&o); err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "JobIds", err)
 				}
 
 				s.JobIds = append(s.JobIds, *o)
 			} else {
 				if err := json.NewDecoder(bytes.NewReader(rawMsg)).Decode(&s.JobIds); err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "JobIds", err)
 				}
 			}
 

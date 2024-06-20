@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // RolloverConditions type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/indices/rollover/types.ts#L24-L40
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/indices/rollover/types.ts#L24-L40
 type RolloverConditions struct {
 	MaxAge                   Duration `json:"max_age,omitempty"`
 	MaxAgeMillis             *int64   `json:"max_age_millis,omitempty"`
@@ -66,22 +67,22 @@ func (s *RolloverConditions) UnmarshalJSON(data []byte) error {
 
 		case "max_age":
 			if err := dec.Decode(&s.MaxAge); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "MaxAge", err)
 			}
 
 		case "max_age_millis":
 			if err := dec.Decode(&s.MaxAgeMillis); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "MaxAgeMillis", err)
 			}
 
 		case "max_docs":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "MaxDocs", err)
 				}
 				s.MaxDocs = &value
 			case float64:
@@ -90,13 +91,13 @@ func (s *RolloverConditions) UnmarshalJSON(data []byte) error {
 			}
 
 		case "max_primary_shard_docs":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "MaxPrimaryShardDocs", err)
 				}
 				s.MaxPrimaryShardDocs = &value
 			case float64:
@@ -106,17 +107,17 @@ func (s *RolloverConditions) UnmarshalJSON(data []byte) error {
 
 		case "max_primary_shard_size":
 			if err := dec.Decode(&s.MaxPrimaryShardSize); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "MaxPrimaryShardSize", err)
 			}
 
 		case "max_primary_shard_size_bytes":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "MaxPrimaryShardSizeBytes", err)
 				}
 				s.MaxPrimaryShardSizeBytes = &value
 			case float64:
@@ -126,17 +127,17 @@ func (s *RolloverConditions) UnmarshalJSON(data []byte) error {
 
 		case "max_size":
 			if err := dec.Decode(&s.MaxSize); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "MaxSize", err)
 			}
 
 		case "max_size_bytes":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "MaxSizeBytes", err)
 				}
 				s.MaxSizeBytes = &value
 			case float64:
@@ -146,17 +147,17 @@ func (s *RolloverConditions) UnmarshalJSON(data []byte) error {
 
 		case "min_age":
 			if err := dec.Decode(&s.MinAge); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "MinAge", err)
 			}
 
 		case "min_docs":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "MinDocs", err)
 				}
 				s.MinDocs = &value
 			case float64:
@@ -165,13 +166,13 @@ func (s *RolloverConditions) UnmarshalJSON(data []byte) error {
 			}
 
 		case "min_primary_shard_docs":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "MinPrimaryShardDocs", err)
 				}
 				s.MinPrimaryShardDocs = &value
 			case float64:
@@ -181,17 +182,17 @@ func (s *RolloverConditions) UnmarshalJSON(data []byte) error {
 
 		case "min_primary_shard_size":
 			if err := dec.Decode(&s.MinPrimaryShardSize); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "MinPrimaryShardSize", err)
 			}
 
 		case "min_primary_shard_size_bytes":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "MinPrimaryShardSizeBytes", err)
 				}
 				s.MinPrimaryShardSizeBytes = &value
 			case float64:
@@ -201,17 +202,17 @@ func (s *RolloverConditions) UnmarshalJSON(data []byte) error {
 
 		case "min_size":
 			if err := dec.Decode(&s.MinSize); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "MinSize", err)
 			}
 
 		case "min_size_bytes":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "MinSizeBytes", err)
 				}
 				s.MinSizeBytes = &value
 			case float64:

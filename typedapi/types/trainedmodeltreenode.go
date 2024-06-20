@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // TrainedModelTreeNode type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/ml/put_trained_model/types.ts#L81-L91
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/ml/put_trained_model/types.ts#L81-L91
 type TrainedModelTreeNode struct {
 	DecisionType *string  `json:"decision_type,omitempty"`
 	DefaultLeft  *bool    `json:"default_left,omitempty"`
@@ -61,7 +62,7 @@ func (s *TrainedModelTreeNode) UnmarshalJSON(data []byte) error {
 		case "decision_type":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "DecisionType", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -71,13 +72,13 @@ func (s *TrainedModelTreeNode) UnmarshalJSON(data []byte) error {
 			s.DecisionType = &o
 
 		case "default_left":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "DefaultLeft", err)
 				}
 				s.DefaultLeft = &value
 			case bool:
@@ -85,13 +86,13 @@ func (s *TrainedModelTreeNode) UnmarshalJSON(data []byte) error {
 			}
 
 		case "leaf_value":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseFloat(v, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "LeafValue", err)
 				}
 				f := Float64(value)
 				s.LeafValue = &f
@@ -102,13 +103,13 @@ func (s *TrainedModelTreeNode) UnmarshalJSON(data []byte) error {
 
 		case "left_child":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "LeftChild", err)
 				}
 				s.LeftChild = &value
 			case float64:
@@ -118,13 +119,13 @@ func (s *TrainedModelTreeNode) UnmarshalJSON(data []byte) error {
 
 		case "node_index":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "NodeIndex", err)
 				}
 				s.NodeIndex = value
 			case float64:
@@ -134,13 +135,13 @@ func (s *TrainedModelTreeNode) UnmarshalJSON(data []byte) error {
 
 		case "right_child":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "RightChild", err)
 				}
 				s.RightChild = &value
 			case float64:
@@ -150,13 +151,13 @@ func (s *TrainedModelTreeNode) UnmarshalJSON(data []byte) error {
 
 		case "split_feature":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "SplitFeature", err)
 				}
 				s.SplitFeature = &value
 			case float64:
@@ -166,13 +167,13 @@ func (s *TrainedModelTreeNode) UnmarshalJSON(data []byte) error {
 
 		case "split_gain":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "SplitGain", err)
 				}
 				s.SplitGain = &value
 			case float64:
@@ -181,13 +182,13 @@ func (s *TrainedModelTreeNode) UnmarshalJSON(data []byte) error {
 			}
 
 		case "threshold":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseFloat(v, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Threshold", err)
 				}
 				f := Float64(value)
 				s.Threshold = &f
