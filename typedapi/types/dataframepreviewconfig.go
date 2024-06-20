@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // DataframePreviewConfig type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/ml/preview_data_frame_analytics/types.ts#L27-L33
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/ml/preview_data_frame_analytics/types.ts#L27-L33
 type DataframePreviewConfig struct {
 	Analysis         DataframeAnalysisContainer       `json:"analysis"`
 	AnalyzedFields   *DataframeAnalysisAnalyzedFields `json:"analyzed_fields,omitempty"`
@@ -56,23 +57,23 @@ func (s *DataframePreviewConfig) UnmarshalJSON(data []byte) error {
 
 		case "analysis":
 			if err := dec.Decode(&s.Analysis); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Analysis", err)
 			}
 
 		case "analyzed_fields":
 			if err := dec.Decode(&s.AnalyzedFields); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "AnalyzedFields", err)
 			}
 
 		case "max_num_threads":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "MaxNumThreads", err)
 				}
 				s.MaxNumThreads = &value
 			case float64:
@@ -83,7 +84,7 @@ func (s *DataframePreviewConfig) UnmarshalJSON(data []byte) error {
 		case "model_memory_limit":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "ModelMemoryLimit", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -94,7 +95,7 @@ func (s *DataframePreviewConfig) UnmarshalJSON(data []byte) error {
 
 		case "source":
 			if err := dec.Decode(&s.Source); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Source", err)
 			}
 
 		}

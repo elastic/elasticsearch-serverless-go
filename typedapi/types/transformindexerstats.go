@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // TransformIndexerStats type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/transform/get_transform_stats/types.ts#L56-L74
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/transform/get_transform_stats/types.ts#L56-L74
 type TransformIndexerStats struct {
 	DeleteTimeInMs                     *int64  `json:"delete_time_in_ms,omitempty"`
 	DocumentsDeleted                   *int64  `json:"documents_deleted,omitempty"`
@@ -68,17 +69,17 @@ func (s *TransformIndexerStats) UnmarshalJSON(data []byte) error {
 
 		case "delete_time_in_ms":
 			if err := dec.Decode(&s.DeleteTimeInMs); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "DeleteTimeInMs", err)
 			}
 
 		case "documents_deleted":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "DocumentsDeleted", err)
 				}
 				s.DocumentsDeleted = &value
 			case float64:
@@ -87,13 +88,13 @@ func (s *TransformIndexerStats) UnmarshalJSON(data []byte) error {
 			}
 
 		case "documents_indexed":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "DocumentsIndexed", err)
 				}
 				s.DocumentsIndexed = value
 			case float64:
@@ -102,13 +103,13 @@ func (s *TransformIndexerStats) UnmarshalJSON(data []byte) error {
 			}
 
 		case "documents_processed":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "DocumentsProcessed", err)
 				}
 				s.DocumentsProcessed = value
 			case float64:
@@ -118,17 +119,17 @@ func (s *TransformIndexerStats) UnmarshalJSON(data []byte) error {
 
 		case "exponential_avg_checkpoint_duration_ms":
 			if err := dec.Decode(&s.ExponentialAvgCheckpointDurationMs); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "ExponentialAvgCheckpointDurationMs", err)
 			}
 
 		case "exponential_avg_documents_indexed":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseFloat(v, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "ExponentialAvgDocumentsIndexed", err)
 				}
 				f := Float64(value)
 				s.ExponentialAvgDocumentsIndexed = f
@@ -138,13 +139,13 @@ func (s *TransformIndexerStats) UnmarshalJSON(data []byte) error {
 			}
 
 		case "exponential_avg_documents_processed":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseFloat(v, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "ExponentialAvgDocumentsProcessed", err)
 				}
 				f := Float64(value)
 				s.ExponentialAvgDocumentsProcessed = f
@@ -154,13 +155,13 @@ func (s *TransformIndexerStats) UnmarshalJSON(data []byte) error {
 			}
 
 		case "index_failures":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "IndexFailures", err)
 				}
 				s.IndexFailures = value
 			case float64:
@@ -170,17 +171,17 @@ func (s *TransformIndexerStats) UnmarshalJSON(data []byte) error {
 
 		case "index_time_in_ms":
 			if err := dec.Decode(&s.IndexTimeInMs); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "IndexTimeInMs", err)
 			}
 
 		case "index_total":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "IndexTotal", err)
 				}
 				s.IndexTotal = value
 			case float64:
@@ -189,13 +190,13 @@ func (s *TransformIndexerStats) UnmarshalJSON(data []byte) error {
 			}
 
 		case "pages_processed":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "PagesProcessed", err)
 				}
 				s.PagesProcessed = value
 			case float64:
@@ -205,17 +206,17 @@ func (s *TransformIndexerStats) UnmarshalJSON(data []byte) error {
 
 		case "processing_time_in_ms":
 			if err := dec.Decode(&s.ProcessingTimeInMs); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "ProcessingTimeInMs", err)
 			}
 
 		case "processing_total":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "ProcessingTotal", err)
 				}
 				s.ProcessingTotal = value
 			case float64:
@@ -224,13 +225,13 @@ func (s *TransformIndexerStats) UnmarshalJSON(data []byte) error {
 			}
 
 		case "search_failures":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "SearchFailures", err)
 				}
 				s.SearchFailures = value
 			case float64:
@@ -240,17 +241,17 @@ func (s *TransformIndexerStats) UnmarshalJSON(data []byte) error {
 
 		case "search_time_in_ms":
 			if err := dec.Decode(&s.SearchTimeInMs); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "SearchTimeInMs", err)
 			}
 
 		case "search_total":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "SearchTotal", err)
 				}
 				s.SearchTotal = value
 			case float64:
@@ -259,13 +260,13 @@ func (s *TransformIndexerStats) UnmarshalJSON(data []byte) error {
 			}
 
 		case "trigger_count":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "TriggerCount", err)
 				}
 				s.TriggerCount = value
 			case float64:

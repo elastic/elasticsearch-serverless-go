@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // MultiSearchResult type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_global/msearch/types.ts#L204-L207
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_global/msearch/types.ts#L203-L206
 type MultiSearchResult struct {
 	Responses []MsearchResponseItem `json:"responses"`
 	Took      int64                 `json:"took"`
@@ -52,18 +53,54 @@ func (s *MultiSearchResult) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "responses":
-			if err := dec.Decode(&s.Responses); err != nil {
-				return err
+			messageArray := []json.RawMessage{}
+			if err := dec.Decode(&messageArray); err != nil {
+				return fmt.Errorf("%s | %w", "Responses", err)
+			}
+		responses:
+			for _, message := range messageArray {
+				keyDec := json.NewDecoder(bytes.NewReader(message))
+				for {
+					t, err := keyDec.Token()
+					if err != nil {
+						if errors.Is(err, io.EOF) {
+							break
+						}
+						return fmt.Errorf("%s | %w", "Responses", err)
+					}
+
+					switch t {
+
+					case "aggregations", "_clusters", "fields", "hits", "max_score", "num_reduce_phases", "pit_id", "profile", "_scroll_id", "_shards", "suggest", "terminated_early", "timed_out", "took":
+						o := NewMultiSearchItem()
+						localDec := json.NewDecoder(bytes.NewReader(message))
+						if err := localDec.Decode(&o); err != nil {
+							return fmt.Errorf("%s | %w", "Responses", err)
+						}
+						s.Responses = append(s.Responses, o)
+						continue responses
+
+					case "error":
+						o := NewErrorResponseBase()
+						localDec := json.NewDecoder(bytes.NewReader(message))
+						if err := localDec.Decode(&o); err != nil {
+							return fmt.Errorf("%s | %w", "Responses", err)
+						}
+						s.Responses = append(s.Responses, o)
+						continue responses
+
+					}
+				}
 			}
 
 		case "took":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Took", err)
 				}
 				s.Took = value
 			case float64:

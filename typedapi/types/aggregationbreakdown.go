@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // AggregationBreakdown type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_global/search/_types/profile.ts#L23-L36
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_global/search/_types/profile.ts#L23-L36
 type AggregationBreakdown struct {
 	BuildAggregation        int64  `json:"build_aggregation"`
 	BuildAggregationCount   int64  `json:"build_aggregation_count"`
@@ -62,13 +63,13 @@ func (s *AggregationBreakdown) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "build_aggregation":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "BuildAggregation", err)
 				}
 				s.BuildAggregation = value
 			case float64:
@@ -77,13 +78,13 @@ func (s *AggregationBreakdown) UnmarshalJSON(data []byte) error {
 			}
 
 		case "build_aggregation_count":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "BuildAggregationCount", err)
 				}
 				s.BuildAggregationCount = value
 			case float64:
@@ -92,13 +93,13 @@ func (s *AggregationBreakdown) UnmarshalJSON(data []byte) error {
 			}
 
 		case "build_leaf_collector":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "BuildLeafCollector", err)
 				}
 				s.BuildLeafCollector = value
 			case float64:
@@ -107,13 +108,13 @@ func (s *AggregationBreakdown) UnmarshalJSON(data []byte) error {
 			}
 
 		case "build_leaf_collector_count":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "BuildLeafCollectorCount", err)
 				}
 				s.BuildLeafCollectorCount = value
 			case float64:
@@ -122,13 +123,13 @@ func (s *AggregationBreakdown) UnmarshalJSON(data []byte) error {
 			}
 
 		case "collect":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Collect", err)
 				}
 				s.Collect = value
 			case float64:
@@ -137,13 +138,13 @@ func (s *AggregationBreakdown) UnmarshalJSON(data []byte) error {
 			}
 
 		case "collect_count":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "CollectCount", err)
 				}
 				s.CollectCount = value
 			case float64:
@@ -152,13 +153,13 @@ func (s *AggregationBreakdown) UnmarshalJSON(data []byte) error {
 			}
 
 		case "initialize":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Initialize", err)
 				}
 				s.Initialize = value
 			case float64:
@@ -167,13 +168,13 @@ func (s *AggregationBreakdown) UnmarshalJSON(data []byte) error {
 			}
 
 		case "initialize_count":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "InitializeCount", err)
 				}
 				s.InitializeCount = value
 			case float64:
@@ -182,13 +183,13 @@ func (s *AggregationBreakdown) UnmarshalJSON(data []byte) error {
 			}
 
 		case "post_collection":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "PostCollection", err)
 				}
 				s.PostCollection = &value
 			case float64:
@@ -197,13 +198,13 @@ func (s *AggregationBreakdown) UnmarshalJSON(data []byte) error {
 			}
 
 		case "post_collection_count":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "PostCollectionCount", err)
 				}
 				s.PostCollectionCount = &value
 			case float64:
@@ -212,13 +213,13 @@ func (s *AggregationBreakdown) UnmarshalJSON(data []byte) error {
 			}
 
 		case "reduce":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Reduce", err)
 				}
 				s.Reduce = value
 			case float64:
@@ -227,13 +228,13 @@ func (s *AggregationBreakdown) UnmarshalJSON(data []byte) error {
 			}
 
 		case "reduce_count":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "ReduceCount", err)
 				}
 				s.ReduceCount = value
 			case float64:

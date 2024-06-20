@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // ConfusionMatrixItem type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/ml/evaluate_data_frame/types.ts#L125-L130
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/ml/evaluate_data_frame/types.ts#L125-L130
 type ConfusionMatrixItem struct {
 	ActualClass                 string                      `json:"actual_class"`
 	ActualClassDocCount         int                         `json:"actual_class_doc_count"`
@@ -55,18 +56,18 @@ func (s *ConfusionMatrixItem) UnmarshalJSON(data []byte) error {
 
 		case "actual_class":
 			if err := dec.Decode(&s.ActualClass); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "ActualClass", err)
 			}
 
 		case "actual_class_doc_count":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "ActualClassDocCount", err)
 				}
 				s.ActualClassDocCount = value
 			case float64:
@@ -76,13 +77,13 @@ func (s *ConfusionMatrixItem) UnmarshalJSON(data []byte) error {
 
 		case "other_predicted_class_doc_count":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "OtherPredictedClassDocCount", err)
 				}
 				s.OtherPredictedClassDocCount = value
 			case float64:
@@ -92,7 +93,7 @@ func (s *ConfusionMatrixItem) UnmarshalJSON(data []byte) error {
 
 		case "predicted_classes":
 			if err := dec.Decode(&s.PredictedClasses); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "PredictedClasses", err)
 			}
 
 		}

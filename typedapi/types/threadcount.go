@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // ThreadCount type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/nodes/_types/Stats.ts#L1004-L1029
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/nodes/_types/Stats.ts#L1004-L1029
 type ThreadCount struct {
 	// Active Number of active threads in the thread pool.
 	Active *int64 `json:"active,omitempty"`
@@ -62,13 +63,13 @@ func (s *ThreadCount) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "active":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Active", err)
 				}
 				s.Active = &value
 			case float64:
@@ -77,13 +78,13 @@ func (s *ThreadCount) UnmarshalJSON(data []byte) error {
 			}
 
 		case "completed":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Completed", err)
 				}
 				s.Completed = &value
 			case float64:
@@ -92,13 +93,13 @@ func (s *ThreadCount) UnmarshalJSON(data []byte) error {
 			}
 
 		case "largest":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Largest", err)
 				}
 				s.Largest = &value
 			case float64:
@@ -107,13 +108,13 @@ func (s *ThreadCount) UnmarshalJSON(data []byte) error {
 			}
 
 		case "queue":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Queue", err)
 				}
 				s.Queue = &value
 			case float64:
@@ -122,13 +123,13 @@ func (s *ThreadCount) UnmarshalJSON(data []byte) error {
 			}
 
 		case "rejected":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Rejected", err)
 				}
 				s.Rejected = &value
 			case float64:
@@ -137,13 +138,13 @@ func (s *ThreadCount) UnmarshalJSON(data []byte) error {
 			}
 
 		case "threads":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Threads", err)
 				}
 				s.Threads = &value
 			case float64:

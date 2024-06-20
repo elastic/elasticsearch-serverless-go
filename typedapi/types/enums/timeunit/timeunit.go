@@ -16,32 +16,32 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 // Package timeunit
 package timeunit
 
 import "strings"
 
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/Time.ts#L69-L84
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/Time.ts#L69-L77
 type TimeUnit struct {
 	Name string
 }
 
 var (
-	Nanos = TimeUnit{"nanos"}
+	Nanoseconds = TimeUnit{"nanos"}
 
-	Micros = TimeUnit{"micros"}
+	Microseconds = TimeUnit{"micros"}
 
-	Ms = TimeUnit{"ms"}
+	Milliseconds = TimeUnit{"ms"}
 
-	S = TimeUnit{"s"}
+	Seconds = TimeUnit{"s"}
 
-	M = TimeUnit{"m"}
+	Minutes = TimeUnit{"m"}
 
-	H = TimeUnit{"h"}
+	Hours = TimeUnit{"h"}
 
-	D = TimeUnit{"d"}
+	Days = TimeUnit{"d"}
 )
 
 func (t TimeUnit) MarshalText() (text []byte, err error) {
@@ -52,19 +52,19 @@ func (t *TimeUnit) UnmarshalText(text []byte) error {
 	switch strings.ReplaceAll(strings.ToLower(string(text)), "\"", "") {
 
 	case "nanos":
-		*t = Nanos
+		*t = Nanoseconds
 	case "micros":
-		*t = Micros
+		*t = Microseconds
 	case "ms":
-		*t = Ms
+		*t = Milliseconds
 	case "s":
-		*t = S
+		*t = Seconds
 	case "m":
-		*t = M
+		*t = Minutes
 	case "h":
-		*t = H
+		*t = Hours
 	case "d":
-		*t = D
+		*t = Days
 	default:
 		*t = TimeUnit{string(text)}
 	}

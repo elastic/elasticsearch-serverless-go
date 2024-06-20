@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // SearchStats type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/Stats.ts#L252-L271
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/Stats.ts#L252-L271
 type SearchStats struct {
 	FetchCurrent        int64                  `json:"fetch_current"`
 	FetchTime           Duration               `json:"fetch_time,omitempty"`
@@ -68,13 +69,13 @@ func (s *SearchStats) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "fetch_current":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "FetchCurrent", err)
 				}
 				s.FetchCurrent = value
 			case float64:
@@ -84,22 +85,22 @@ func (s *SearchStats) UnmarshalJSON(data []byte) error {
 
 		case "fetch_time":
 			if err := dec.Decode(&s.FetchTime); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "FetchTime", err)
 			}
 
 		case "fetch_time_in_millis":
 			if err := dec.Decode(&s.FetchTimeInMillis); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "FetchTimeInMillis", err)
 			}
 
 		case "fetch_total":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "FetchTotal", err)
 				}
 				s.FetchTotal = value
 			case float64:
@@ -112,17 +113,17 @@ func (s *SearchStats) UnmarshalJSON(data []byte) error {
 				s.Groups = make(map[string]SearchStats, 0)
 			}
 			if err := dec.Decode(&s.Groups); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Groups", err)
 			}
 
 		case "open_contexts":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "OpenContexts", err)
 				}
 				s.OpenContexts = &value
 			case float64:
@@ -131,13 +132,13 @@ func (s *SearchStats) UnmarshalJSON(data []byte) error {
 			}
 
 		case "query_current":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "QueryCurrent", err)
 				}
 				s.QueryCurrent = value
 			case float64:
@@ -147,22 +148,22 @@ func (s *SearchStats) UnmarshalJSON(data []byte) error {
 
 		case "query_time":
 			if err := dec.Decode(&s.QueryTime); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "QueryTime", err)
 			}
 
 		case "query_time_in_millis":
 			if err := dec.Decode(&s.QueryTimeInMillis); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "QueryTimeInMillis", err)
 			}
 
 		case "query_total":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "QueryTotal", err)
 				}
 				s.QueryTotal = value
 			case float64:
@@ -171,13 +172,13 @@ func (s *SearchStats) UnmarshalJSON(data []byte) error {
 			}
 
 		case "scroll_current":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "ScrollCurrent", err)
 				}
 				s.ScrollCurrent = value
 			case float64:
@@ -187,22 +188,22 @@ func (s *SearchStats) UnmarshalJSON(data []byte) error {
 
 		case "scroll_time":
 			if err := dec.Decode(&s.ScrollTime); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "ScrollTime", err)
 			}
 
 		case "scroll_time_in_millis":
 			if err := dec.Decode(&s.ScrollTimeInMillis); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "ScrollTimeInMillis", err)
 			}
 
 		case "scroll_total":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "ScrollTotal", err)
 				}
 				s.ScrollTotal = value
 			case float64:
@@ -211,13 +212,13 @@ func (s *SearchStats) UnmarshalJSON(data []byte) error {
 			}
 
 		case "suggest_current":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "SuggestCurrent", err)
 				}
 				s.SuggestCurrent = value
 			case float64:
@@ -227,22 +228,22 @@ func (s *SearchStats) UnmarshalJSON(data []byte) error {
 
 		case "suggest_time":
 			if err := dec.Decode(&s.SuggestTime); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "SuggestTime", err)
 			}
 
 		case "suggest_time_in_millis":
 			if err := dec.Decode(&s.SuggestTimeInMillis); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "SuggestTimeInMillis", err)
 			}
 
 		case "suggest_total":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "SuggestTotal", err)
 				}
 				s.SuggestTotal = value
 			case float64:

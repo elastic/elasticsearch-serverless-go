@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // FetchProfileBreakdown type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_global/search/_types/profile.ts#L148-L157
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_global/search/_types/profile.ts#L148-L157
 type FetchProfileBreakdown struct {
 	LoadSource            *int `json:"load_source,omitempty"`
 	LoadSourceCount       *int `json:"load_source_count,omitempty"`
@@ -59,13 +60,13 @@ func (s *FetchProfileBreakdown) UnmarshalJSON(data []byte) error {
 
 		case "load_source":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "LoadSource", err)
 				}
 				s.LoadSource = &value
 			case float64:
@@ -75,13 +76,13 @@ func (s *FetchProfileBreakdown) UnmarshalJSON(data []byte) error {
 
 		case "load_source_count":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "LoadSourceCount", err)
 				}
 				s.LoadSourceCount = &value
 			case float64:
@@ -91,13 +92,13 @@ func (s *FetchProfileBreakdown) UnmarshalJSON(data []byte) error {
 
 		case "load_stored_fields":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "LoadStoredFields", err)
 				}
 				s.LoadStoredFields = &value
 			case float64:
@@ -107,13 +108,13 @@ func (s *FetchProfileBreakdown) UnmarshalJSON(data []byte) error {
 
 		case "load_stored_fields_count":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "LoadStoredFieldsCount", err)
 				}
 				s.LoadStoredFieldsCount = &value
 			case float64:
@@ -123,13 +124,13 @@ func (s *FetchProfileBreakdown) UnmarshalJSON(data []byte) error {
 
 		case "next_reader":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "NextReader", err)
 				}
 				s.NextReader = &value
 			case float64:
@@ -139,13 +140,13 @@ func (s *FetchProfileBreakdown) UnmarshalJSON(data []byte) error {
 
 		case "next_reader_count":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "NextReaderCount", err)
 				}
 				s.NextReaderCount = &value
 			case float64:
@@ -155,13 +156,13 @@ func (s *FetchProfileBreakdown) UnmarshalJSON(data []byte) error {
 
 		case "process":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Process", err)
 				}
 				s.Process = &value
 			case float64:
@@ -171,13 +172,13 @@ func (s *FetchProfileBreakdown) UnmarshalJSON(data []byte) error {
 
 		case "process_count":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "ProcessCount", err)
 				}
 				s.ProcessCount = &value
 			case float64:

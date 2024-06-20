@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -31,7 +31,7 @@ import (
 
 // TermsQuery type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/query_dsl/term.ts#L233-L235
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/query_dsl/term.ts#L254-L256
 type TermsQuery struct {
 	// Boost Floating point number used to decrease or increase the relevance scores of
 	// the query.
@@ -40,7 +40,7 @@ type TermsQuery struct {
 	// A value greater than 1.0 increases the relevance score.
 	Boost      *float32                   `json:"boost,omitempty"`
 	QueryName_ *string                    `json:"_name,omitempty"`
-	TermsQuery map[string]TermsQueryField `json:"TermsQuery,omitempty"`
+	TermsQuery map[string]TermsQueryField `json:"-"`
 }
 
 func (s *TermsQuery) UnmarshalJSON(data []byte) error {
@@ -59,13 +59,13 @@ func (s *TermsQuery) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "boost":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseFloat(v, 32)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Boost", err)
 				}
 				f := float32(value)
 				s.Boost = &f
@@ -77,7 +77,7 @@ func (s *TermsQuery) UnmarshalJSON(data []byte) error {
 		case "_name":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "QueryName_", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -86,15 +86,18 @@ func (s *TermsQuery) UnmarshalJSON(data []byte) error {
 			}
 			s.QueryName_ = &o
 
-		case "TermsQuery":
-			if s.TermsQuery == nil {
-				s.TermsQuery = make(map[string]TermsQueryField, 0)
-			}
-			if err := dec.Decode(&s.TermsQuery); err != nil {
-				return err
-			}
-
 		default:
+
+			if key, ok := t.(string); ok {
+				if s.TermsQuery == nil {
+					s.TermsQuery = make(map[string]TermsQueryField, 0)
+				}
+				raw := new(TermsQueryField)
+				if err := dec.Decode(&raw); err != nil {
+					return fmt.Errorf("%s | %w", "TermsQuery", err)
+				}
+				s.TermsQuery[key] = *raw
+			}
 
 		}
 	}
@@ -105,7 +108,7 @@ func (s *TermsQuery) UnmarshalJSON(data []byte) error {
 func (s TermsQuery) MarshalJSON() ([]byte, error) {
 	type opt TermsQuery
 	// We transform the struct to a map without the embedded additional properties map
-	tmp := make(map[string]interface{}, 0)
+	tmp := make(map[string]any, 0)
 
 	data, err := json.Marshal(opt(s))
 	if err != nil {

@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,18 +24,19 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // SettingsSimilarityBm25 type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/indices/_types/IndexSettings.ts#L180-L185
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/indices/_types/IndexSettings.ts#L186-L191
 type SettingsSimilarityBm25 struct {
-	B                Float64 `json:"b"`
-	DiscountOverlaps bool    `json:"discount_overlaps"`
-	K1               Float64 `json:"k1"`
-	Type             string  `json:"type,omitempty"`
+	B                *Float64 `json:"b,omitempty"`
+	DiscountOverlaps *bool    `json:"discount_overlaps,omitempty"`
+	K1               *Float64 `json:"k1,omitempty"`
+	Type             string   `json:"type,omitempty"`
 }
 
 func (s *SettingsSimilarityBm25) UnmarshalJSON(data []byte) error {
@@ -54,54 +55,54 @@ func (s *SettingsSimilarityBm25) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "b":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseFloat(v, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "B", err)
 				}
 				f := Float64(value)
-				s.B = f
+				s.B = &f
 			case float64:
 				f := Float64(v)
-				s.B = f
+				s.B = &f
 			}
 
 		case "discount_overlaps":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "DiscountOverlaps", err)
 				}
-				s.DiscountOverlaps = value
+				s.DiscountOverlaps = &value
 			case bool:
-				s.DiscountOverlaps = v
+				s.DiscountOverlaps = &v
 			}
 
 		case "k1":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseFloat(v, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "K1", err)
 				}
 				f := Float64(value)
-				s.K1 = f
+				s.K1 = &f
 			case float64:
 				f := Float64(v)
-				s.K1 = f
+				s.K1 = &f
 			}
 
 		case "type":
 			if err := dec.Decode(&s.Type); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Type", err)
 			}
 
 		}

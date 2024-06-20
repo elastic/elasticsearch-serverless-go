@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,20 +24,21 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // EnrichPolicy type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/enrich/_types/Policy.ts#L33-L40
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/enrich/_types/Policy.ts#L34-L41
 type EnrichPolicy struct {
 	ElasticsearchVersion *string  `json:"elasticsearch_version,omitempty"`
 	EnrichFields         []string `json:"enrich_fields"`
 	Indices              []string `json:"indices"`
 	MatchField           string   `json:"match_field"`
 	Name                 *string  `json:"name,omitempty"`
-	Query                *string  `json:"query,omitempty"`
+	Query                *Query   `json:"query,omitempty"`
 }
 
 func (s *EnrichPolicy) UnmarshalJSON(data []byte) error {
@@ -58,7 +59,7 @@ func (s *EnrichPolicy) UnmarshalJSON(data []byte) error {
 		case "elasticsearch_version":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "ElasticsearchVersion", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -73,13 +74,13 @@ func (s *EnrichPolicy) UnmarshalJSON(data []byte) error {
 			if !bytes.HasPrefix(rawMsg, []byte("[")) {
 				o := new(string)
 				if err := json.NewDecoder(bytes.NewReader(rawMsg)).Decode(&o); err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "EnrichFields", err)
 				}
 
 				s.EnrichFields = append(s.EnrichFields, *o)
 			} else {
 				if err := json.NewDecoder(bytes.NewReader(rawMsg)).Decode(&s.EnrichFields); err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "EnrichFields", err)
 				}
 			}
 
@@ -89,37 +90,30 @@ func (s *EnrichPolicy) UnmarshalJSON(data []byte) error {
 			if !bytes.HasPrefix(rawMsg, []byte("[")) {
 				o := new(string)
 				if err := json.NewDecoder(bytes.NewReader(rawMsg)).Decode(&o); err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Indices", err)
 				}
 
 				s.Indices = append(s.Indices, *o)
 			} else {
 				if err := json.NewDecoder(bytes.NewReader(rawMsg)).Decode(&s.Indices); err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Indices", err)
 				}
 			}
 
 		case "match_field":
 			if err := dec.Decode(&s.MatchField); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "MatchField", err)
 			}
 
 		case "name":
 			if err := dec.Decode(&s.Name); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Name", err)
 			}
 
 		case "query":
-			var tmp json.RawMessage
-			if err := dec.Decode(&tmp); err != nil {
-				return err
+			if err := dec.Decode(&s.Query); err != nil {
+				return fmt.Errorf("%s | %w", "Query", err)
 			}
-			o := string(tmp[:])
-			o, err = strconv.Unquote(o)
-			if err != nil {
-				o = string(tmp[:])
-			}
-			s.Query = &o
 
 		}
 	}

@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,6 +24,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 
@@ -32,7 +33,7 @@ import (
 
 // FieldCapability type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_global/field_caps/types.ts#L23-L81
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_global/field_caps/types.ts#L23-L81
 type FieldCapability struct {
 	// Aggregatable Whether this field can be aggregated on all indices.
 	Aggregatable bool `json:"aggregatable"`
@@ -84,13 +85,13 @@ func (s *FieldCapability) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "aggregatable":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Aggregatable", err)
 				}
 				s.Aggregatable = value
 			case bool:
@@ -103,29 +104,29 @@ func (s *FieldCapability) UnmarshalJSON(data []byte) error {
 			if !bytes.HasPrefix(rawMsg, []byte("[")) {
 				o := new(string)
 				if err := json.NewDecoder(bytes.NewReader(rawMsg)).Decode(&o); err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Indices", err)
 				}
 
 				s.Indices = append(s.Indices, *o)
 			} else {
 				if err := json.NewDecoder(bytes.NewReader(rawMsg)).Decode(&s.Indices); err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Indices", err)
 				}
 			}
 
 		case "meta":
 			if err := dec.Decode(&s.Meta); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Meta", err)
 			}
 
 		case "metadata_field":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "MetadataField", err)
 				}
 				s.MetadataField = &value
 			case bool:
@@ -134,7 +135,7 @@ func (s *FieldCapability) UnmarshalJSON(data []byte) error {
 
 		case "metric_conflicts_indices":
 			if err := dec.Decode(&s.MetricConflictsIndices); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "MetricConflictsIndices", err)
 			}
 
 		case "non_aggregatable_indices":
@@ -143,19 +144,19 @@ func (s *FieldCapability) UnmarshalJSON(data []byte) error {
 			if !bytes.HasPrefix(rawMsg, []byte("[")) {
 				o := new(string)
 				if err := json.NewDecoder(bytes.NewReader(rawMsg)).Decode(&o); err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "NonAggregatableIndices", err)
 				}
 
 				s.NonAggregatableIndices = append(s.NonAggregatableIndices, *o)
 			} else {
 				if err := json.NewDecoder(bytes.NewReader(rawMsg)).Decode(&s.NonAggregatableIndices); err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "NonAggregatableIndices", err)
 				}
 			}
 
 		case "non_dimension_indices":
 			if err := dec.Decode(&s.NonDimensionIndices); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "NonDimensionIndices", err)
 			}
 
 		case "non_searchable_indices":
@@ -164,24 +165,24 @@ func (s *FieldCapability) UnmarshalJSON(data []byte) error {
 			if !bytes.HasPrefix(rawMsg, []byte("[")) {
 				o := new(string)
 				if err := json.NewDecoder(bytes.NewReader(rawMsg)).Decode(&o); err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "NonSearchableIndices", err)
 				}
 
 				s.NonSearchableIndices = append(s.NonSearchableIndices, *o)
 			} else {
 				if err := json.NewDecoder(bytes.NewReader(rawMsg)).Decode(&s.NonSearchableIndices); err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "NonSearchableIndices", err)
 				}
 			}
 
 		case "searchable":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Searchable", err)
 				}
 				s.Searchable = value
 			case bool:
@@ -189,13 +190,13 @@ func (s *FieldCapability) UnmarshalJSON(data []byte) error {
 			}
 
 		case "time_series_dimension":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "TimeSeriesDimension", err)
 				}
 				s.TimeSeriesDimension = &value
 			case bool:
@@ -204,13 +205,13 @@ func (s *FieldCapability) UnmarshalJSON(data []byte) error {
 
 		case "time_series_metric":
 			if err := dec.Decode(&s.TimeSeriesMetric); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "TimeSeriesMetric", err)
 			}
 
 		case "type":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Type", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)

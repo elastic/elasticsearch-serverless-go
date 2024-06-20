@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // IngestTotal type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/nodes/_types/Stats.ts#L356-L377
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/nodes/_types/Stats.ts#L356-L377
 type IngestTotal struct {
 	// Count Total number of documents ingested during the lifetime of this node.
 	Count *int64 `json:"count,omitempty"`
@@ -61,13 +62,13 @@ func (s *IngestTotal) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "count":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Count", err)
 				}
 				s.Count = &value
 			case float64:
@@ -76,13 +77,13 @@ func (s *IngestTotal) UnmarshalJSON(data []byte) error {
 			}
 
 		case "current":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Current", err)
 				}
 				s.Current = &value
 			case float64:
@@ -91,13 +92,13 @@ func (s *IngestTotal) UnmarshalJSON(data []byte) error {
 			}
 
 		case "failed":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Failed", err)
 				}
 				s.Failed = &value
 			case float64:
@@ -107,12 +108,12 @@ func (s *IngestTotal) UnmarshalJSON(data []byte) error {
 
 		case "processors":
 			if err := dec.Decode(&s.Processors); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Processors", err)
 			}
 
 		case "time_in_millis":
 			if err := dec.Decode(&s.TimeInMillis); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "TimeInMillis", err)
 			}
 
 		}

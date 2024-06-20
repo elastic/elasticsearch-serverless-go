@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,6 +24,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 
 	"github.com/elastic/elasticsearch-serverless-go/typedapi/types/enums/versiontype"
@@ -31,7 +32,7 @@ import (
 
 // LikeDocument type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/query_dsl/specialized.ts#L165-L184
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/query_dsl/specialized.ts#L162-L184
 type LikeDocument struct {
 	// Doc A document not present in the index.
 	Doc    json.RawMessage `json:"doc,omitempty"`
@@ -39,7 +40,8 @@ type LikeDocument struct {
 	// Id_ ID of a document.
 	Id_ *string `json:"_id,omitempty"`
 	// Index_ Index of a document.
-	Index_           *string                  `json:"_index,omitempty"`
+	Index_ *string `json:"_index,omitempty"`
+	// PerFieldAnalyzer Overrides the default analyzer.
 	PerFieldAnalyzer map[string]string        `json:"per_field_analyzer,omitempty"`
 	Routing          *string                  `json:"routing,omitempty"`
 	Version          *int64                   `json:"version,omitempty"`
@@ -63,22 +65,22 @@ func (s *LikeDocument) UnmarshalJSON(data []byte) error {
 
 		case "doc":
 			if err := dec.Decode(&s.Doc); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Doc", err)
 			}
 
 		case "fields":
 			if err := dec.Decode(&s.Fields); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Fields", err)
 			}
 
 		case "_id":
 			if err := dec.Decode(&s.Id_); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Id_", err)
 			}
 
 		case "_index":
 			if err := dec.Decode(&s.Index_); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Index_", err)
 			}
 
 		case "per_field_analyzer":
@@ -86,22 +88,22 @@ func (s *LikeDocument) UnmarshalJSON(data []byte) error {
 				s.PerFieldAnalyzer = make(map[string]string, 0)
 			}
 			if err := dec.Decode(&s.PerFieldAnalyzer); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "PerFieldAnalyzer", err)
 			}
 
 		case "routing":
 			if err := dec.Decode(&s.Routing); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Routing", err)
 			}
 
 		case "version":
 			if err := dec.Decode(&s.Version); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Version", err)
 			}
 
 		case "version_type":
 			if err := dec.Decode(&s.VersionType); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "VersionType", err)
 			}
 
 		}

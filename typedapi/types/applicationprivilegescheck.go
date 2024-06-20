@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // ApplicationPrivilegesCheck type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/security/has_privileges/types.ts#L24-L31
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/security/has_privileges/types.ts#L24-L31
 type ApplicationPrivilegesCheck struct {
 	// Application The name of the application.
 	Application string `json:"application"`
@@ -60,7 +61,7 @@ func (s *ApplicationPrivilegesCheck) UnmarshalJSON(data []byte) error {
 		case "application":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Application", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -71,12 +72,12 @@ func (s *ApplicationPrivilegesCheck) UnmarshalJSON(data []byte) error {
 
 		case "privileges":
 			if err := dec.Decode(&s.Privileges); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Privileges", err)
 			}
 
 		case "resources":
 			if err := dec.Decode(&s.Resources); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Resources", err)
 			}
 
 		}

@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // NodesContext type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/nodes/_types/Stats.ts#L997-L1002
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/nodes/_types/Stats.ts#L997-L1002
 type NodesContext struct {
 	CacheEvictions            *int64  `json:"cache_evictions,omitempty"`
 	CompilationLimitTriggered *int64  `json:"compilation_limit_triggered,omitempty"`
@@ -54,13 +55,13 @@ func (s *NodesContext) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "cache_evictions":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "CacheEvictions", err)
 				}
 				s.CacheEvictions = &value
 			case float64:
@@ -69,13 +70,13 @@ func (s *NodesContext) UnmarshalJSON(data []byte) error {
 			}
 
 		case "compilation_limit_triggered":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "CompilationLimitTriggered", err)
 				}
 				s.CompilationLimitTriggered = &value
 			case float64:
@@ -84,13 +85,13 @@ func (s *NodesContext) UnmarshalJSON(data []byte) error {
 			}
 
 		case "compilations":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Compilations", err)
 				}
 				s.Compilations = &value
 			case float64:
@@ -101,7 +102,7 @@ func (s *NodesContext) UnmarshalJSON(data []byte) error {
 		case "context":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Context", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)

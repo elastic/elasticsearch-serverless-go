@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // CategorizeTextAggregation type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/aggregations/bucket.ts#L1037-L1101
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/aggregations/bucket.ts#L1045-L1109
 type CategorizeTextAggregation struct {
 	// CategorizationAnalyzer The categorization analyzer specifies how the text is analyzed and tokenized
 	// before being categorized.
@@ -67,11 +68,9 @@ type CategorizeTextAggregation struct {
 	// Smaller values use less memory and create fewer categories. Larger values
 	// will use more memory and
 	// create narrower categories. Max allowed value is 100.
-	MaxUniqueTokens *int     `json:"max_unique_tokens,omitempty"`
-	Meta            Metadata `json:"meta,omitempty"`
+	MaxUniqueTokens *int `json:"max_unique_tokens,omitempty"`
 	// MinDocCount The minimum number of documents in a bucket to be returned to the results.
-	MinDocCount *int    `json:"min_doc_count,omitempty"`
-	Name        *string `json:"name,omitempty"`
+	MinDocCount *int `json:"min_doc_count,omitempty"`
 	// ShardMinDocCount The minimum number of documents in a bucket to be returned from the shard
 	// before merging.
 	ShardMinDocCount *int `json:"shard_min_doc_count,omitempty"`
@@ -119,29 +118,29 @@ func (s *CategorizeTextAggregation) UnmarshalJSON(data []byte) error {
 
 			default:
 				if err := localDec.Decode(&s.CategorizationAnalyzer); err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "CategorizationAnalyzer", err)
 				}
 			}
 
 		case "categorization_filters":
 			if err := dec.Decode(&s.CategorizationFilters); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "CategorizationFilters", err)
 			}
 
 		case "field":
 			if err := dec.Decode(&s.Field); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Field", err)
 			}
 
 		case "max_matched_tokens":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "MaxMatchedTokens", err)
 				}
 				s.MaxMatchedTokens = &value
 			case float64:
@@ -151,13 +150,13 @@ func (s *CategorizeTextAggregation) UnmarshalJSON(data []byte) error {
 
 		case "max_unique_tokens":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "MaxUniqueTokens", err)
 				}
 				s.MaxUniqueTokens = &value
 			case float64:
@@ -165,20 +164,15 @@ func (s *CategorizeTextAggregation) UnmarshalJSON(data []byte) error {
 				s.MaxUniqueTokens = &f
 			}
 
-		case "meta":
-			if err := dec.Decode(&s.Meta); err != nil {
-				return err
-			}
-
 		case "min_doc_count":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "MinDocCount", err)
 				}
 				s.MinDocCount = &value
 			case float64:
@@ -186,27 +180,15 @@ func (s *CategorizeTextAggregation) UnmarshalJSON(data []byte) error {
 				s.MinDocCount = &f
 			}
 
-		case "name":
-			var tmp json.RawMessage
-			if err := dec.Decode(&tmp); err != nil {
-				return err
-			}
-			o := string(tmp[:])
-			o, err = strconv.Unquote(o)
-			if err != nil {
-				o = string(tmp[:])
-			}
-			s.Name = &o
-
 		case "shard_min_doc_count":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "ShardMinDocCount", err)
 				}
 				s.ShardMinDocCount = &value
 			case float64:
@@ -216,13 +198,13 @@ func (s *CategorizeTextAggregation) UnmarshalJSON(data []byte) error {
 
 		case "shard_size":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "ShardSize", err)
 				}
 				s.ShardSize = &value
 			case float64:
@@ -232,13 +214,13 @@ func (s *CategorizeTextAggregation) UnmarshalJSON(data []byte) error {
 
 		case "similarity_threshold":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "SimilarityThreshold", err)
 				}
 				s.SimilarityThreshold = &value
 			case float64:
@@ -248,13 +230,13 @@ func (s *CategorizeTextAggregation) UnmarshalJSON(data []byte) error {
 
 		case "size":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Size", err)
 				}
 				s.Size = &value
 			case float64:

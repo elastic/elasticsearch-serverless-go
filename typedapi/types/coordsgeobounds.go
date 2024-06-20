@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // CoordsGeoBounds type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/Geo.ts#L163-L168
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/Geo.ts#L154-L159
 type CoordsGeoBounds struct {
 	Bottom Float64 `json:"bottom"`
 	Left   Float64 `json:"left"`
@@ -54,13 +55,13 @@ func (s *CoordsGeoBounds) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "bottom":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseFloat(v, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Bottom", err)
 				}
 				f := Float64(value)
 				s.Bottom = f
@@ -70,13 +71,13 @@ func (s *CoordsGeoBounds) UnmarshalJSON(data []byte) error {
 			}
 
 		case "left":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseFloat(v, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Left", err)
 				}
 				f := Float64(value)
 				s.Left = f
@@ -86,13 +87,13 @@ func (s *CoordsGeoBounds) UnmarshalJSON(data []byte) error {
 			}
 
 		case "right":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseFloat(v, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Right", err)
 				}
 				f := Float64(value)
 				s.Right = f
@@ -102,13 +103,13 @@ func (s *CoordsGeoBounds) UnmarshalJSON(data []byte) error {
 			}
 
 		case "top":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseFloat(v, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Top", err)
 				}
 				f := Float64(value)
 				s.Top = f

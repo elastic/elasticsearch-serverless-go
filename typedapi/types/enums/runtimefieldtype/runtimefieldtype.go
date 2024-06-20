@@ -16,20 +16,22 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 // Package runtimefieldtype
 package runtimefieldtype
 
 import "strings"
 
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/mapping/RuntimeFields.ts#L56-L65
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/mapping/RuntimeFields.ts#L56-L66
 type RuntimeFieldType struct {
 	Name string
 }
 
 var (
 	Boolean = RuntimeFieldType{"boolean"}
+
+	Composite = RuntimeFieldType{"composite"}
 
 	Date = RuntimeFieldType{"date"}
 
@@ -55,6 +57,8 @@ func (r *RuntimeFieldType) UnmarshalText(text []byte) error {
 
 	case "boolean":
 		*r = Boolean
+	case "composite":
+		*r = Composite
 	case "date":
 		*r = Date
 	case "double":

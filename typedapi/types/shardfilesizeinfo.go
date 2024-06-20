@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // ShardFileSizeInfo type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/indices/stats/types.ts#L124-L131
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/indices/stats/types.ts#L124-L131
 type ShardFileSizeInfo struct {
 	AverageSizeInBytes *int64 `json:"average_size_in_bytes,omitempty"`
 	Count              *int64 `json:"count,omitempty"`
@@ -56,13 +57,13 @@ func (s *ShardFileSizeInfo) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "average_size_in_bytes":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "AverageSizeInBytes", err)
 				}
 				s.AverageSizeInBytes = &value
 			case float64:
@@ -71,13 +72,13 @@ func (s *ShardFileSizeInfo) UnmarshalJSON(data []byte) error {
 			}
 
 		case "count":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Count", err)
 				}
 				s.Count = &value
 			case float64:
@@ -88,7 +89,7 @@ func (s *ShardFileSizeInfo) UnmarshalJSON(data []byte) error {
 		case "description":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Description", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -98,13 +99,13 @@ func (s *ShardFileSizeInfo) UnmarshalJSON(data []byte) error {
 			s.Description = o
 
 		case "max_size_in_bytes":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "MaxSizeInBytes", err)
 				}
 				s.MaxSizeInBytes = &value
 			case float64:
@@ -113,13 +114,13 @@ func (s *ShardFileSizeInfo) UnmarshalJSON(data []byte) error {
 			}
 
 		case "min_size_in_bytes":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "MinSizeInBytes", err)
 				}
 				s.MinSizeInBytes = &value
 			case float64:
@@ -128,13 +129,13 @@ func (s *ShardFileSizeInfo) UnmarshalJSON(data []byte) error {
 			}
 
 		case "size_in_bytes":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "SizeInBytes", err)
 				}
 				s.SizeInBytes = value
 			case float64:

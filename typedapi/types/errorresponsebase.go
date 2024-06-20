@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,18 +24,20 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
-// TransientMetadataConfig type.
+// ErrorResponseBase type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/security/_types/TransientMetadataConfig.ts#L20-L22
-type TransientMetadataConfig struct {
-	Enabled bool `json:"enabled"`
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/Base.ts#L76-L85
+type ErrorResponseBase struct {
+	Error  ErrorCause `json:"error"`
+	Status int        `json:"status"`
 }
 
-func (s *TransientMetadataConfig) UnmarshalJSON(data []byte) error {
+func (s *ErrorResponseBase) UnmarshalJSON(data []byte) error {
 
 	dec := json.NewDecoder(bytes.NewReader(data))
 
@@ -50,18 +52,25 @@ func (s *TransientMetadataConfig) UnmarshalJSON(data []byte) error {
 
 		switch t {
 
-		case "enabled":
-			var tmp interface{}
+		case "error":
+			if err := dec.Decode(&s.Error); err != nil {
+				return fmt.Errorf("%s | %w", "Error", err)
+			}
+
+		case "status":
+
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
-				value, err := strconv.ParseBool(v)
+				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Status", err)
 				}
-				s.Enabled = value
-			case bool:
-				s.Enabled = v
+				s.Status = value
+			case float64:
+				f := int(v)
+				s.Status = f
 			}
 
 		}
@@ -69,9 +78,9 @@ func (s *TransientMetadataConfig) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// NewTransientMetadataConfig returns a TransientMetadataConfig.
-func NewTransientMetadataConfig() *TransientMetadataConfig {
-	r := &TransientMetadataConfig{}
+// NewErrorResponseBase returns a ErrorResponseBase.
+func NewErrorResponseBase() *ErrorResponseBase {
+	r := &ErrorResponseBase{}
 
 	return r
 }

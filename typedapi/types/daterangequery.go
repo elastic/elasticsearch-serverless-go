@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,6 +24,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 
@@ -32,7 +33,7 @@ import (
 
 // DateRangeQuery type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/query_dsl/term.ts#L116-L143
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/query_dsl/term.ts#L116-L143
 type DateRangeQuery struct {
 	// Boost Floating point number used to decrease or increase the relevance scores of
 	// the query.
@@ -42,7 +43,7 @@ type DateRangeQuery struct {
 	Boost *float32 `json:"boost,omitempty"`
 	// Format Date format used to convert `date` values in the query.
 	Format *string `json:"format,omitempty"`
-	From   string  `json:"from,omitempty"`
+	From   *string `json:"from,omitempty"`
 	// Gt Greater than.
 	Gt *string `json:"gt,omitempty"`
 	// Gte Greater than or equal to.
@@ -57,7 +58,7 @@ type DateRangeQuery struct {
 	// TimeZone Coordinated Universal Time (UTC) offset or IANA time zone used to convert
 	// `date` values in the query to UTC.
 	TimeZone *string `json:"time_zone,omitempty"`
-	To       string  `json:"to,omitempty"`
+	To       *string `json:"to,omitempty"`
 }
 
 func (s *DateRangeQuery) UnmarshalJSON(data []byte) error {
@@ -76,13 +77,13 @@ func (s *DateRangeQuery) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "boost":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseFloat(v, 32)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Boost", err)
 				}
 				f := float32(value)
 				s.Boost = &f
@@ -93,38 +94,38 @@ func (s *DateRangeQuery) UnmarshalJSON(data []byte) error {
 
 		case "format":
 			if err := dec.Decode(&s.Format); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Format", err)
 			}
 
 		case "from":
 			if err := dec.Decode(&s.From); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "From", err)
 			}
 
 		case "gt":
 			if err := dec.Decode(&s.Gt); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Gt", err)
 			}
 
 		case "gte":
 			if err := dec.Decode(&s.Gte); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Gte", err)
 			}
 
 		case "lt":
 			if err := dec.Decode(&s.Lt); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Lt", err)
 			}
 
 		case "lte":
 			if err := dec.Decode(&s.Lte); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Lte", err)
 			}
 
 		case "_name":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "QueryName_", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -135,17 +136,17 @@ func (s *DateRangeQuery) UnmarshalJSON(data []byte) error {
 
 		case "relation":
 			if err := dec.Decode(&s.Relation); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Relation", err)
 			}
 
 		case "time_zone":
 			if err := dec.Decode(&s.TimeZone); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "TimeZone", err)
 			}
 
 		case "to":
 			if err := dec.Decode(&s.To); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "To", err)
 			}
 
 		}

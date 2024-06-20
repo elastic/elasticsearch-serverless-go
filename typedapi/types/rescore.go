@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,16 +24,18 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // Rescore type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_global/search/_types/rescoring.ts#L23-L26
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_global/search/_types/rescoring.ts#L25-L38
 type Rescore struct {
-	Query      RescoreQuery `json:"query"`
-	WindowSize *int         `json:"window_size,omitempty"`
+	LearningToRank *LearningToRank `json:"learning_to_rank,omitempty"`
+	Query          *RescoreQuery   `json:"query,omitempty"`
+	WindowSize     *int            `json:"window_size,omitempty"`
 }
 
 func (s *Rescore) UnmarshalJSON(data []byte) error {
@@ -51,20 +53,25 @@ func (s *Rescore) UnmarshalJSON(data []byte) error {
 
 		switch t {
 
+		case "learning_to_rank":
+			if err := dec.Decode(&s.LearningToRank); err != nil {
+				return fmt.Errorf("%s | %w", "LearningToRank", err)
+			}
+
 		case "query":
 			if err := dec.Decode(&s.Query); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Query", err)
 			}
 
 		case "window_size":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "WindowSize", err)
 				}
 				s.WindowSize = &value
 			case float64:

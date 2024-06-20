@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -31,7 +31,7 @@ import (
 
 // ShapeQuery type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/query_dsl/specialized.ts#L344-L352
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/query_dsl/specialized.ts#L344-L352
 type ShapeQuery struct {
 	// Boost Floating point number used to decrease or increase the relevance scores of
 	// the query.
@@ -43,7 +43,7 @@ type ShapeQuery struct {
 	// documents.
 	IgnoreUnmapped *bool                      `json:"ignore_unmapped,omitempty"`
 	QueryName_     *string                    `json:"_name,omitempty"`
-	ShapeQuery     map[string]ShapeFieldQuery `json:"ShapeQuery,omitempty"`
+	ShapeQuery     map[string]ShapeFieldQuery `json:"-"`
 }
 
 func (s *ShapeQuery) UnmarshalJSON(data []byte) error {
@@ -62,13 +62,13 @@ func (s *ShapeQuery) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "boost":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseFloat(v, 32)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Boost", err)
 				}
 				f := float32(value)
 				s.Boost = &f
@@ -78,13 +78,13 @@ func (s *ShapeQuery) UnmarshalJSON(data []byte) error {
 			}
 
 		case "ignore_unmapped":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "IgnoreUnmapped", err)
 				}
 				s.IgnoreUnmapped = &value
 			case bool:
@@ -94,7 +94,7 @@ func (s *ShapeQuery) UnmarshalJSON(data []byte) error {
 		case "_name":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "QueryName_", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -103,15 +103,18 @@ func (s *ShapeQuery) UnmarshalJSON(data []byte) error {
 			}
 			s.QueryName_ = &o
 
-		case "ShapeQuery":
-			if s.ShapeQuery == nil {
-				s.ShapeQuery = make(map[string]ShapeFieldQuery, 0)
-			}
-			if err := dec.Decode(&s.ShapeQuery); err != nil {
-				return err
-			}
-
 		default:
+
+			if key, ok := t.(string); ok {
+				if s.ShapeQuery == nil {
+					s.ShapeQuery = make(map[string]ShapeFieldQuery, 0)
+				}
+				raw := NewShapeFieldQuery()
+				if err := dec.Decode(&raw); err != nil {
+					return fmt.Errorf("%s | %w", "ShapeQuery", err)
+				}
+				s.ShapeQuery[key] = *raw
+			}
 
 		}
 	}
@@ -122,7 +125,7 @@ func (s *ShapeQuery) UnmarshalJSON(data []byte) error {
 func (s ShapeQuery) MarshalJSON() ([]byte, error) {
 	type opt ShapeQuery
 	// We transform the struct to a map without the embedded additional properties map
-	tmp := make(map[string]interface{}, 0)
+	tmp := make(map[string]any, 0)
 
 	data, err := json.Marshal(opt(s))
 	if err != nil {

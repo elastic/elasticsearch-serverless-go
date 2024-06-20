@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,26 +24,27 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // QueryCacheStats type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/Stats.ts#L192-L226
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/Stats.ts#L192-L226
 type QueryCacheStats struct {
 	// CacheCount Total number of entries added to the query cache across all shards assigned
 	// to selected nodes.
 	// This number includes current and evicted entries.
-	CacheCount int `json:"cache_count"`
+	CacheCount int64 `json:"cache_count"`
 	// CacheSize Total number of entries currently in the query cache across all shards
 	// assigned to selected nodes.
-	CacheSize int `json:"cache_size"`
+	CacheSize int64 `json:"cache_size"`
 	// Evictions Total number of query cache evictions across all shards assigned to selected
 	// nodes.
-	Evictions int `json:"evictions"`
+	Evictions int64 `json:"evictions"`
 	// HitCount Total count of query cache hits across all shards assigned to selected nodes.
-	HitCount int `json:"hit_count"`
+	HitCount int64 `json:"hit_count"`
 	// MemorySize Total amount of memory used for the query cache across all shards assigned to
 	// selected nodes.
 	MemorySize ByteSize `json:"memory_size,omitempty"`
@@ -52,10 +53,10 @@ type QueryCacheStats struct {
 	MemorySizeInBytes int64 `json:"memory_size_in_bytes"`
 	// MissCount Total count of query cache misses across all shards assigned to selected
 	// nodes.
-	MissCount int `json:"miss_count"`
+	MissCount int64 `json:"miss_count"`
 	// TotalCount Total count of hits and misses in the query cache across all shards assigned
 	// to selected nodes.
-	TotalCount int `json:"total_count"`
+	TotalCount int64 `json:"total_count"`
 }
 
 func (s *QueryCacheStats) UnmarshalJSON(data []byte) error {
@@ -74,82 +75,78 @@ func (s *QueryCacheStats) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "cache_count":
-
-			var tmp interface{}
-			dec.Decode(&tmp)
-			switch v := tmp.(type) {
-			case string:
-				value, err := strconv.Atoi(v)
-				if err != nil {
-					return err
-				}
-				s.CacheCount = value
-			case float64:
-				f := int(v)
-				s.CacheCount = f
-			}
-
-		case "cache_size":
-
-			var tmp interface{}
-			dec.Decode(&tmp)
-			switch v := tmp.(type) {
-			case string:
-				value, err := strconv.Atoi(v)
-				if err != nil {
-					return err
-				}
-				s.CacheSize = value
-			case float64:
-				f := int(v)
-				s.CacheSize = f
-			}
-
-		case "evictions":
-
-			var tmp interface{}
-			dec.Decode(&tmp)
-			switch v := tmp.(type) {
-			case string:
-				value, err := strconv.Atoi(v)
-				if err != nil {
-					return err
-				}
-				s.Evictions = value
-			case float64:
-				f := int(v)
-				s.Evictions = f
-			}
-
-		case "hit_count":
-
-			var tmp interface{}
-			dec.Decode(&tmp)
-			switch v := tmp.(type) {
-			case string:
-				value, err := strconv.Atoi(v)
-				if err != nil {
-					return err
-				}
-				s.HitCount = value
-			case float64:
-				f := int(v)
-				s.HitCount = f
-			}
-
-		case "memory_size":
-			if err := dec.Decode(&s.MemorySize); err != nil {
-				return err
-			}
-
-		case "memory_size_in_bytes":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "CacheCount", err)
+				}
+				s.CacheCount = value
+			case float64:
+				f := int64(v)
+				s.CacheCount = f
+			}
+
+		case "cache_size":
+			var tmp any
+			dec.Decode(&tmp)
+			switch v := tmp.(type) {
+			case string:
+				value, err := strconv.ParseInt(v, 10, 64)
+				if err != nil {
+					return fmt.Errorf("%s | %w", "CacheSize", err)
+				}
+				s.CacheSize = value
+			case float64:
+				f := int64(v)
+				s.CacheSize = f
+			}
+
+		case "evictions":
+			var tmp any
+			dec.Decode(&tmp)
+			switch v := tmp.(type) {
+			case string:
+				value, err := strconv.ParseInt(v, 10, 64)
+				if err != nil {
+					return fmt.Errorf("%s | %w", "Evictions", err)
+				}
+				s.Evictions = value
+			case float64:
+				f := int64(v)
+				s.Evictions = f
+			}
+
+		case "hit_count":
+			var tmp any
+			dec.Decode(&tmp)
+			switch v := tmp.(type) {
+			case string:
+				value, err := strconv.ParseInt(v, 10, 64)
+				if err != nil {
+					return fmt.Errorf("%s | %w", "HitCount", err)
+				}
+				s.HitCount = value
+			case float64:
+				f := int64(v)
+				s.HitCount = f
+			}
+
+		case "memory_size":
+			if err := dec.Decode(&s.MemorySize); err != nil {
+				return fmt.Errorf("%s | %w", "MemorySize", err)
+			}
+
+		case "memory_size_in_bytes":
+			var tmp any
+			dec.Decode(&tmp)
+			switch v := tmp.(type) {
+			case string:
+				value, err := strconv.ParseInt(v, 10, 64)
+				if err != nil {
+					return fmt.Errorf("%s | %w", "MemorySizeInBytes", err)
 				}
 				s.MemorySizeInBytes = value
 			case float64:
@@ -158,34 +155,32 @@ func (s *QueryCacheStats) UnmarshalJSON(data []byte) error {
 			}
 
 		case "miss_count":
-
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
-				value, err := strconv.Atoi(v)
+				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "MissCount", err)
 				}
 				s.MissCount = value
 			case float64:
-				f := int(v)
+				f := int64(v)
 				s.MissCount = f
 			}
 
 		case "total_count":
-
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
-				value, err := strconv.Atoi(v)
+				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "TotalCount", err)
 				}
 				s.TotalCount = value
 			case float64:
-				f := int(v)
+				f := int64(v)
 				s.TotalCount = f
 			}
 

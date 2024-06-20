@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // QueryBreakdown type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_global/search/_types/profile.ts#L97-L116
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_global/search/_types/profile.ts#L97-L116
 type QueryBreakdown struct {
 	Advance                     int64 `json:"advance"`
 	AdvanceCount                int64 `json:"advance_count"`
@@ -68,13 +69,13 @@ func (s *QueryBreakdown) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "advance":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Advance", err)
 				}
 				s.Advance = value
 			case float64:
@@ -83,13 +84,13 @@ func (s *QueryBreakdown) UnmarshalJSON(data []byte) error {
 			}
 
 		case "advance_count":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "AdvanceCount", err)
 				}
 				s.AdvanceCount = value
 			case float64:
@@ -98,13 +99,13 @@ func (s *QueryBreakdown) UnmarshalJSON(data []byte) error {
 			}
 
 		case "build_scorer":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "BuildScorer", err)
 				}
 				s.BuildScorer = value
 			case float64:
@@ -113,13 +114,13 @@ func (s *QueryBreakdown) UnmarshalJSON(data []byte) error {
 			}
 
 		case "build_scorer_count":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "BuildScorerCount", err)
 				}
 				s.BuildScorerCount = value
 			case float64:
@@ -128,13 +129,13 @@ func (s *QueryBreakdown) UnmarshalJSON(data []byte) error {
 			}
 
 		case "compute_max_score":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "ComputeMaxScore", err)
 				}
 				s.ComputeMaxScore = value
 			case float64:
@@ -143,13 +144,13 @@ func (s *QueryBreakdown) UnmarshalJSON(data []byte) error {
 			}
 
 		case "compute_max_score_count":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "ComputeMaxScoreCount", err)
 				}
 				s.ComputeMaxScoreCount = value
 			case float64:
@@ -158,13 +159,13 @@ func (s *QueryBreakdown) UnmarshalJSON(data []byte) error {
 			}
 
 		case "create_weight":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "CreateWeight", err)
 				}
 				s.CreateWeight = value
 			case float64:
@@ -173,13 +174,13 @@ func (s *QueryBreakdown) UnmarshalJSON(data []byte) error {
 			}
 
 		case "create_weight_count":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "CreateWeightCount", err)
 				}
 				s.CreateWeightCount = value
 			case float64:
@@ -188,13 +189,13 @@ func (s *QueryBreakdown) UnmarshalJSON(data []byte) error {
 			}
 
 		case "match":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Match", err)
 				}
 				s.Match = value
 			case float64:
@@ -203,13 +204,13 @@ func (s *QueryBreakdown) UnmarshalJSON(data []byte) error {
 			}
 
 		case "match_count":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "MatchCount", err)
 				}
 				s.MatchCount = value
 			case float64:
@@ -218,13 +219,13 @@ func (s *QueryBreakdown) UnmarshalJSON(data []byte) error {
 			}
 
 		case "next_doc":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "NextDoc", err)
 				}
 				s.NextDoc = value
 			case float64:
@@ -233,13 +234,13 @@ func (s *QueryBreakdown) UnmarshalJSON(data []byte) error {
 			}
 
 		case "next_doc_count":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "NextDocCount", err)
 				}
 				s.NextDocCount = value
 			case float64:
@@ -248,13 +249,13 @@ func (s *QueryBreakdown) UnmarshalJSON(data []byte) error {
 			}
 
 		case "score":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Score", err)
 				}
 				s.Score = value
 			case float64:
@@ -263,13 +264,13 @@ func (s *QueryBreakdown) UnmarshalJSON(data []byte) error {
 			}
 
 		case "score_count":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "ScoreCount", err)
 				}
 				s.ScoreCount = value
 			case float64:
@@ -278,13 +279,13 @@ func (s *QueryBreakdown) UnmarshalJSON(data []byte) error {
 			}
 
 		case "set_min_competitive_score":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "SetMinCompetitiveScore", err)
 				}
 				s.SetMinCompetitiveScore = value
 			case float64:
@@ -293,13 +294,13 @@ func (s *QueryBreakdown) UnmarshalJSON(data []byte) error {
 			}
 
 		case "set_min_competitive_score_count":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "SetMinCompetitiveScoreCount", err)
 				}
 				s.SetMinCompetitiveScoreCount = value
 			case float64:
@@ -308,13 +309,13 @@ func (s *QueryBreakdown) UnmarshalJSON(data []byte) error {
 			}
 
 		case "shallow_advance":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "ShallowAdvance", err)
 				}
 				s.ShallowAdvance = value
 			case float64:
@@ -323,13 +324,13 @@ func (s *QueryBreakdown) UnmarshalJSON(data []byte) error {
 			}
 
 		case "shallow_advance_count":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "ShallowAdvanceCount", err)
 				}
 				s.ShallowAdvanceCount = value
 			case float64:

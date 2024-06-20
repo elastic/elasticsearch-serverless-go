@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package create
 
@@ -29,7 +29,7 @@ import (
 
 // Request holds the request body struct for the package create
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/indices/create/IndicesCreateRequest.ts#L28-L81
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/indices/create/IndicesCreateRequest.ts#L28-L81
 type Request struct {
 
 	// Aliases Aliases for the index.
@@ -48,6 +48,7 @@ func NewRequest() *Request {
 	r := &Request{
 		Aliases: make(map[string]types.Alias, 0),
 	}
+
 	return r
 }
 

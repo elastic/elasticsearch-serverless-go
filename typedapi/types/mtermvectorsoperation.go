@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,6 +24,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 
@@ -32,7 +33,7 @@ import (
 
 // MTermVectorsOperation type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_global/mtermvectors/types.ts#L35-L94
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_global/mtermvectors/types.ts#L35-L94
 type MTermVectorsOperation struct {
 	// Doc An artificial document (a document not present in the index) for which you
 	// want to retrieve term vectors.
@@ -48,7 +49,7 @@ type MTermVectorsOperation struct {
 	// Filter Filter terms based on their tf-idf scores.
 	Filter *TermVectorsFilter `json:"filter,omitempty"`
 	// Id_ The ID of the document.
-	Id_ string `json:"_id"`
+	Id_ *string `json:"_id,omitempty"`
 	// Index_ The index of the document.
 	Index_ *string `json:"_index,omitempty"`
 	// Offsets If `true`, the response includes term offsets.
@@ -84,17 +85,17 @@ func (s *MTermVectorsOperation) UnmarshalJSON(data []byte) error {
 
 		case "doc":
 			if err := dec.Decode(&s.Doc); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Doc", err)
 			}
 
 		case "field_statistics":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "FieldStatistics", err)
 				}
 				s.FieldStatistics = &value
 			case bool:
@@ -107,39 +108,39 @@ func (s *MTermVectorsOperation) UnmarshalJSON(data []byte) error {
 			if !bytes.HasPrefix(rawMsg, []byte("[")) {
 				o := new(string)
 				if err := json.NewDecoder(bytes.NewReader(rawMsg)).Decode(&o); err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Fields", err)
 				}
 
 				s.Fields = append(s.Fields, *o)
 			} else {
 				if err := json.NewDecoder(bytes.NewReader(rawMsg)).Decode(&s.Fields); err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Fields", err)
 				}
 			}
 
 		case "filter":
 			if err := dec.Decode(&s.Filter); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Filter", err)
 			}
 
 		case "_id":
 			if err := dec.Decode(&s.Id_); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Id_", err)
 			}
 
 		case "_index":
 			if err := dec.Decode(&s.Index_); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Index_", err)
 			}
 
 		case "offsets":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Offsets", err)
 				}
 				s.Offsets = &value
 			case bool:
@@ -147,13 +148,13 @@ func (s *MTermVectorsOperation) UnmarshalJSON(data []byte) error {
 			}
 
 		case "payloads":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Payloads", err)
 				}
 				s.Payloads = &value
 			case bool:
@@ -161,13 +162,13 @@ func (s *MTermVectorsOperation) UnmarshalJSON(data []byte) error {
 			}
 
 		case "positions":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Positions", err)
 				}
 				s.Positions = &value
 			case bool:
@@ -176,17 +177,17 @@ func (s *MTermVectorsOperation) UnmarshalJSON(data []byte) error {
 
 		case "routing":
 			if err := dec.Decode(&s.Routing); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Routing", err)
 			}
 
 		case "term_statistics":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "TermStatistics", err)
 				}
 				s.TermStatistics = &value
 			case bool:
@@ -195,12 +196,12 @@ func (s *MTermVectorsOperation) UnmarshalJSON(data []byte) error {
 
 		case "version":
 			if err := dec.Decode(&s.Version); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Version", err)
 			}
 
 		case "version_type":
 			if err := dec.Decode(&s.VersionType); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "VersionType", err)
 			}
 
 		}

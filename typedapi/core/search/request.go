@@ -16,20 +16,24 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package search
 
 import (
+	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"io"
+	"strconv"
 
 	"github.com/elastic/elasticsearch-serverless-go/typedapi/types"
 )
 
 // Request holds the request body struct for the package search
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_global/search/SearchRequest.ts#L53-L506
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_global/search/SearchRequest.ts#L54-L520
 type Request struct {
 
 	// Aggregations Defines the aggregations that are run as part of the search request.
@@ -61,7 +65,7 @@ type Request struct {
 	// IndicesBoost Boosts the _score of documents from specified indices.
 	IndicesBoost []map[string]types.Float64 `json:"indices_boost,omitempty"`
 	// Knn Defines the approximate kNN search to run.
-	Knn []types.KnnQuery `json:"knn,omitempty"`
+	Knn []types.KnnSearch `json:"knn,omitempty"`
 	// MinScore Minimum `_score` for matching documents.
 	// Documents with a lower `_score` are not included in the search results.
 	MinScore *types.Float64 `json:"min_score,omitempty"`
@@ -84,6 +88,10 @@ type Request struct {
 	// Rescore Can be used to improve precision by reordering just the top (for example 100
 	// - 500) documents returned by the `query` and `post_filter` phases.
 	Rescore []types.Rescore `json:"rescore,omitempty"`
+	// Retriever A retriever is a specification to describe top documents returned from a
+	// search. A retriever replaces other elements of the search API that also
+	// return top documents such as query and knn.
+	Retriever *types.RetrieverContainer `json:"retriever,omitempty"`
 	// RuntimeMappings Defines one or more runtime fields in the search request.
 	// These fields take precedence over mapped fields with the same name.
 	RuntimeMappings types.RuntimeFields `json:"runtime_mappings,omitempty"`
@@ -157,6 +165,7 @@ func NewRequest() *Request {
 		Ext:          make(map[string]json.RawMessage, 0),
 		ScriptFields: make(map[string]types.ScriptField, 0),
 	}
+
 	return r
 }
 
@@ -170,4 +179,341 @@ func (r *Request) FromJSON(data string) (*Request, error) {
 	}
 
 	return &req, nil
+}
+
+func (s *Request) UnmarshalJSON(data []byte) error {
+	dec := json.NewDecoder(bytes.NewReader(data))
+
+	for {
+		t, err := dec.Token()
+		if err != nil {
+			if errors.Is(err, io.EOF) {
+				break
+			}
+			return err
+		}
+
+		switch t {
+
+		case "aggregations", "aggs":
+			if s.Aggregations == nil {
+				s.Aggregations = make(map[string]types.Aggregations, 0)
+			}
+			if err := dec.Decode(&s.Aggregations); err != nil {
+				return fmt.Errorf("%s | %w", "Aggregations", err)
+			}
+
+		case "collapse":
+			if err := dec.Decode(&s.Collapse); err != nil {
+				return fmt.Errorf("%s | %w", "Collapse", err)
+			}
+
+		case "docvalue_fields":
+			if err := dec.Decode(&s.DocvalueFields); err != nil {
+				return fmt.Errorf("%s | %w", "DocvalueFields", err)
+			}
+
+		case "explain":
+			var tmp any
+			dec.Decode(&tmp)
+			switch v := tmp.(type) {
+			case string:
+				value, err := strconv.ParseBool(v)
+				if err != nil {
+					return fmt.Errorf("%s | %w", "Explain", err)
+				}
+				s.Explain = &value
+			case bool:
+				s.Explain = &v
+			}
+
+		case "ext":
+			if s.Ext == nil {
+				s.Ext = make(map[string]json.RawMessage, 0)
+			}
+			if err := dec.Decode(&s.Ext); err != nil {
+				return fmt.Errorf("%s | %w", "Ext", err)
+			}
+
+		case "fields":
+			if err := dec.Decode(&s.Fields); err != nil {
+				return fmt.Errorf("%s | %w", "Fields", err)
+			}
+
+		case "from":
+
+			var tmp any
+			dec.Decode(&tmp)
+			switch v := tmp.(type) {
+			case string:
+				value, err := strconv.Atoi(v)
+				if err != nil {
+					return fmt.Errorf("%s | %w", "From", err)
+				}
+				s.From = &value
+			case float64:
+				f := int(v)
+				s.From = &f
+			}
+
+		case "highlight":
+			if err := dec.Decode(&s.Highlight); err != nil {
+				return fmt.Errorf("%s | %w", "Highlight", err)
+			}
+
+		case "indices_boost":
+			if err := dec.Decode(&s.IndicesBoost); err != nil {
+				return fmt.Errorf("%s | %w", "IndicesBoost", err)
+			}
+
+		case "knn":
+			rawMsg := json.RawMessage{}
+			dec.Decode(&rawMsg)
+			if !bytes.HasPrefix(rawMsg, []byte("[")) {
+				o := types.NewKnnSearch()
+				if err := json.NewDecoder(bytes.NewReader(rawMsg)).Decode(&o); err != nil {
+					return fmt.Errorf("%s | %w", "Knn", err)
+				}
+
+				s.Knn = append(s.Knn, *o)
+			} else {
+				if err := json.NewDecoder(bytes.NewReader(rawMsg)).Decode(&s.Knn); err != nil {
+					return fmt.Errorf("%s | %w", "Knn", err)
+				}
+			}
+
+		case "min_score":
+			var tmp any
+			dec.Decode(&tmp)
+			switch v := tmp.(type) {
+			case string:
+				value, err := strconv.ParseFloat(v, 64)
+				if err != nil {
+					return fmt.Errorf("%s | %w", "MinScore", err)
+				}
+				f := types.Float64(value)
+				s.MinScore = &f
+			case float64:
+				f := types.Float64(v)
+				s.MinScore = &f
+			}
+
+		case "pit":
+			if err := dec.Decode(&s.Pit); err != nil {
+				return fmt.Errorf("%s | %w", "Pit", err)
+			}
+
+		case "post_filter":
+			if err := dec.Decode(&s.PostFilter); err != nil {
+				return fmt.Errorf("%s | %w", "PostFilter", err)
+			}
+
+		case "profile":
+			var tmp any
+			dec.Decode(&tmp)
+			switch v := tmp.(type) {
+			case string:
+				value, err := strconv.ParseBool(v)
+				if err != nil {
+					return fmt.Errorf("%s | %w", "Profile", err)
+				}
+				s.Profile = &value
+			case bool:
+				s.Profile = &v
+			}
+
+		case "query":
+			if err := dec.Decode(&s.Query); err != nil {
+				return fmt.Errorf("%s | %w", "Query", err)
+			}
+
+		case "rank":
+			if err := dec.Decode(&s.Rank); err != nil {
+				return fmt.Errorf("%s | %w", "Rank", err)
+			}
+
+		case "rescore":
+			rawMsg := json.RawMessage{}
+			dec.Decode(&rawMsg)
+			if !bytes.HasPrefix(rawMsg, []byte("[")) {
+				o := types.NewRescore()
+				if err := json.NewDecoder(bytes.NewReader(rawMsg)).Decode(&o); err != nil {
+					return fmt.Errorf("%s | %w", "Rescore", err)
+				}
+
+				s.Rescore = append(s.Rescore, *o)
+			} else {
+				if err := json.NewDecoder(bytes.NewReader(rawMsg)).Decode(&s.Rescore); err != nil {
+					return fmt.Errorf("%s | %w", "Rescore", err)
+				}
+			}
+
+		case "retriever":
+			if err := dec.Decode(&s.Retriever); err != nil {
+				return fmt.Errorf("%s | %w", "Retriever", err)
+			}
+
+		case "runtime_mappings":
+			if err := dec.Decode(&s.RuntimeMappings); err != nil {
+				return fmt.Errorf("%s | %w", "RuntimeMappings", err)
+			}
+
+		case "script_fields":
+			if s.ScriptFields == nil {
+				s.ScriptFields = make(map[string]types.ScriptField, 0)
+			}
+			if err := dec.Decode(&s.ScriptFields); err != nil {
+				return fmt.Errorf("%s | %w", "ScriptFields", err)
+			}
+
+		case "search_after":
+			if err := dec.Decode(&s.SearchAfter); err != nil {
+				return fmt.Errorf("%s | %w", "SearchAfter", err)
+			}
+
+		case "seq_no_primary_term":
+			var tmp any
+			dec.Decode(&tmp)
+			switch v := tmp.(type) {
+			case string:
+				value, err := strconv.ParseBool(v)
+				if err != nil {
+					return fmt.Errorf("%s | %w", "SeqNoPrimaryTerm", err)
+				}
+				s.SeqNoPrimaryTerm = &value
+			case bool:
+				s.SeqNoPrimaryTerm = &v
+			}
+
+		case "size":
+
+			var tmp any
+			dec.Decode(&tmp)
+			switch v := tmp.(type) {
+			case string:
+				value, err := strconv.Atoi(v)
+				if err != nil {
+					return fmt.Errorf("%s | %w", "Size", err)
+				}
+				s.Size = &value
+			case float64:
+				f := int(v)
+				s.Size = &f
+			}
+
+		case "slice":
+			if err := dec.Decode(&s.Slice); err != nil {
+				return fmt.Errorf("%s | %w", "Slice", err)
+			}
+
+		case "sort":
+			rawMsg := json.RawMessage{}
+			dec.Decode(&rawMsg)
+			if !bytes.HasPrefix(rawMsg, []byte("[")) {
+				o := new(types.SortCombinations)
+				if err := json.NewDecoder(bytes.NewReader(rawMsg)).Decode(&o); err != nil {
+					return fmt.Errorf("%s | %w", "Sort", err)
+				}
+
+				s.Sort = append(s.Sort, *o)
+			} else {
+				if err := json.NewDecoder(bytes.NewReader(rawMsg)).Decode(&s.Sort); err != nil {
+					return fmt.Errorf("%s | %w", "Sort", err)
+				}
+			}
+
+		case "_source":
+			if err := dec.Decode(&s.Source_); err != nil {
+				return fmt.Errorf("%s | %w", "Source_", err)
+			}
+
+		case "stats":
+			if err := dec.Decode(&s.Stats); err != nil {
+				return fmt.Errorf("%s | %w", "Stats", err)
+			}
+
+		case "stored_fields":
+			rawMsg := json.RawMessage{}
+			dec.Decode(&rawMsg)
+			if !bytes.HasPrefix(rawMsg, []byte("[")) {
+				o := new(string)
+				if err := json.NewDecoder(bytes.NewReader(rawMsg)).Decode(&o); err != nil {
+					return fmt.Errorf("%s | %w", "StoredFields", err)
+				}
+
+				s.StoredFields = append(s.StoredFields, *o)
+			} else {
+				if err := json.NewDecoder(bytes.NewReader(rawMsg)).Decode(&s.StoredFields); err != nil {
+					return fmt.Errorf("%s | %w", "StoredFields", err)
+				}
+			}
+
+		case "suggest":
+			if err := dec.Decode(&s.Suggest); err != nil {
+				return fmt.Errorf("%s | %w", "Suggest", err)
+			}
+
+		case "terminate_after":
+			var tmp any
+			dec.Decode(&tmp)
+			switch v := tmp.(type) {
+			case string:
+				value, err := strconv.ParseInt(v, 10, 64)
+				if err != nil {
+					return fmt.Errorf("%s | %w", "TerminateAfter", err)
+				}
+				s.TerminateAfter = &value
+			case float64:
+				f := int64(v)
+				s.TerminateAfter = &f
+			}
+
+		case "timeout":
+			var tmp json.RawMessage
+			if err := dec.Decode(&tmp); err != nil {
+				return fmt.Errorf("%s | %w", "Timeout", err)
+			}
+			o := string(tmp[:])
+			o, err = strconv.Unquote(o)
+			if err != nil {
+				o = string(tmp[:])
+			}
+			s.Timeout = &o
+
+		case "track_scores":
+			var tmp any
+			dec.Decode(&tmp)
+			switch v := tmp.(type) {
+			case string:
+				value, err := strconv.ParseBool(v)
+				if err != nil {
+					return fmt.Errorf("%s | %w", "TrackScores", err)
+				}
+				s.TrackScores = &value
+			case bool:
+				s.TrackScores = &v
+			}
+
+		case "track_total_hits":
+			if err := dec.Decode(&s.TrackTotalHits); err != nil {
+				return fmt.Errorf("%s | %w", "TrackTotalHits", err)
+			}
+
+		case "version":
+			var tmp any
+			dec.Decode(&tmp)
+			switch v := tmp.(type) {
+			case string:
+				value, err := strconv.ParseBool(v)
+				if err != nil {
+					return fmt.Errorf("%s | %w", "Version", err)
+				}
+				s.Version = &value
+			case bool:
+				s.Version = &v
+			}
+
+		}
+	}
+	return nil
 }

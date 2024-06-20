@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,23 +24,16 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
-	"strconv"
 
 	"github.com/elastic/elasticsearch-serverless-go/typedapi/types/enums/indexprivilege"
 )
 
 // IndicesPrivileges type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/security/_types/Privileges.ts#L82-L105
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/security/_types/Privileges.ts#L200-L224
 type IndicesPrivileges struct {
-	// AllowRestrictedIndices Set to `true` if using wildcard or regular expressions for patterns that
-	// cover restricted indices. Implicitly, restricted indices have limited
-	// privileges that can cause pattern tests to fail. If restricted indices are
-	// explicitly included in the `names` list, Elasticsearch checks privileges
-	// against these indices regardless of the value set for
-	// `allow_restricted_indices`.
-	AllowRestrictedIndices *bool `json:"allow_restricted_indices,omitempty"`
 	// FieldSecurity The document fields that the owners of the role have read access to.
 	FieldSecurity *FieldSecurity `json:"field_security,omitempty"`
 	// Names A list of indices (or index name patterns) to which the permissions in this
@@ -70,23 +63,9 @@ func (s *IndicesPrivileges) UnmarshalJSON(data []byte) error {
 
 		switch t {
 
-		case "allow_restricted_indices":
-			var tmp interface{}
-			dec.Decode(&tmp)
-			switch v := tmp.(type) {
-			case string:
-				value, err := strconv.ParseBool(v)
-				if err != nil {
-					return err
-				}
-				s.AllowRestrictedIndices = &value
-			case bool:
-				s.AllowRestrictedIndices = &v
-			}
-
 		case "field_security":
 			if err := dec.Decode(&s.FieldSecurity); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "FieldSecurity", err)
 			}
 
 		case "names":
@@ -95,24 +74,24 @@ func (s *IndicesPrivileges) UnmarshalJSON(data []byte) error {
 			if !bytes.HasPrefix(rawMsg, []byte("[")) {
 				o := new(string)
 				if err := json.NewDecoder(bytes.NewReader(rawMsg)).Decode(&o); err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Names", err)
 				}
 
 				s.Names = append(s.Names, *o)
 			} else {
 				if err := json.NewDecoder(bytes.NewReader(rawMsg)).Decode(&s.Names); err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Names", err)
 				}
 			}
 
 		case "privileges":
 			if err := dec.Decode(&s.Privileges); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Privileges", err)
 			}
 
 		case "query":
 			if err := dec.Decode(&s.Query); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Query", err)
 			}
 
 		}

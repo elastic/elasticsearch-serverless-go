@@ -16,21 +16,19 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 // Package indexprivilege
 package indexprivilege
 
 import "strings"
 
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/security/_types/Privileges.ts#L166-L187
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/security/_types/Privileges.ts#L285-L327
 type IndexPrivilege struct {
 	Name string
 }
 
 var (
-	None = IndexPrivilege{"none"}
-
 	All = IndexPrivilege{"all"}
 
 	Autoconfigure = IndexPrivilege{"auto_configure"}
@@ -51,17 +49,13 @@ var (
 
 	Manage = IndexPrivilege{"manage"}
 
-	Managefollowindex = IndexPrivilege{"manage_follow_index"}
-
-	Manageilm = IndexPrivilege{"manage_ilm"}
-
-	Manageleaderindex = IndexPrivilege{"manage_leader_index"}
+	Managedatastreamlifecycle = IndexPrivilege{"manage_data_stream_lifecycle"}
 
 	Monitor = IndexPrivilege{"monitor"}
 
-	Read = IndexPrivilege{"read"}
+	None = IndexPrivilege{"none"}
 
-	Readcrosscluster = IndexPrivilege{"read_cross_cluster"}
+	Read = IndexPrivilege{"read"}
 
 	Viewindexmetadata = IndexPrivilege{"view_index_metadata"}
 
@@ -75,8 +69,6 @@ func (i IndexPrivilege) MarshalText() (text []byte, err error) {
 func (i *IndexPrivilege) UnmarshalText(text []byte) error {
 	switch strings.ReplaceAll(strings.ToLower(string(text)), "\"", "") {
 
-	case "none":
-		*i = None
 	case "all":
 		*i = All
 	case "auto_configure":
@@ -97,18 +89,14 @@ func (i *IndexPrivilege) UnmarshalText(text []byte) error {
 		*i = Maintenance
 	case "manage":
 		*i = Manage
-	case "manage_follow_index":
-		*i = Managefollowindex
-	case "manage_ilm":
-		*i = Manageilm
-	case "manage_leader_index":
-		*i = Manageleaderindex
+	case "manage_data_stream_lifecycle":
+		*i = Managedatastreamlifecycle
 	case "monitor":
 		*i = Monitor
+	case "none":
+		*i = None
 	case "read":
 		*i = Read
-	case "read_cross_cluster":
-		*i = Readcrosscluster
 	case "view_index_metadata":
 		*i = Viewindexmetadata
 	case "write":

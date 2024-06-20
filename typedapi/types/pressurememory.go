@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // PressureMemory type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/nodes/_types/Stats.ts#L144-L199
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/nodes/_types/Stats.ts#L144-L199
 type PressureMemory struct {
 	// All Memory consumed by indexing requests in the coordinating, primary, or replica
 	// stage.
@@ -84,17 +85,17 @@ func (s *PressureMemory) UnmarshalJSON(data []byte) error {
 
 		case "all":
 			if err := dec.Decode(&s.All); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "All", err)
 			}
 
 		case "all_in_bytes":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "AllInBytes", err)
 				}
 				s.AllInBytes = &value
 			case float64:
@@ -104,17 +105,17 @@ func (s *PressureMemory) UnmarshalJSON(data []byte) error {
 
 		case "combined_coordinating_and_primary":
 			if err := dec.Decode(&s.CombinedCoordinatingAndPrimary); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "CombinedCoordinatingAndPrimary", err)
 			}
 
 		case "combined_coordinating_and_primary_in_bytes":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "CombinedCoordinatingAndPrimaryInBytes", err)
 				}
 				s.CombinedCoordinatingAndPrimaryInBytes = &value
 			case float64:
@@ -124,17 +125,17 @@ func (s *PressureMemory) UnmarshalJSON(data []byte) error {
 
 		case "coordinating":
 			if err := dec.Decode(&s.Coordinating); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Coordinating", err)
 			}
 
 		case "coordinating_in_bytes":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "CoordinatingInBytes", err)
 				}
 				s.CoordinatingInBytes = &value
 			case float64:
@@ -143,13 +144,13 @@ func (s *PressureMemory) UnmarshalJSON(data []byte) error {
 			}
 
 		case "coordinating_rejections":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "CoordinatingRejections", err)
 				}
 				s.CoordinatingRejections = &value
 			case float64:
@@ -159,17 +160,17 @@ func (s *PressureMemory) UnmarshalJSON(data []byte) error {
 
 		case "primary":
 			if err := dec.Decode(&s.Primary); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Primary", err)
 			}
 
 		case "primary_in_bytes":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "PrimaryInBytes", err)
 				}
 				s.PrimaryInBytes = &value
 			case float64:
@@ -178,13 +179,13 @@ func (s *PressureMemory) UnmarshalJSON(data []byte) error {
 			}
 
 		case "primary_rejections":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "PrimaryRejections", err)
 				}
 				s.PrimaryRejections = &value
 			case float64:
@@ -194,17 +195,17 @@ func (s *PressureMemory) UnmarshalJSON(data []byte) error {
 
 		case "replica":
 			if err := dec.Decode(&s.Replica); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Replica", err)
 			}
 
 		case "replica_in_bytes":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "ReplicaInBytes", err)
 				}
 				s.ReplicaInBytes = &value
 			case float64:
@@ -213,13 +214,13 @@ func (s *PressureMemory) UnmarshalJSON(data []byte) error {
 			}
 
 		case "replica_rejections":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "ReplicaRejections", err)
 				}
 				s.ReplicaRejections = &value
 			case float64:

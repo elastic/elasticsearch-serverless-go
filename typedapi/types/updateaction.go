@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // UpdateAction type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_global/bulk/types.ts#L169-L205
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_global/bulk/types.ts#L169-L205
 type UpdateAction struct {
 	// DetectNoop Set to false to disable setting 'result' in the response
 	// to 'noop' if no change to the document occurred.
@@ -69,13 +70,13 @@ func (s *UpdateAction) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "detect_noop":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "DetectNoop", err)
 				}
 				s.DetectNoop = &value
 			case bool:
@@ -84,17 +85,17 @@ func (s *UpdateAction) UnmarshalJSON(data []byte) error {
 
 		case "doc":
 			if err := dec.Decode(&s.Doc); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Doc", err)
 			}
 
 		case "doc_as_upsert":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "DocAsUpsert", err)
 				}
 				s.DocAsUpsert = &value
 			case bool:
@@ -102,18 +103,49 @@ func (s *UpdateAction) UnmarshalJSON(data []byte) error {
 			}
 
 		case "script":
-			if err := dec.Decode(&s.Script); err != nil {
-				return err
+			message := json.RawMessage{}
+			if err := dec.Decode(&message); err != nil {
+				return fmt.Errorf("%s | %w", "Script", err)
+			}
+			keyDec := json.NewDecoder(bytes.NewReader(message))
+			for {
+				t, err := keyDec.Token()
+				if err != nil {
+					if errors.Is(err, io.EOF) {
+						break
+					}
+					return fmt.Errorf("%s | %w", "Script", err)
+				}
+
+				switch t {
+
+				case "lang", "options", "source":
+					o := NewInlineScript()
+					localDec := json.NewDecoder(bytes.NewReader(message))
+					if err := localDec.Decode(&o); err != nil {
+						return fmt.Errorf("%s | %w", "Script", err)
+					}
+					s.Script = o
+
+				case "id":
+					o := NewStoredScriptId()
+					localDec := json.NewDecoder(bytes.NewReader(message))
+					if err := localDec.Decode(&o); err != nil {
+						return fmt.Errorf("%s | %w", "Script", err)
+					}
+					s.Script = o
+
+				}
 			}
 
 		case "scripted_upsert":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "ScriptedUpsert", err)
 				}
 				s.ScriptedUpsert = &value
 			case bool:
@@ -122,12 +154,12 @@ func (s *UpdateAction) UnmarshalJSON(data []byte) error {
 
 		case "_source":
 			if err := dec.Decode(&s.Source_); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Source_", err)
 			}
 
 		case "upsert":
 			if err := dec.Decode(&s.Upsert); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Upsert", err)
 			}
 
 		}

@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // CoordinatorStats type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/enrich/stats/types.ts#L29-L35
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/enrich/stats/types.ts#L29-L35
 type CoordinatorStats struct {
 	ExecutedSearchesTotal int64  `json:"executed_searches_total"`
 	NodeId                string `json:"node_id"`
@@ -55,13 +56,13 @@ func (s *CoordinatorStats) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "executed_searches_total":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "ExecutedSearchesTotal", err)
 				}
 				s.ExecutedSearchesTotal = value
 			case float64:
@@ -71,18 +72,18 @@ func (s *CoordinatorStats) UnmarshalJSON(data []byte) error {
 
 		case "node_id":
 			if err := dec.Decode(&s.NodeId); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "NodeId", err)
 			}
 
 		case "queue_size":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "QueueSize", err)
 				}
 				s.QueueSize = value
 			case float64:
@@ -92,13 +93,13 @@ func (s *CoordinatorStats) UnmarshalJSON(data []byte) error {
 
 		case "remote_requests_current":
 
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.Atoi(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "RemoteRequestsCurrent", err)
 				}
 				s.RemoteRequestsCurrent = value
 			case float64:
@@ -107,13 +108,13 @@ func (s *CoordinatorStats) UnmarshalJSON(data []byte) error {
 			}
 
 		case "remote_requests_total":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "RemoteRequestsTotal", err)
 				}
 				s.RemoteRequestsTotal = value
 			case float64:

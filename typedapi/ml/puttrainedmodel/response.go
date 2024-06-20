@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package puttrainedmodel
 
@@ -27,8 +27,7 @@ import (
 
 // Response holds the response body struct for the package puttrainedmodel
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/ml/put_trained_model/MlPutTrainedModelResponse.ts#L22-L24
-
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/ml/put_trained_model/MlPutTrainedModelResponse.ts#L22-L24
 type Response struct {
 	CompressedDefinition *string `json:"compressed_definition,omitempty"`
 	// CreateTime The time when the trained model was created.
@@ -62,7 +61,8 @@ type Response struct {
 	ModelId        string         `json:"model_id"`
 	ModelSizeBytes types.ByteSize `json:"model_size_bytes,omitempty"`
 	// ModelType The model type
-	ModelType *trainedmodeltype.TrainedModelType `json:"model_type,omitempty"`
+	ModelType     *trainedmodeltype.TrainedModelType `json:"model_type,omitempty"`
+	PrefixStrings *types.TrainedModelPrefixStrings   `json:"prefix_strings,omitempty"`
 	// Tags A comma delimited string of tags. A trained model can have many tags, or
 	// none.
 	Tags []string `json:"tags"`

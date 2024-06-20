@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package typedapi
 
@@ -86,6 +86,7 @@ import (
 	eql_get "github.com/elastic/elasticsearch-serverless-go/typedapi/eql/get"
 	eql_get_status "github.com/elastic/elasticsearch-serverless-go/typedapi/eql/getstatus"
 	eql_search "github.com/elastic/elasticsearch-serverless-go/typedapi/eql/search"
+	esql_query "github.com/elastic/elasticsearch-serverless-go/typedapi/esql/query"
 	graph_explore "github.com/elastic/elasticsearch-serverless-go/typedapi/graph/explore"
 	indices_add_block "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/addblock"
 	indices_analyze "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/analyze"
@@ -123,6 +124,10 @@ import (
 	indices_simulate_template "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/simulatetemplate"
 	indices_update_aliases "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/updatealiases"
 	indices_validate_query "github.com/elastic/elasticsearch-serverless-go/typedapi/indices/validatequery"
+	inference_delete "github.com/elastic/elasticsearch-serverless-go/typedapi/inference/delete"
+	inference_get "github.com/elastic/elasticsearch-serverless-go/typedapi/inference/get"
+	inference_inference "github.com/elastic/elasticsearch-serverless-go/typedapi/inference/inference"
+	inference_put "github.com/elastic/elasticsearch-serverless-go/typedapi/inference/put"
 	ingest_delete_pipeline "github.com/elastic/elasticsearch-serverless-go/typedapi/ingest/deletepipeline"
 	ingest_get_pipeline "github.com/elastic/elasticsearch-serverless-go/typedapi/ingest/getpipeline"
 	ingest_processor_grok "github.com/elastic/elasticsearch-serverless-go/typedapi/ingest/processorgrok"
@@ -183,6 +188,7 @@ import (
 	ml_update_data_frame_analytics "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/updatedataframeanalytics"
 	ml_update_filter "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/updatefilter"
 	ml_update_job "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/updatejob"
+	ml_update_trained_model_deployment "github.com/elastic/elasticsearch-serverless-go/typedapi/ml/updatetrainedmodeldeployment"
 	query_ruleset_delete "github.com/elastic/elasticsearch-serverless-go/typedapi/queryruleset/delete"
 	query_ruleset_get "github.com/elastic/elasticsearch-serverless-go/typedapi/queryruleset/get"
 	query_ruleset_list "github.com/elastic/elasticsearch-serverless-go/typedapi/queryruleset/list"
@@ -229,129 +235,239 @@ import (
 )
 
 type AsyncSearch struct {
-	// Deletes an async search by ID. If the search is still running, the search
-	// request will be cancelled. Otherwise, the saved search results are deleted.
+	// Deletes an async search by identifier.
+	// If the search is still running, the search request will be cancelled.
+	// Otherwise, the saved search results are deleted.
+	// If the Elasticsearch security features are enabled, the deletion of a
+	// specific async search is restricted to: the authenticated user that submitted
+	// the original search request; users that have the `cancel_task` cluster
+	// privilege.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/async-search.html
 	Delete async_search_delete.NewDelete
 	// Retrieves the results of a previously submitted async search request given
-	// its ID.
+	// its identifier.
+	// If the Elasticsearch security features are enabled, access to the results of
+	// a specific async search is restricted to the user or API key that submitted
+	// it.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/async-search.html
 	Get async_search_get.NewGet
+	// Get async search status
 	// Retrieves the status of a previously submitted async search request given its
-	// ID.
+	// identifier, without retrieving search results.
+	// If the Elasticsearch security features are enabled, use of this API is
+	// restricted to the `monitoring_user` role.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/async-search.html
 	Status async_search_status.NewStatus
-	// Executes a search request asynchronously.
+	// Runs a search request asynchronously.
+	// When the primary sort of the results is an indexed field, shards get sorted
+	// based on minimum and maximum value that they hold for that field, hence
+	// partial results become available following the sort criteria that was
+	// requested.
+	// Warning: Async search does not support scroll nor search requests that only
+	// include the suggest section.
+	// By default, Elasticsearch doesn’t allow you to store an async search response
+	// larger than 10Mb and an attempt to do this results in an error.
+	// The maximum allowed size for a stored async search response can be set by
+	// changing the `search.max_async_search_response_size` cluster level setting.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/async-search.html
 	Submit async_search_submit.NewSubmit
 }
 
 type Cat struct {
-	// Shows information about currently configured aliases to indices including
-	// filter and routing infos.
+	// Retrieves the cluster’s index aliases, including filter and routing
+	// information.
+	// The API does not return data stream aliases.
+	// IMPORTANT: cat APIs are only intended for human consumption using the command
+	// line or the Kibana console. They are not intended for use by applications.
+	// For application consumption, use the aliases API.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/cat-alias.html
 	Aliases cat_aliases.NewAliases
-	// Returns information about existing component_templates templates.
+	// Returns information about component templates in a cluster.
+	// Component templates are building blocks for constructing index templates that
+	// specify index mappings, settings, and aliases.
+	// IMPORTANT: cat APIs are only intended for human consumption using the command
+	// line or Kibana console.
+	// They are not intended for use by applications. For application consumption,
+	// use the get component template API.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/cat-component-templates.html
 	ComponentTemplates cat_component_templates.NewComponentTemplates
-	// Provides quick access to the document count of the entire cluster, or
-	// individual indices.
+	// Provides quick access to a document count for a data stream, an index, or an
+	// entire cluster.
+	// NOTE: The document count only includes live documents, not deleted documents
+	// which have not yet been removed by the merge process.
+	// IMPORTANT: cat APIs are only intended for human consumption using the command
+	// line or Kibana console.
+	// They are not intended for use by applications. For application consumption,
+	// use the count API.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/cat-count.html
 	Count cat_count.NewCount
 	// Returns help for the Cat APIs.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/cat.html
 	Help cat_help.NewHelp
-	// Returns information about indices: number of primaries and replicas, document
-	// counts, disk size, ...
+	// Returns high-level information about indices in a cluster, including backing
+	// indices for data streams.
+	// IMPORTANT: cat APIs are only intended for human consumption using the command
+	// line or Kibana console.
+	// They are not intended for use by applications. For application consumption,
+	// use the get index API.
+	// Use the cat indices API to get the following information for each index in a
+	// cluster: shard count; document count; deleted document count; primary store
+	// size; total store size of all shards, including shard replicas.
+	// These metrics are retrieved directly from Lucene, which Elasticsearch uses
+	// internally to power indexing and search. As a result, all document counts
+	// include hidden nested documents.
+	// To get an accurate count of Elasticsearch documents, use the cat count or
+	// count APIs.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/cat-indices.html
 	Indices cat_indices.NewIndices
-	// Gets configuration and usage information about data frame analytics jobs.
+	// Returns configuration and usage information about data frame analytics jobs.
+	//
+	// IMPORTANT: cat APIs are only intended for human consumption using the Kibana
+	// console or command line. They are not intended for use by applications. For
+	// application consumption, use the get data frame analytics jobs statistics
+	// API.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/cat-dfanalytics.html
 	MlDataFrameAnalytics cat_ml_data_frame_analytics.NewMlDataFrameAnalytics
-	// Gets configuration and usage information about datafeeds.
+	// Returns configuration and usage information about datafeeds.
+	// This API returns a maximum of 10,000 datafeeds.
+	// If the Elasticsearch security features are enabled, you must have
+	// `monitor_ml`, `monitor`, `manage_ml`, or `manage`
+	// cluster privileges to use this API.
+	//
+	// IMPORTANT: cat APIs are only intended for human consumption using the Kibana
+	// console or command line. They are not intended for use by applications. For
+	// application consumption, use the get datafeed statistics API.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/cat-datafeeds.html
 	MlDatafeeds cat_ml_datafeeds.NewMlDatafeeds
-	// Gets configuration and usage information about anomaly detection jobs.
+	// Returns configuration and usage information for anomaly detection jobs.
+	// This API returns a maximum of 10,000 jobs.
+	// If the Elasticsearch security features are enabled, you must have
+	// `monitor_ml`,
+	// `monitor`, `manage_ml`, or `manage` cluster privileges to use this API.
+	//
+	// IMPORTANT: cat APIs are only intended for human consumption using the Kibana
+	// console or command line. They are not intended for use by applications. For
+	// application consumption, use the get anomaly detection job statistics API.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/cat-anomaly-detectors.html
 	MlJobs cat_ml_jobs.NewMlJobs
-	// Gets configuration and usage information about inference trained models.
+	// Returns configuration and usage information about inference trained models.
+	//
+	// IMPORTANT: cat APIs are only intended for human consumption using the Kibana
+	// console or command line. They are not intended for use by applications. For
+	// application consumption, use the get trained models statistics API.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/cat-trained-model.html
 	MlTrainedModels cat_ml_trained_models.NewMlTrainedModels
-	// Gets configuration and usage information about transforms.
+	// Returns configuration and usage information about transforms.
+	//
+	// IMPORTANT: cat APIs are only intended for human consumption using the Kibana
+	// console or command line. They are not intended for use by applications. For
+	// application consumption, use the get transform statistics API.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/cat-transforms.html
 	Transforms cat_transforms.NewTransforms
 }
 
 type Cluster struct {
-	// Deletes a component template
+	// Deletes component templates.
+	// Component templates are building blocks for constructing index templates that
+	// specify index mappings, settings, and aliases.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-component-template.html
 	DeleteComponentTemplate cluster_delete_component_template.NewDeleteComponentTemplate
 	// Returns information about whether a particular component template exist
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-component-template.html
 	ExistsComponentTemplate cluster_exists_component_template.NewExistsComponentTemplate
-	// Returns one or more component templates
+	// Retrieves information about component templates.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-component-template.html
 	GetComponentTemplate cluster_get_component_template.NewGetComponentTemplate
 	// Returns different information about the cluster.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/cluster-info.html
 	Info cluster_info.NewInfo
-	// Creates or updates a component template
+	// Creates or updates a component template.
+	// Component templates are building blocks for constructing index templates that
+	// specify index mappings, settings, and aliases.
+	//
+	// An index template can be composed of multiple component templates.
+	// To use a component template, specify it in an index template’s `composed_of`
+	// list.
+	// Component templates are only applied to new data streams and indices as part
+	// of a matching index template.
+	//
+	// Settings and mappings specified directly in the index template or the create
+	// index request override any settings or mappings specified in a component
+	// template.
+	//
+	// Component templates are only used during index creation.
+	// For data streams, this includes data stream creation and the creation of a
+	// stream’s backing indices.
+	// Changes to component templates do not affect existing indices, including a
+	// stream’s backing indices.
+	//
+	// You can use C-style `/* *\/` block comments in component templates.
+	// You can include comments anywhere in the request body except before the
+	// opening curly bracket.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-component-template.html
 	PutComponentTemplate cluster_put_component_template.NewPutComponentTemplate
 }
 
 type Core struct {
-	// Allows to perform multiple index/update/delete operations in a single
-	// request.
+	// Performs multiple indexing or delete operations in a single API call.
+	// This reduces overhead and can greatly increase indexing speed.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html
 	Bulk core_bulk.NewBulk
-	// Explicitly clears the search context for a scroll.
+	// Clears the search context and results for a scrolling search.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/clear-scroll-api.html
 	ClearScroll core_clear_scroll.NewClearScroll
-	// Close a point in time
+	// Closes a point-in-time.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/point-in-time-api.html
 	ClosePointInTime core_close_point_in_time.NewClosePointInTime
 	// Returns number of documents matching a query.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/search-count.html
 	Count core_count.NewCount
-	// Creates a new document in the index.
-	//
-	// Returns a 409 response when a document with a same ID already exists in the
-	// index.
+	// Adds a JSON document to the specified data stream or index and makes it
+	// searchable.
+	// If the target is an index and the document already exists, the request
+	// updates the document and increments its version.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-index_.html
 	Create core_create.NewCreate
-	// Removes a document from the index.
+	// Removes a JSON document from the specified index.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-delete.html
 	Delete core_delete.NewDelete
-	// Deletes documents matching the provided query.
+	// Deletes documents that match the specified query.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-delete-by-query.html
 	DeleteByQuery core_delete_by_query.NewDeleteByQuery
-	// Deletes a script.
+	// Deletes a stored script or search template.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-scripting.html
 	DeleteScript core_delete_script.NewDeleteScript
-	// Returns information about whether a document exists in an index.
+	// Checks if a document in an index exists.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-get.html
 	Exists core_exists.NewExists
-	// Returns information about whether a document source exists in an index.
+	// Checks if a document's `_source` is stored.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-get.html
 	ExistsSource core_exists_source.NewExistsSource
-	// Returns information about why a specific matches (or doesn't match) a query.
+	// Returns information about why a specific document matches (or doesn’t match)
+	// a query.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/search-explain.html
 	Explain core_explain.NewExplain
-	// Returns the information about the capabilities of fields among multiple
-	// indices.
+	// The field capabilities API returns the information about the capabilities of
+	// fields among multiple indices.
+	// The field capabilities API returns runtime fields like any other field. For
+	// example, a runtime field with a type
+	// of keyword is returned as any other field that belongs to the `keyword`
+	// family.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/search-field-caps.html
 	FieldCaps core_field_caps.NewFieldCaps
 	// Returns a document.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-get.html
 	Get core_get.NewGet
-	// Returns a script.
+	// Retrieves a stored script or search template.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-scripting.html
 	GetScript core_get_script.NewGetScript
 	// Returns the source of a document.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-get.html
 	GetSource core_get_source.NewGetSource
-	// Creates or updates a document in an index.
+	// Adds a JSON document to the specified data stream or index and makes it
+	// searchable.
+	// If the target is an index and the document already exists, the request
+	// updates the document and increments its version.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-index_.html
 	Index core_index.NewIndex
 	// Returns basic information about the cluster.
@@ -363,23 +479,33 @@ type Core struct {
 	// Allows to execute several search operations in one request.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/search-multi-search.html
 	Msearch core_msearch.NewMsearch
-	// Allows to execute several search template operations in one request.
+	// Runs multiple templated searches with a single request.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/search-multi-search.html
 	MsearchTemplate core_msearch_template.NewMsearchTemplate
 	// Returns multiple termvectors in one request.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-multi-termvectors.html
 	Mtermvectors core_mtermvectors.NewMtermvectors
-	// Open a point in time that can be used in subsequent searches
+	// A search request by default executes against the most recent visible data of
+	// the target indices,
+	// which is called point in time. Elasticsearch pit (point in time) is a
+	// lightweight view into the
+	// state of the data as it existed when initiated. In some cases, it’s preferred
+	// to perform multiple
+	// search requests using the same point in time. For example, if refreshes
+	// happen between
+	// `search_after` requests, then the results of those requests might not be
+	// consistent as changes happening
+	// between searches are only visible to the more recent point in time.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/point-in-time-api.html
 	OpenPointInTime core_open_point_in_time.NewOpenPointInTime
 	// Returns whether the cluster is running.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html
 	Ping core_ping.NewPing
-	// Creates or updates a script.
+	// Creates or updates a stored script or search template.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-scripting.html
 	PutScript core_put_script.NewPutScript
-	// Allows to evaluate the quality of ranked search results over a set of typical
-	// search queries
+	// Enables you to evaluate the quality of ranked search results over a set of
+	// typical search queries.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/search-rank-eval.html
 	RankEval core_rank_eval.NewRankEval
 	// Allows to copy documents from one index to another, optionally filtering the
@@ -389,23 +515,26 @@ type Core struct {
 	// documents from a remote cluster.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-reindex.html
 	Reindex core_reindex.NewReindex
-	// Allows to use the Mustache language to pre-render a search definition.
+	// Renders a search template as a search request body.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/render-search-template-api.html
 	RenderSearchTemplate core_render_search_template.NewRenderSearchTemplate
-	// Allows an arbitrary script to be executed and a result to be returned
+	// Runs a script and returns a result.
 	// https://www.elastic.co/guide/en/elasticsearch/painless/current/painless-execute-api.html
 	ScriptsPainlessExecute core_scripts_painless_execute.NewScriptsPainlessExecute
 	// Allows to retrieve a large numbers of results from a single search request.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-body.html#request-body-search-scroll
 	Scroll core_scroll.NewScroll
-	// Returns results matching a query.
+	// Returns search hits that match the query defined in the request.
+	// You can provide search queries using the `q` query string parameter or the
+	// request body.
+	// If both are specified, only the query parameter is used.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/search-search.html
 	Search core_search.NewSearch
 	// Searches a vector tile for geospatial values. Returns results as a binary
 	// Mapbox vector tile.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/search-vector-tile-api.html
 	SearchMvt core_search_mvt.NewSearchMvt
-	// Allows to use the Mustache language to pre-render a search definition.
+	// Runs a search with a search template.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/search-template.html
 	SearchTemplate core_search_template.NewSearchTemplate
 	// The terms enum API  can be used to discover terms in the index that begin
@@ -420,9 +549,10 @@ type Core struct {
 	// Updates a document with a script or partial document.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.html
 	Update core_update.NewUpdate
-	// Performs an update on every document in the index without changing the
-	// source,
-	// for example to pick up a mapping change.
+	// Updates documents that match the specified query.
+	// If no query is specified, performs an update on every document in the data
+	// stream or index without modifying the source, which is useful for picking up
+	// mapping changes.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update-by-query.html
 	UpdateByQuery core_update_by_query.NewUpdateByQuery
 }
@@ -434,39 +564,45 @@ type Enrich struct {
 	// Creates the enrich index for an existing enrich policy.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/execute-enrich-policy-api.html
 	ExecutePolicy enrich_execute_policy.NewExecutePolicy
-	// Gets information about an enrich policy.
+	// Returns information about an enrich policy.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/get-enrich-policy-api.html
 	GetPolicy enrich_get_policy.NewGetPolicy
-	// Creates a new enrich policy.
+	// Creates an enrich policy.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/put-enrich-policy-api.html
 	PutPolicy enrich_put_policy.NewPutPolicy
-	// Gets enrich coordinator statistics and information about enrich policies that
-	// are currently executing.
+	// Returns enrich coordinator statistics and information about enrich policies
+	// that are currently executing.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/enrich-stats-api.html
 	Stats enrich_stats.NewStats
 }
 
 type Eql struct {
-	// Deletes an async EQL search by ID. If the search is still running, the search
-	// request will be cancelled. Otherwise, the saved search results are deleted.
+	// Deletes an async EQL search or a stored synchronous EQL search.
+	// The API also deletes results for the search.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/eql-search-api.html
 	Delete eql_delete.NewDelete
-	// Returns async results from previously executed Event Query Language (EQL)
-	// search
-	//  https://www.elastic.co/guide/en/elasticsearch/reference/current/get-async-eql-search-api.html
+	// Returns the current status and available results for an async EQL search or a
+	// stored synchronous EQL search.
+	// https://www.elastic.co/guide/en/elasticsearch/reference/current/get-async-eql-search-api.html
 	Get eql_get.NewGet
-	// Returns the status of a previously submitted async or stored Event Query
-	// Language (EQL) search
-	//  https://www.elastic.co/guide/en/elasticsearch/reference/current/get-async-eql-status-api.html
+	// Returns the current status for an async EQL search or a stored synchronous
+	// EQL search without returning results.
+	// https://www.elastic.co/guide/en/elasticsearch/reference/current/get-async-eql-status-api.html
 	GetStatus eql_get_status.NewGetStatus
 	// Returns results matching a query expressed in Event Query Language (EQL)
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/eql-search-api.html
 	Search eql_search.NewSearch
 }
 
+type Esql struct {
+	// Executes an ES|QL request
+	// https://www.elastic.co/guide/en/elasticsearch/reference/current/esql-rest.html
+	Query esql_query.NewQuery
+}
+
 type Graph struct {
-	// Explore extracted and summarized information about the documents and terms in
-	// an index.
+	// Extracts and summarizes information about the documents and terms in an
+	// Elasticsearch data stream or index.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/graph-explore-api.html
 	Explore graph_explore.NewExplore
 }
@@ -475,159 +611,233 @@ type Indices struct {
 	// Adds a block to an index.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/index-modules-blocks.html
 	AddBlock indices_add_block.NewAddBlock
-	// Performs the analysis process on a text and return the tokens breakdown of
-	// the text.
+	// Performs analysis on a text string and returns the resulting tokens.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-analyze.html
 	Analyze indices_analyze.NewAnalyze
-	// Creates an index with optional settings and mappings.
+	// Creates a new index.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-create-index.html
 	Create indices_create.NewCreate
-	// Creates a data stream
+	// Creates a data stream.
+	// You must have a matching index template with data stream enabled.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/data-streams.html
 	CreateDataStream indices_create_data_stream.NewCreateDataStream
-	// Provides statistics on operations happening in a data stream.
+	// Retrieves statistics for one or more data streams.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/data-streams.html
 	DataStreamsStats indices_data_streams_stats.NewDataStreamsStats
-	// Deletes an index.
+	// Deletes one or more indices.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-delete-index.html
 	Delete indices_delete.NewDelete
-	// Deletes an alias.
+	// Removes a data stream or index from an alias.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-aliases.html
 	DeleteAlias indices_delete_alias.NewDeleteAlias
-	// Deletes the data stream lifecycle of the selected data streams.
+	// Removes the data lifecycle from a data stream rendering it not managed by the
+	// data stream lifecycle
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/data-streams-delete-lifecycle.html
 	DeleteDataLifecycle indices_delete_data_lifecycle.NewDeleteDataLifecycle
-	// Deletes a data stream.
+	// Deletes one or more data streams and their backing indices.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/data-streams.html
 	DeleteDataStream indices_delete_data_stream.NewDeleteDataStream
-	// Deletes an index template.
-	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-templates.html
+	// The provided <index-template> may contain multiple template names separated
+	// by a comma. If multiple template
+	// names are specified then there is no wildcard support and the provided names
+	// should match completely with
+	// existing templates.
+	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-delete-template.html
 	DeleteIndexTemplate indices_delete_index_template.NewDeleteIndexTemplate
-	// Returns information about whether a particular index exists.
+	// Checks if a data stream, index, or alias exists.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-exists.html
 	Exists indices_exists.NewExists
-	// Returns information about whether a particular alias exists.
+	// Checks if an alias exists.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-aliases.html
 	ExistsAlias indices_exists_alias.NewExistsAlias
 	// Returns information about whether a particular index template exists.
-	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-templates.html
+	// https://www.elastic.co/guide/en/elasticsearch/reference/current/index-templates.html
 	ExistsIndexTemplate indices_exists_index_template.NewExistsIndexTemplate
 	// Retrieves information about the index's current data stream lifecycle, such
 	// as any potential encountered error, time since creation etc.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/data-streams-explain-lifecycle.html
 	ExplainDataLifecycle indices_explain_data_lifecycle.NewExplainDataLifecycle
-	// Returns information about one or more indices.
+	// Returns information about one or more indices. For data streams, the API
+	// returns information about the
+	// stream’s backing indices.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-get-index.html
 	Get indices_get.NewGet
-	// Returns an alias.
+	// Retrieves information for one or more aliases.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-aliases.html
 	GetAlias indices_get_alias.NewGetAlias
-	// Returns the data stream lifecycle of the selected data streams.
+	// Retrieves the data stream lifecycle configuration of one or more data
+	// streams.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/data-streams-get-lifecycle.html
 	GetDataLifecycle indices_get_data_lifecycle.NewGetDataLifecycle
-	// Returns data streams.
+	// Retrieves information about one or more data streams.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/data-streams.html
 	GetDataStream indices_get_data_stream.NewGetDataStream
-	// Returns an index template.
-	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-templates.html
+	// Returns information about one or more index templates.
+	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-get-template.html
 	GetIndexTemplate indices_get_index_template.NewGetIndexTemplate
-	// Returns mappings for one or more indices.
+	// Retrieves mapping definitions for one or more indices.
+	// For data streams, the API retrieves mappings for the stream’s backing
+	// indices.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-get-mapping.html
 	GetMapping indices_get_mapping.NewGetMapping
-	// Returns settings for one or more indices.
+	// Returns setting information for one or more indices. For data streams,
+	// returns setting information for the stream’s backing indices.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-get-settings.html
 	GetSettings indices_get_settings.NewGetSettings
-	// Migrates an alias to a data stream
+	// Converts an index alias to a data stream.
+	// You must have a matching index template that is data stream enabled.
+	// The alias must meet the following criteria:
+	// The alias must have a write index;
+	// All indices for the alias must have a `@timestamp` field mapping of a `date`
+	// or `date_nanos` field type;
+	// The alias must not have any filters;
+	// The alias must not use custom routing.
+	// If successful, the request removes the alias and creates a data stream with
+	// the same name.
+	// The indices for the alias become hidden backing indices for the stream.
+	// The write index for the alias becomes the write index for the stream.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/data-streams.html
 	MigrateToDataStream indices_migrate_to_data_stream.NewMigrateToDataStream
-	// Modifies a data stream
+	// Performs one or more data stream modification actions in a single atomic
+	// operation.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/data-streams.html
 	ModifyDataStream indices_modify_data_stream.NewModifyDataStream
-	// Creates or updates an alias.
+	// Adds a data stream or index to an alias.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-aliases.html
 	PutAlias indices_put_alias.NewPutAlias
-	// Updates the data stream lifecycle of the selected data streams.
+	// Update the data lifecycle of the specified data streams.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/data-streams-put-lifecycle.html
 	PutDataLifecycle indices_put_data_lifecycle.NewPutDataLifecycle
 	// Creates or updates an index template.
-	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-templates.html
+	// Index templates define settings, mappings, and aliases that can be applied
+	// automatically to new indices.
+	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-put-template.html
 	PutIndexTemplate indices_put_index_template.NewPutIndexTemplate
-	// Updates the index mappings.
+	// Adds new fields to an existing data stream or index.
+	// You can also use this API to change the search settings of existing fields.
+	// For data streams, these changes are applied to all backing indices by
+	// default.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-put-mapping.html
 	PutMapping indices_put_mapping.NewPutMapping
-	// Updates the index settings.
+	// Changes a dynamic index setting in real time. For data streams, index setting
+	// changes are applied to all backing indices by default.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-update-settings.html
 	PutSettings indices_put_settings.NewPutSettings
 	// Creates or updates an index template.
-	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-templates.html
+	// Index templates define settings, mappings, and aliases that can be applied
+	// automatically to new indices.
+	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-templates-v1.html
 	PutTemplate indices_put_template.NewPutTemplate
-	// Performs the refresh operation in one or more indices.
+	// A refresh makes recent operations performed on one or more indices available
+	// for search.
+	// For data streams, the API runs the refresh operation on the stream’s backing
+	// indices.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-refresh.html
 	Refresh indices_refresh.NewRefresh
-	// Returns information about any matching indices, aliases, and data streams
+	// Resolves the specified name(s) and/or index patterns for indices, aliases,
+	// and data streams.
+	// Multiple patterns and remote clusters are supported.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-resolve-index-api.html
 	ResolveIndex indices_resolve_index.NewResolveIndex
-	// Updates an alias to point to a new index when the existing index
-	// is considered to be too large or too old.
+	// Creates a new index for a data stream or index alias.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-rollover-index.html
 	Rollover indices_rollover.NewRollover
-	// Simulate matching the given index name against the index templates in the
-	// system
-	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-templates.html
+	//
+	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-simulate-index.html
 	SimulateIndexTemplate indices_simulate_index_template.NewSimulateIndexTemplate
-	// Simulate resolving the given template name or body
-	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-templates.html
+	// Returns the index configuration that would be applied by a particular index
+	// template.
+	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-simulate-template.html
 	SimulateTemplate indices_simulate_template.NewSimulateTemplate
-	// Updates index aliases.
+	// Adds a data stream or index to an alias.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-aliases.html
 	UpdateAliases indices_update_aliases.NewUpdateAliases
-	// Allows a user to validate a potentially expensive query without executing it.
+	// Validates a potentially expensive query without executing it.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/search-validate.html
 	ValidateQuery indices_validate_query.NewValidateQuery
 }
 
+type Inference struct {
+	// Delete an inference endpoint
+	// https://www.elastic.co/guide/en/elasticsearch/reference/current/delete-inference-api.html
+	Delete inference_delete.NewDelete
+	// Get an inference endpoint
+	// https://www.elastic.co/guide/en/elasticsearch/reference/current/get-inference-api.html
+	Get inference_get.NewGet
+	// Perform inference on the service
+	// https://www.elastic.co/guide/en/elasticsearch/reference/current/post-inference-api.html
+	Inference inference_inference.NewInference
+	// Create an inference endpoint
+	// https://www.elastic.co/guide/en/elasticsearch/reference/current/put-inference-api.html
+	Put inference_put.NewPut
+}
+
 type Ingest struct {
-	// Deletes a pipeline.
+	// Deletes one or more existing ingest pipeline.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/delete-pipeline-api.html
 	DeletePipeline ingest_delete_pipeline.NewDeletePipeline
-	// Returns a pipeline.
+	// Returns information about one or more ingest pipelines.
+	// This API returns a local reference of the pipeline.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/get-pipeline-api.html
 	GetPipeline ingest_get_pipeline.NewGetPipeline
-	// Returns a list of the built-in patterns.
+	// Extracts structured fields out of a single text field within a document.
+	// You choose which field to extract matched fields from, as well as the grok
+	// pattern you expect will match.
+	// A grok pattern is like a regular expression that supports aliased expressions
+	// that can be reused.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/grok-processor.html
 	ProcessorGrok ingest_processor_grok.NewProcessorGrok
-	// Creates or updates a pipeline.
+	// Creates or updates an ingest pipeline.
+	// Changes made using this API take effect immediately.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/ingest.html
 	PutPipeline ingest_put_pipeline.NewPutPipeline
-	// Allows to simulate a pipeline with example documents.
+	// Executes an ingest pipeline against a set of provided documents.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/simulate-pipeline-api.html
 	Simulate ingest_simulate.NewSimulate
 }
 
 type License struct {
-	// Retrieves licensing information for the cluster
+	// This API returns information about the type of license, when it was issued,
+	// and when it expires, for example.
+	// For more information about the different types of licenses, see
+	// https://www.elastic.co/subscriptions.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/get-license.html
 	Get license_get.NewGet
 }
 
 type Logstash struct {
-	// Deletes Logstash Pipelines used by Central Management
+	// Deletes a pipeline used for Logstash Central Management.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/logstash-api-delete-pipeline.html
 	DeletePipeline logstash_delete_pipeline.NewDeletePipeline
-	// Retrieves Logstash Pipelines used by Central Management
+	// Retrieves pipelines used for Logstash Central Management.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/logstash-api-get-pipeline.html
 	GetPipeline logstash_get_pipeline.NewGetPipeline
-	// Adds and updates Logstash Pipelines used for Central Management
+	// Creates or updates a pipeline used for Logstash Central Management.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/logstash-api-put-pipeline.html
 	PutPipeline logstash_put_pipeline.NewPutPipeline
 }
 
 type Ml struct {
-	// Closes one or more anomaly detection jobs. A job can be opened and closed
-	// multiple times throughout its lifecycle.
+	// Close anomaly detection jobs
+	// A job can be opened and closed multiple times throughout its lifecycle. A
+	// closed job cannot receive data or perform analysis operations, but you can
+	// still explore and navigate results.
+	// When you close a job, it runs housekeeping tasks such as pruning the model
+	// history, flushing buffers, calculating final results and persisting the model
+	// snapshots. Depending upon the size of the job, it could take several minutes
+	// to close and the equivalent time to re-open. After it is closed, the job has
+	// a minimal overhead on the cluster except for maintaining its meta data.
+	// Therefore it is a best practice to close jobs that are no longer required to
+	// process data.
+	// If you close an anomaly detection job whose datafeed is running, the request
+	// first tries to stop the datafeed. This behavior is equivalent to calling stop
+	// datafeed API with the same timeout and force parameters as the close job
+	// request.
+	// When a datafeed that has a specified end date stops, it automatically closes
+	// its associated job.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-close-job.html
 	CloseJob ml_close_job.NewCloseJob
-	// Deletes a calendar.
+	// Removes all scheduled events from a calendar, then deletes it.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-delete-calendar.html
 	DeleteCalendar ml_delete_calendar.NewDeleteCalendar
 	// Deletes scheduled events from a calendar.
@@ -636,32 +846,58 @@ type Ml struct {
 	// Deletes anomaly detection jobs from a calendar.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-delete-calendar-job.html
 	DeleteCalendarJob ml_delete_calendar_job.NewDeleteCalendarJob
-	// Deletes an existing data frame analytics job.
+	// Deletes a data frame analytics job.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/delete-dfanalytics.html
 	DeleteDataFrameAnalytics ml_delete_data_frame_analytics.NewDeleteDataFrameAnalytics
 	// Deletes an existing datafeed.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-delete-datafeed.html
 	DeleteDatafeed ml_delete_datafeed.NewDeleteDatafeed
 	// Deletes a filter.
+	// If an anomaly detection job references the filter, you cannot delete the
+	// filter. You must update or delete the job before you can delete the filter.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-delete-filter.html
 	DeleteFilter ml_delete_filter.NewDeleteFilter
-	// Deletes an existing anomaly detection job.
+	// Deletes an anomaly detection job.
+	//
+	// All job configuration, model state and results are deleted.
+	// It is not currently possible to delete multiple jobs using wildcards or a
+	// comma separated list. If you delete a job that has a datafeed, the request
+	// first tries to delete the datafeed. This behavior is equivalent to calling
+	// the delete datafeed API with the same timeout and force parameters as the
+	// delete job request.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-delete-job.html
 	DeleteJob ml_delete_job.NewDeleteJob
 	// Deletes an existing trained inference model that is currently not referenced
 	// by an ingest pipeline.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/delete-trained-models.html
 	DeleteTrainedModel ml_delete_trained_model.NewDeleteTrainedModel
-	// Deletes a model alias that refers to the trained model
+	// Deletes a trained model alias.
+	// This API deletes an existing model alias that refers to a trained model. If
+	// the model alias is missing or refers to a model other than the one identified
+	// by the `model_id`, this API returns an error.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/delete-trained-models-aliases.html
 	DeleteTrainedModelAlias ml_delete_trained_model_alias.NewDeleteTrainedModelAlias
-	// Estimates the model memory
+	// Makes an estimation of the memory usage for an anomaly detection job model.
+	// It is based on analysis configuration details for the job and cardinality
+	// estimates for the fields it references.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-apis.html
 	EstimateModelMemory ml_estimate_model_memory.NewEstimateModelMemory
 	// Evaluates the data frame analytics for an annotated index.
+	// The API packages together commonly used evaluation metrics for various types
+	// of machine learning features. This has been designed for use on indexes
+	// created by data frame analytics. Evaluation requires both a ground truth
+	// field and an analytics result field to be present.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/evaluate-dfanalytics.html
 	EvaluateDataFrame ml_evaluate_data_frame.NewEvaluateDataFrame
 	// Forces any buffered data to be processed by the job.
+	// The flush jobs API is only applicable when sending data for analysis using
+	// the post data API. Depending on the content of the buffer, then it might
+	// additionally calculate new results. Both flush and close operations are
+	// similar, however the flush is more efficient if you are expecting to send
+	// more data for analysis. When flushing, the job remains open and is available
+	// to continue analyzing data. A close operation additionally prunes and
+	// persists the model state to disk and the job must be opened again before
+	// analyzing further data.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-flush-job.html
 	FlushJob ml_flush_job.NewFlushJob
 	// Retrieves information about the scheduled events in calendars.
@@ -671,125 +907,273 @@ type Ml struct {
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-get-calendar.html
 	GetCalendars ml_get_calendars.NewGetCalendars
 	// Retrieves configuration information for data frame analytics jobs.
+	// You can get information for multiple data frame analytics jobs in a single
+	// API request by using a comma-separated list of data frame analytics jobs or a
+	// wildcard expression.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/get-dfanalytics.html
 	GetDataFrameAnalytics ml_get_data_frame_analytics.NewGetDataFrameAnalytics
 	// Retrieves usage information for data frame analytics jobs.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/get-dfanalytics-stats.html
 	GetDataFrameAnalyticsStats ml_get_data_frame_analytics_stats.NewGetDataFrameAnalyticsStats
 	// Retrieves usage information for datafeeds.
+	// You can get statistics for multiple datafeeds in a single API request by
+	// using a comma-separated list of datafeeds or a wildcard expression. You can
+	// get statistics for all datafeeds by using `_all`, by specifying `*` as the
+	// `<feed_id>`, or by omitting the `<feed_id>`. If the datafeed is stopped, the
+	// only information you receive is the `datafeed_id` and the `state`.
+	// This API returns a maximum of 10,000 datafeeds.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-get-datafeed-stats.html
 	GetDatafeedStats ml_get_datafeed_stats.NewGetDatafeedStats
 	// Retrieves configuration information for datafeeds.
+	// You can get information for multiple datafeeds in a single API request by
+	// using a comma-separated list of datafeeds or a wildcard expression. You can
+	// get information for all datafeeds by using `_all`, by specifying `*` as the
+	// `<feed_id>`, or by omitting the `<feed_id>`.
+	// This API returns a maximum of 10,000 datafeeds.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-get-datafeed.html
 	GetDatafeeds ml_get_datafeeds.NewGetDatafeeds
 	// Retrieves filters.
+	// You can get a single filter or all filters.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-get-filter.html
 	GetFilters ml_get_filters.NewGetFilters
 	// Retrieves usage information for anomaly detection jobs.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-get-job-stats.html
 	GetJobStats ml_get_job_stats.NewGetJobStats
 	// Retrieves configuration information for anomaly detection jobs.
+	// You can get information for multiple anomaly detection jobs in a single API
+	// request by using a group name, a comma-separated list of jobs, or a wildcard
+	// expression. You can get information for all anomaly detection jobs by using
+	// `_all`, by specifying `*` as the `<job_id>`, or by omitting the `<job_id>`.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-get-job.html
 	GetJobs ml_get_jobs.NewGetJobs
 	// Retrieves overall bucket results that summarize the bucket results of
 	// multiple anomaly detection jobs.
+	//
+	// The `overall_score` is calculated by combining the scores of all the
+	// buckets within the overall bucket span. First, the maximum
+	// `anomaly_score` per anomaly detection job in the overall bucket is
+	// calculated. Then the `top_n` of those scores are averaged to result in
+	// the `overall_score`. This means that you can fine-tune the
+	// `overall_score` so that it is more or less sensitive to the number of
+	// jobs that detect an anomaly at the same time. For example, if you set
+	// `top_n` to `1`, the `overall_score` is the maximum bucket score in the
+	// overall bucket. Alternatively, if you set `top_n` to the number of jobs,
+	// the `overall_score` is high only when all jobs detect anomalies in that
+	// overall bucket. If you set the `bucket_span` parameter (to a value
+	// greater than its default), the `overall_score` is the maximum
+	// `overall_score` of the overall buckets that have a span equal to the
+	// jobs' largest bucket span.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-get-overall-buckets.html
 	GetOverallBuckets ml_get_overall_buckets.NewGetOverallBuckets
-	// Retrieves configuration information for a trained inference model.
+	// Retrieves configuration information for a trained model.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/get-trained-models.html
 	GetTrainedModels ml_get_trained_models.NewGetTrainedModels
-	// Retrieves usage information for trained inference models.
+	// Retrieves usage information for trained models. You can get usage information
+	// for multiple trained
+	// models in a single API request by using a comma-separated list of model IDs
+	// or a wildcard expression.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/get-trained-models-stats.html
 	GetTrainedModelsStats ml_get_trained_models_stats.NewGetTrainedModelsStats
-	// Evaluate a trained model.
+	// Evaluates a trained model.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/infer-trained-model.html
 	InferTrainedModel ml_infer_trained_model.NewInferTrainedModel
 	// Opens one or more anomaly detection jobs.
+	// An anomaly detection job must be opened in order for it to be ready to
+	// receive and analyze data. It can be opened and closed multiple times
+	// throughout its lifecycle.
+	// When you open a new job, it starts with an empty model.
+	// When you open an existing job, the most recent model state is automatically
+	// loaded. The job is ready to resume its analysis from where it left off, once
+	// new data is received.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-open-job.html
 	OpenJob ml_open_job.NewOpenJob
-	// Posts scheduled events in a calendar.
+	// Adds scheduled events to a calendar.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-post-calendar-event.html
 	PostCalendarEvents ml_post_calendar_events.NewPostCalendarEvents
-	// Previews that will be analyzed given a data frame analytics config.
+	// Previews the extracted features used by a data frame analytics config.
 	// http://www.elastic.co/guide/en/elasticsearch/reference/current/preview-dfanalytics.html
 	PreviewDataFrameAnalytics ml_preview_data_frame_analytics.NewPreviewDataFrameAnalytics
 	// Previews a datafeed.
+	// This API returns the first "page" of search results from a datafeed.
+	// You can preview an existing datafeed or provide configuration details for a
+	// datafeed
+	// and anomaly detection job in the API. The preview shows the structure of the
+	// data
+	// that will be passed to the anomaly detection engine.
+	// IMPORTANT: When Elasticsearch security features are enabled, the preview uses
+	// the credentials of the user that
+	// called the API. However, when the datafeed starts it uses the roles of the
+	// last user that created or updated the
+	// datafeed. To get a preview that accurately reflects the behavior of the
+	// datafeed, use the appropriate credentials.
+	// You can also use secondary authorization headers to supply the credentials.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-preview-datafeed.html
 	PreviewDatafeed ml_preview_datafeed.NewPreviewDatafeed
-	// Instantiates a calendar.
+	// Creates a calendar.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-put-calendar.html
 	PutCalendar ml_put_calendar.NewPutCalendar
 	// Adds an anomaly detection job to a calendar.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-put-calendar-job.html
 	PutCalendarJob ml_put_calendar_job.NewPutCalendarJob
 	// Instantiates a data frame analytics job.
+	// This API creates a data frame analytics job that performs an analysis on the
+	// source indices and stores the outcome in a destination index.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/put-dfanalytics.html
 	PutDataFrameAnalytics ml_put_data_frame_analytics.NewPutDataFrameAnalytics
 	// Instantiates a datafeed.
+	// Datafeeds retrieve data from Elasticsearch for analysis by an anomaly
+	// detection job.
+	// You can associate only one datafeed with each anomaly detection job.
+	// The datafeed contains a query that runs at a defined interval (`frequency`).
+	// If you are concerned about delayed data, you can add a delay (`query_delay')
+	// at each interval.
+	// When Elasticsearch security features are enabled, your datafeed remembers
+	// which roles the user who created it had
+	// at the time of creation and runs the query using those same roles. If you
+	// provide secondary authorization headers,
+	// those credentials are used instead.
+	// You must use Kibana, this API, or the create anomaly detection jobs API to
+	// create a datafeed. Do not add a datafeed
+	// directly to the `.ml-config` index. Do not give users `write` privileges on
+	// the `.ml-config` index.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-put-datafeed.html
 	PutDatafeed ml_put_datafeed.NewPutDatafeed
 	// Instantiates a filter.
+	// A filter contains a list of strings. It can be used by one or more anomaly
+	// detection jobs.
+	// Specifically, filters are referenced in the `custom_rules` property of
+	// detector configuration objects.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-put-filter.html
 	PutFilter ml_put_filter.NewPutFilter
-	// Instantiates an anomaly detection job.
+	// Instantiates an anomaly detection job. If you include a `datafeed_config`,
+	// you must have read index privileges on the source index.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-put-job.html
 	PutJob ml_put_job.NewPutJob
-	// Creates an inference trained model.
+	// Enables you to supply a trained model that is not created by data frame
+	// analytics.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/put-trained-models.html
 	PutTrainedModel ml_put_trained_model.NewPutTrainedModel
-	// Creates a new model alias (or reassigns an existing one) to refer to the
-	// trained model
+	// Creates or updates a trained model alias. A trained model alias is a logical
+	// name used to reference a single trained model.
+	// You can use aliases instead of trained model identifiers to make it easier to
+	// reference your models. For example, you can use aliases in inference
+	// aggregations and processors.
+	// An alias must be unique and refer to only a single trained model. However,
+	// you can have multiple aliases for each trained model.
+	// If you use this API to update an alias such that it references a different
+	// trained model ID and the model uses a different type of data frame analytics,
+	// an error occurs. For example, this situation occurs if you have a trained
+	// model for regression analysis and a trained model for classification
+	// analysis; you cannot reassign an alias from one type of trained model to
+	// another.
+	// If you use this API to update an alias and there are very few input fields in
+	// common between the old and new trained models for the model alias, the API
+	// returns a warning.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/put-trained-models-aliases.html
 	PutTrainedModelAlias ml_put_trained_model_alias.NewPutTrainedModelAlias
-	// Creates part of a trained model definition
+	// Creates part of a trained model definition.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/put-trained-model-definition-part.html
 	PutTrainedModelDefinitionPart ml_put_trained_model_definition_part.NewPutTrainedModelDefinitionPart
-	// Creates a trained model vocabulary
+	// Creates a trained model vocabulary.
+	// This API is supported only for natural language processing (NLP) models.
+	// The vocabulary is stored in the index as described in
+	// `inference_config.*.vocabulary` of the trained model definition.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/put-trained-model-vocabulary.html
 	PutTrainedModelVocabulary ml_put_trained_model_vocabulary.NewPutTrainedModelVocabulary
-	// Resets an existing anomaly detection job.
+	// Resets an anomaly detection job.
+	// All model state and results are deleted. The job is ready to start over as if
+	// it had just been created.
+	// It is not currently possible to reset multiple jobs using wildcards or a
+	// comma separated list.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-reset-job.html
 	ResetJob ml_reset_job.NewResetJob
 	// Starts a data frame analytics job.
+	// A data frame analytics job can be started and stopped multiple times
+	// throughout its lifecycle.
+	// If the destination index does not exist, it is created automatically the
+	// first time you start the data frame analytics job. The
+	// `index.number_of_shards` and `index.number_of_replicas` settings for the
+	// destination index are copied from the source index. If there are multiple
+	// source indices, the destination index copies the highest setting values. The
+	// mappings for the destination index are also copied from the source indices.
+	// If there are any mapping conflicts, the job fails to start.
+	// If the destination index exists, it is used as is. You can therefore set up
+	// the destination index in advance with custom settings and mappings.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/start-dfanalytics.html
 	StartDataFrameAnalytics ml_start_data_frame_analytics.NewStartDataFrameAnalytics
 	// Starts one or more datafeeds.
+	//
+	// A datafeed must be started in order to retrieve data from Elasticsearch. A
+	// datafeed can be started and stopped
+	// multiple times throughout its lifecycle.
+	//
+	// Before you can start a datafeed, the anomaly detection job must be open.
+	// Otherwise, an error occurs.
+	//
+	// If you restart a stopped datafeed, it continues processing input data from
+	// the next millisecond after it was stopped.
+	// If new data was indexed for that exact millisecond between stopping and
+	// starting, it will be ignored.
+	//
+	// When Elasticsearch security features are enabled, your datafeed remembers
+	// which roles the last user to create or
+	// update it had at the time of creation or update and runs the query using
+	// those same roles. If you provided secondary
+	// authorization headers when you created or updated the datafeed, those
+	// credentials are used instead.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-start-datafeed.html
 	StartDatafeed ml_start_datafeed.NewStartDatafeed
-	// Start a trained model deployment.
+	// Starts a trained model deployment, which allocates the model to every machine
+	// learning node.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/start-trained-model-deployment.html
 	StartTrainedModelDeployment ml_start_trained_model_deployment.NewStartTrainedModelDeployment
 	// Stops one or more data frame analytics jobs.
+	// A data frame analytics job can be started and stopped multiple times
+	// throughout its lifecycle.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/stop-dfanalytics.html
 	StopDataFrameAnalytics ml_stop_data_frame_analytics.NewStopDataFrameAnalytics
 	// Stops one or more datafeeds.
+	// A datafeed that is stopped ceases to retrieve data from Elasticsearch. A
+	// datafeed can be started and stopped
+	// multiple times throughout its lifecycle.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-stop-datafeed.html
 	StopDatafeed ml_stop_datafeed.NewStopDatafeed
-	// Stop a trained model deployment.
+	// Stops a trained model deployment.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/stop-trained-model-deployment.html
 	StopTrainedModelDeployment ml_stop_trained_model_deployment.NewStopTrainedModelDeployment
-	// Updates certain properties of a data frame analytics job.
+	// Updates an existing data frame analytics job.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/update-dfanalytics.html
 	UpdateDataFrameAnalytics ml_update_data_frame_analytics.NewUpdateDataFrameAnalytics
-	// Updates certain properties of a datafeed.
+	// Updates the properties of a datafeed.
+	// You must stop and start the datafeed for the changes to be applied.
+	// When Elasticsearch security features are enabled, your datafeed remembers
+	// which roles the user who updated it had at
+	// the time of the update and runs the query using those same roles. If you
+	// provide secondary authorization headers,
+	// those credentials are used instead.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-update-datafeed.html
 	UpdateDatafeed ml_update_datafeed.NewUpdateDatafeed
-	// Updates the description of a filter, adds items, or removes items.
+	// Updates the description of a filter, adds items, or removes items from the
+	// list.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-update-filter.html
 	UpdateFilter ml_update_filter.NewUpdateFilter
 	// Updates certain properties of an anomaly detection job.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-update-job.html
 	UpdateJob ml_update_job.NewUpdateJob
+	// Starts a trained model deployment, which allocates the model to every machine
+	// learning node.
+	// https://www.elastic.co/guide/en/elasticsearch/reference/current/update-trained-model-deployment.html
+	UpdateTrainedModelDeployment ml_update_trained_model_deployment.NewUpdateTrainedModelDeployment
 }
 
 type QueryRuleset struct {
 	// Deletes a query ruleset.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/delete-query-ruleset.html
 	Delete query_ruleset_delete.NewDelete
-	// Returns the details about a query ruleset.
+	// Returns the details about a query ruleset
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/get-query-ruleset.html
 	Get query_ruleset_get.NewGet
-	// Lists query rulesets.
+	// Returns summarized information about existing query rulesets.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/list-query-rulesets.html
 	List query_ruleset_list.NewList
 	// Creates or updates a query ruleset.
@@ -799,12 +1183,12 @@ type QueryRuleset struct {
 
 type SearchApplication struct {
 	// Deletes a search application.
-	// https://www.elastic.co/guide/en/elasticsearch/reference/current/put-search-application.html
+	// https://www.elastic.co/guide/en/elasticsearch/reference/current/delete-search-application.html
 	Delete search_application_delete.NewDelete
 	// Delete a behavioral analytics collection.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/delete-analytics-collection.html
 	DeleteBehavioralAnalytics search_application_delete_behavioral_analytics.NewDeleteBehavioralAnalytics
-	// Returns the details about a search application.
+	// Returns the details about a search application
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/get-search-application.html
 	Get search_application_get.NewGet
 	// Returns the existing behavioral analytics collections.
@@ -819,32 +1203,81 @@ type SearchApplication struct {
 	// Creates a behavioral analytics collection.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/put-analytics-collection.html
 	PutBehavioralAnalytics search_application_put_behavioral_analytics.NewPutBehavioralAnalytics
-	// Perform a search against a search application
+	// Perform a search against a search application.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/search-application-search.html
 	Search search_application_search.NewSearch
 }
 
 type Security struct {
-	// Enables authentication as a user and retrieve information about the
-	// authenticated user.
+	// Enables you to submit a request with a basic auth header to authenticate a
+	// user and retrieve information about the authenticated user.
+	// A successful call returns a JSON structure that shows user information such
+	// as their username, the roles that are assigned to the user, any assigned
+	// metadata, and information about the realms that authenticated and authorized
+	// the user.
+	// If the user cannot be authenticated, this API returns a 401 status code.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/security-api-authenticate.html
 	Authenticate security_authenticate.NewAuthenticate
 	// Creates an API key for access without requiring basic authentication.
+	// A successful request returns a JSON structure that contains the API key, its
+	// unique id, and its name.
+	// If applicable, it also returns expiration information for the API key in
+	// milliseconds.
+	// NOTE: By default, API keys never expire. You can specify expiration
+	// information when you create the API keys.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/security-api-create-api-key.html
 	CreateApiKey security_create_api_key.NewCreateApiKey
 	// Retrieves information for one or more API keys.
+	// NOTE: If you have only the `manage_own_api_key` privilege, this API returns
+	// only the API keys that you own.
+	// If you have `read_security`, `manage_api_key` or greater privileges
+	// (including `manage_security`), this API returns all API keys regardless of
+	// ownership.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/security-api-get-api-key.html
 	GetApiKey security_get_api_key.NewGetApiKey
 	// Determines whether the specified user has a specified list of privileges.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/security-api-has-privileges.html
 	HasPrivileges security_has_privileges.NewHasPrivileges
 	// Invalidates one or more API keys.
+	// The `manage_api_key` privilege allows deleting any API keys.
+	// The `manage_own_api_key` only allows deleting API keys that are owned by the
+	// user.
+	// In addition, with the `manage_own_api_key` privilege, an invalidation request
+	// must be issued in one of the three formats:
+	// - Set the parameter `owner=true`.
+	// - Or, set both `username` and `realm_name` to match the user’s identity.
+	// - Or, if the request is issued by an API key, i.e. an API key invalidates
+	// itself, specify its ID in the `ids` field.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/security-api-invalidate-api-key.html
 	InvalidateApiKey security_invalidate_api_key.NewInvalidateApiKey
-	// Retrieves information for API keys using a subset of query DSL
+	// Retrieves information for API keys in a paginated manner. You can optionally
+	// filter the results with a query.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/security-api-query-api-key.html
 	QueryApiKeys security_query_api_keys.NewQueryApiKeys
 	// Updates attributes of an existing API key.
+	// Users can only update API keys that they created or that were granted to
+	// them.
+	// Use this API to update API keys created by the create API Key or grant API
+	// Key APIs.
+	// If you need to apply the same update to many API keys, you can use bulk
+	// update API Keys to reduce overhead.
+	// It’s not possible to update expired API keys, or API keys that have been
+	// invalidated by invalidate API Key.
+	// This API supports updates to an API key’s access scope and metadata.
+	// The access scope of an API key is derived from the `role_descriptors` you
+	// specify in the request, and a snapshot of the owner user’s permissions at the
+	// time of the request.
+	// The snapshot of the owner’s permissions is updated automatically on every
+	// call.
+	// If you don’t specify `role_descriptors` in the request, a call to this API
+	// might still change the API key’s access scope.
+	// This change can occur if the owner user’s permissions have changed since the
+	// API key was created or last modified.
+	// To update another user’s API key, use the `run_as` feature to submit a
+	// request on behalf of another user.
+	// IMPORTANT: It’s not possible to use an API key as the authentication
+	// credential for this API.
+	// To update an API key, the owner user’s credentials are required.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/security-api-update-api-key.html
 	UpdateApiKey security_update_api_key.NewUpdateApiKey
 }
@@ -889,7 +1322,7 @@ type Synonyms struct {
 	// Retrieves a summary of all defined synonym sets
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/list-synonyms-sets.html
 	GetSynonymsSets synonyms_get_synonyms_sets.NewGetSynonymsSets
-	// Creates or updates a synonyms set
+	// Creates or updates a synonym set.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/put-synonyms-set.html
 	PutSynonym synonyms_put_synonym.NewPutSynonym
 	// Creates or updates a synonym rule in a synonym set
@@ -904,7 +1337,7 @@ type Tasks struct {
 }
 
 type Transform struct {
-	// Deletes an existing transform.
+	// Deletes a transform.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/delete-transform.html
 	DeleteTransform transform_delete_transform.NewDeleteTransform
 	// Retrieves configuration information for transforms.
@@ -914,24 +1347,110 @@ type Transform struct {
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/get-transform-stats.html
 	GetTransformStats transform_get_transform_stats.NewGetTransformStats
 	// Previews a transform.
+	//
+	// It returns a maximum of 100 results. The calculations are based on all the
+	// current data in the source index. It also
+	// generates a list of mappings and settings for the destination index. These
+	// values are determined based on the field
+	// types of the source index and the transform aggregations.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/preview-transform.html
 	PreviewTransform transform_preview_transform.NewPreviewTransform
-	// Instantiates a transform.
+	// Creates a transform.
+	//
+	// A transform copies data from source indices, transforms it, and persists it
+	// into an entity-centric destination index. You can also think of the
+	// destination index as a two-dimensional tabular data structure (known as
+	// a data frame). The ID for each document in the data frame is generated from a
+	// hash of the entity, so there is a
+	// unique row per entity.
+	//
+	// You must choose either the latest or pivot method for your transform; you
+	// cannot use both in a single transform. If
+	// you choose to use the pivot method for your transform, the entities are
+	// defined by the set of `group_by` fields in
+	// the pivot object. If you choose to use the latest method, the entities are
+	// defined by the `unique_key` field values
+	// in the latest object.
+	//
+	// You must have `create_index`, `index`, and `read` privileges on the
+	// destination index and `read` and
+	// `view_index_metadata` privileges on the source indices. When Elasticsearch
+	// security features are enabled, the
+	// transform remembers which roles the user that created it had at the time of
+	// creation and uses those same roles. If
+	// those roles do not have the required privileges on the source and destination
+	// indices, the transform fails when it
+	// attempts unauthorized operations.
+	//
+	// NOTE: You must use Kibana or this API to create a transform. Do not add a
+	// transform directly into any
+	// `.transform-internal*` indices using the Elasticsearch index API. If
+	// Elasticsearch security features are enabled, do
+	// not give users any privileges on `.transform-internal*` indices. If you used
+	// transforms prior to 7.5, also do not
+	// give users any privileges on `.data-frame-internal*` indices.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/put-transform.html
 	PutTransform transform_put_transform.NewPutTransform
-	// Resets an existing transform.
+	// Resets a transform.
+	// Before you can reset it, you must stop it; alternatively, use the `force`
+	// query parameter.
+	// If the destination index was created by the transform, it is deleted.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/reset-transform.html
 	ResetTransform transform_reset_transform.NewResetTransform
 	// Schedules now a transform.
+	//
+	// If you _schedule_now a transform, it will process the new data instantly,
+	// without waiting for the configured frequency interval. After _schedule_now
+	// API is called,
+	// the transform will be processed again at now + frequency unless _schedule_now
+	// API
+	// is called again in the meantime.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/schedule-now-transform.html
 	ScheduleNowTransform transform_schedule_now_transform.NewScheduleNowTransform
-	// Starts one or more transforms.
+	// Starts a transform.
+	//
+	// When you start a transform, it creates the destination index if it does not
+	// already exist. The `number_of_shards` is
+	// set to `1` and the `auto_expand_replicas` is set to `0-1`. If it is a pivot
+	// transform, it deduces the mapping
+	// definitions for the destination index from the source indices and the
+	// transform aggregations. If fields in the
+	// destination index are derived from scripts (as in the case of
+	// `scripted_metric` or `bucket_script` aggregations),
+	// the transform uses dynamic mappings unless an index template exists. If it is
+	// a latest transform, it does not deduce
+	// mapping definitions; it uses dynamic mappings. To use explicit mappings,
+	// create the destination index before you
+	// start the transform. Alternatively, you can create an index template, though
+	// it does not affect the deduced mappings
+	// in a pivot transform.
+	//
+	// When the transform starts, a series of validations occur to ensure its
+	// success. If you deferred validation when you
+	// created the transform, they occur when you start the transform—​with the
+	// exception of privilege checks. When
+	// Elasticsearch security features are enabled, the transform remembers which
+	// roles the user that created it had at the
+	// time of creation and uses those same roles. If those roles do not have the
+	// required privileges on the source and
+	// destination indices, the transform fails when it attempts unauthorized
+	// operations.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/start-transform.html
 	StartTransform transform_start_transform.NewStartTransform
 	// Stops one or more transforms.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/stop-transform.html
 	StopTransform transform_stop_transform.NewStopTransform
 	// Updates certain properties of a transform.
+	//
+	// All updated properties except `description` do not take effect until after
+	// the transform starts the next checkpoint,
+	// thus there is data consistency in each checkpoint. To use this API, you must
+	// have `read` and `view_index_metadata`
+	// privileges for the source indices. You must also have `index` and `read`
+	// privileges for the destination index. When
+	// Elasticsearch security features are enabled, the transform remembers which
+	// roles the user who updated it had at the
+	// time of update and runs with those privileges.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/update-transform.html
 	UpdateTransform transform_update_transform.NewUpdateTransform
 }
@@ -943,8 +1462,10 @@ type API struct {
 	Core              Core
 	Enrich            Enrich
 	Eql               Eql
+	Esql              Esql
 	Graph             Graph
 	Indices           Indices
+	Inference         Inference
 	Ingest            Ingest
 	License           License
 	Logstash          Logstash
@@ -957,57 +1478,65 @@ type API struct {
 	Tasks             Tasks
 	Transform         Transform
 
-	// Allows to perform multiple index/update/delete operations in a single
-	// request.
+	// Performs multiple indexing or delete operations in a single API call.
+	// This reduces overhead and can greatly increase indexing speed.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html
 	Bulk core_bulk.NewBulk
-	// Explicitly clears the search context for a scroll.
+	// Clears the search context and results for a scrolling search.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/clear-scroll-api.html
 	ClearScroll core_clear_scroll.NewClearScroll
-	// Close a point in time
+	// Closes a point-in-time.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/point-in-time-api.html
 	ClosePointInTime core_close_point_in_time.NewClosePointInTime
 	// Returns number of documents matching a query.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/search-count.html
 	Count core_count.NewCount
-	// Creates a new document in the index.
-	//
-	// Returns a 409 response when a document with a same ID already exists in the
-	// index.
+	// Adds a JSON document to the specified data stream or index and makes it
+	// searchable.
+	// If the target is an index and the document already exists, the request
+	// updates the document and increments its version.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-index_.html
 	Create core_create.NewCreate
-	// Removes a document from the index.
+	// Removes a JSON document from the specified index.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-delete.html
 	Delete core_delete.NewDelete
-	// Deletes documents matching the provided query.
+	// Deletes documents that match the specified query.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-delete-by-query.html
 	DeleteByQuery core_delete_by_query.NewDeleteByQuery
-	// Deletes a script.
+	// Deletes a stored script or search template.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-scripting.html
 	DeleteScript core_delete_script.NewDeleteScript
-	// Returns information about whether a document exists in an index.
+	// Checks if a document in an index exists.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-get.html
 	Exists core_exists.NewExists
-	// Returns information about whether a document source exists in an index.
+	// Checks if a document's `_source` is stored.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-get.html
 	ExistsSource core_exists_source.NewExistsSource
-	// Returns information about why a specific matches (or doesn't match) a query.
+	// Returns information about why a specific document matches (or doesn’t match)
+	// a query.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/search-explain.html
 	Explain core_explain.NewExplain
-	// Returns the information about the capabilities of fields among multiple
-	// indices.
+	// The field capabilities API returns the information about the capabilities of
+	// fields among multiple indices.
+	// The field capabilities API returns runtime fields like any other field. For
+	// example, a runtime field with a type
+	// of keyword is returned as any other field that belongs to the `keyword`
+	// family.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/search-field-caps.html
 	FieldCaps core_field_caps.NewFieldCaps
 	// Returns a document.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-get.html
 	Get core_get.NewGet
-	// Returns a script.
+	// Retrieves a stored script or search template.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-scripting.html
 	GetScript core_get_script.NewGetScript
 	// Returns the source of a document.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-get.html
 	GetSource core_get_source.NewGetSource
-	// Creates or updates a document in an index.
+	// Adds a JSON document to the specified data stream or index and makes it
+	// searchable.
+	// If the target is an index and the document already exists, the request
+	// updates the document and increments its version.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-index_.html
 	Index core_index.NewIndex
 	// Returns basic information about the cluster.
@@ -1019,23 +1548,33 @@ type API struct {
 	// Allows to execute several search operations in one request.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/search-multi-search.html
 	Msearch core_msearch.NewMsearch
-	// Allows to execute several search template operations in one request.
+	// Runs multiple templated searches with a single request.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/search-multi-search.html
 	MsearchTemplate core_msearch_template.NewMsearchTemplate
 	// Returns multiple termvectors in one request.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-multi-termvectors.html
 	Mtermvectors core_mtermvectors.NewMtermvectors
-	// Open a point in time that can be used in subsequent searches
+	// A search request by default executes against the most recent visible data of
+	// the target indices,
+	// which is called point in time. Elasticsearch pit (point in time) is a
+	// lightweight view into the
+	// state of the data as it existed when initiated. In some cases, it’s preferred
+	// to perform multiple
+	// search requests using the same point in time. For example, if refreshes
+	// happen between
+	// `search_after` requests, then the results of those requests might not be
+	// consistent as changes happening
+	// between searches are only visible to the more recent point in time.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/point-in-time-api.html
 	OpenPointInTime core_open_point_in_time.NewOpenPointInTime
 	// Returns whether the cluster is running.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html
 	Ping core_ping.NewPing
-	// Creates or updates a script.
+	// Creates or updates a stored script or search template.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-scripting.html
 	PutScript core_put_script.NewPutScript
-	// Allows to evaluate the quality of ranked search results over a set of typical
-	// search queries
+	// Enables you to evaluate the quality of ranked search results over a set of
+	// typical search queries.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/search-rank-eval.html
 	RankEval core_rank_eval.NewRankEval
 	// Allows to copy documents from one index to another, optionally filtering the
@@ -1045,23 +1584,26 @@ type API struct {
 	// documents from a remote cluster.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-reindex.html
 	Reindex core_reindex.NewReindex
-	// Allows to use the Mustache language to pre-render a search definition.
+	// Renders a search template as a search request body.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/render-search-template-api.html
 	RenderSearchTemplate core_render_search_template.NewRenderSearchTemplate
-	// Allows an arbitrary script to be executed and a result to be returned
+	// Runs a script and returns a result.
 	// https://www.elastic.co/guide/en/elasticsearch/painless/current/painless-execute-api.html
 	ScriptsPainlessExecute core_scripts_painless_execute.NewScriptsPainlessExecute
 	// Allows to retrieve a large numbers of results from a single search request.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-body.html#request-body-search-scroll
 	Scroll core_scroll.NewScroll
-	// Returns results matching a query.
+	// Returns search hits that match the query defined in the request.
+	// You can provide search queries using the `q` query string parameter or the
+	// request body.
+	// If both are specified, only the query parameter is used.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/search-search.html
 	Search core_search.NewSearch
 	// Searches a vector tile for geospatial values. Returns results as a binary
 	// Mapbox vector tile.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/search-vector-tile-api.html
 	SearchMvt core_search_mvt.NewSearchMvt
-	// Allows to use the Mustache language to pre-render a search definition.
+	// Runs a search with a search template.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/search-template.html
 	SearchTemplate core_search_template.NewSearchTemplate
 	// The terms enum API  can be used to discover terms in the index that begin
@@ -1076,9 +1618,10 @@ type API struct {
 	// Updates a document with a script or partial document.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.html
 	Update core_update.NewUpdate
-	// Performs an update on every document in the index without changing the
-	// source,
-	// for example to pick up a mapping change.
+	// Updates documents that match the specified query.
+	// If no query is specified, performs an update on every document in the data
+	// stream or index without modifying the source, which is useful for picking up
+	// mapping changes.
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update-by-query.html
 	UpdateByQuery core_update_by_query.NewUpdateByQuery
 }
@@ -1173,6 +1716,11 @@ func New(tp elastictransport.Interface) *API {
 			Search:    eql_search.NewSearchFunc(tp),
 		},
 
+		// Esql
+		Esql: Esql{
+			Query: esql_query.NewQueryFunc(tp),
+		},
+
 		// Graph
 		Graph: Graph{
 			Explore: graph_explore.NewExploreFunc(tp),
@@ -1216,6 +1764,14 @@ func New(tp elastictransport.Interface) *API {
 			SimulateTemplate:      indices_simulate_template.NewSimulateTemplateFunc(tp),
 			UpdateAliases:         indices_update_aliases.NewUpdateAliasesFunc(tp),
 			ValidateQuery:         indices_validate_query.NewValidateQueryFunc(tp),
+		},
+
+		// Inference
+		Inference: Inference{
+			Delete:    inference_delete.NewDeleteFunc(tp),
+			Get:       inference_get.NewGetFunc(tp),
+			Inference: inference_inference.NewInferenceFunc(tp),
+			Put:       inference_put.NewPutFunc(tp),
 		},
 
 		// Ingest
@@ -1292,6 +1848,7 @@ func New(tp elastictransport.Interface) *API {
 			UpdateDatafeed:                ml_update_datafeed.NewUpdateDatafeedFunc(tp),
 			UpdateFilter:                  ml_update_filter.NewUpdateFilterFunc(tp),
 			UpdateJob:                     ml_update_job.NewUpdateJobFunc(tp),
+			UpdateTrainedModelDeployment:  ml_update_trained_model_deployment.NewUpdateTrainedModelDeploymentFunc(tp),
 		},
 
 		// QueryRuleset

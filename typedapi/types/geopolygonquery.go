@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -33,7 +33,7 @@ import (
 
 // GeoPolygonQuery type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/query_dsl/geo.ts#L85-L93
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/query_dsl/geo.ts#L91-L99
 type GeoPolygonQuery struct {
 	// Boost Floating point number used to decrease or increase the relevance scores of
 	// the query.
@@ -41,7 +41,7 @@ type GeoPolygonQuery struct {
 	// A boost value between 0 and 1.0 decreases the relevance score.
 	// A value greater than 1.0 increases the relevance score.
 	Boost            *float32                                 `json:"boost,omitempty"`
-	GeoPolygonQuery  map[string]GeoPolygonPoints              `json:"GeoPolygonQuery,omitempty"`
+	GeoPolygonQuery  map[string]GeoPolygonPoints              `json:"-"`
 	IgnoreUnmapped   *bool                                    `json:"ignore_unmapped,omitempty"`
 	QueryName_       *string                                  `json:"_name,omitempty"`
 	ValidationMethod *geovalidationmethod.GeoValidationMethod `json:"validation_method,omitempty"`
@@ -63,13 +63,13 @@ func (s *GeoPolygonQuery) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "boost":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseFloat(v, 32)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Boost", err)
 				}
 				f := float32(value)
 				s.Boost = &f
@@ -78,22 +78,14 @@ func (s *GeoPolygonQuery) UnmarshalJSON(data []byte) error {
 				s.Boost = &f
 			}
 
-		case "GeoPolygonQuery":
-			if s.GeoPolygonQuery == nil {
-				s.GeoPolygonQuery = make(map[string]GeoPolygonPoints, 0)
-			}
-			if err := dec.Decode(&s.GeoPolygonQuery); err != nil {
-				return err
-			}
-
 		case "ignore_unmapped":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "IgnoreUnmapped", err)
 				}
 				s.IgnoreUnmapped = &value
 			case bool:
@@ -103,7 +95,7 @@ func (s *GeoPolygonQuery) UnmarshalJSON(data []byte) error {
 		case "_name":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "QueryName_", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -114,10 +106,21 @@ func (s *GeoPolygonQuery) UnmarshalJSON(data []byte) error {
 
 		case "validation_method":
 			if err := dec.Decode(&s.ValidationMethod); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "ValidationMethod", err)
 			}
 
 		default:
+
+			if key, ok := t.(string); ok {
+				if s.GeoPolygonQuery == nil {
+					s.GeoPolygonQuery = make(map[string]GeoPolygonPoints, 0)
+				}
+				raw := NewGeoPolygonPoints()
+				if err := dec.Decode(&raw); err != nil {
+					return fmt.Errorf("%s | %w", "GeoPolygonQuery", err)
+				}
+				s.GeoPolygonQuery[key] = *raw
+			}
 
 		}
 	}
@@ -128,7 +131,7 @@ func (s *GeoPolygonQuery) UnmarshalJSON(data []byte) error {
 func (s GeoPolygonQuery) MarshalJSON() ([]byte, error) {
 	type opt GeoPolygonQuery
 	// We transform the struct to a map without the embedded additional properties map
-	tmp := make(map[string]interface{}, 0)
+	tmp := make(map[string]any, 0)
 
 	data, err := json.Marshal(opt(s))
 	if err != nil {

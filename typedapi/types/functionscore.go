@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // FunctionScore type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/query_dsl/compound.ts#L201-L241
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/query_dsl/compound.ts#L201-L241
 type FunctionScore struct {
 	// Exp Function that scores a document with a exponential decay, depending on the
 	// distance of a numeric field value of the document from an origin.
@@ -75,47 +76,47 @@ func (s *FunctionScore) UnmarshalJSON(data []byte) error {
 
 		case "exp":
 			if err := dec.Decode(&s.Exp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Exp", err)
 			}
 
 		case "field_value_factor":
 			if err := dec.Decode(&s.FieldValueFactor); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "FieldValueFactor", err)
 			}
 
 		case "filter":
 			if err := dec.Decode(&s.Filter); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Filter", err)
 			}
 
 		case "gauss":
 			if err := dec.Decode(&s.Gauss); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Gauss", err)
 			}
 
 		case "linear":
 			if err := dec.Decode(&s.Linear); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Linear", err)
 			}
 
 		case "random_score":
 			if err := dec.Decode(&s.RandomScore); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "RandomScore", err)
 			}
 
 		case "script_score":
 			if err := dec.Decode(&s.ScriptScore); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "ScriptScore", err)
 			}
 
 		case "weight":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseFloat(v, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Weight", err)
 				}
 				f := Float64(value)
 				s.Weight = &f

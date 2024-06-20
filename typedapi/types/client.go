@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // Client type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/nodes/_types/Stats.ts#L649-L696
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/nodes/_types/Stats.ts#L649-L696
 type Client struct {
 	// Agent Reported agent for the HTTP client.
 	// If unavailable, this property is not included in the response.
@@ -76,7 +77,7 @@ func (s *Client) UnmarshalJSON(data []byte) error {
 		case "agent":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Agent", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -86,13 +87,13 @@ func (s *Client) UnmarshalJSON(data []byte) error {
 			s.Agent = &o
 
 		case "closed_time_millis":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "ClosedTimeMillis", err)
 				}
 				s.ClosedTimeMillis = &value
 			case float64:
@@ -101,13 +102,13 @@ func (s *Client) UnmarshalJSON(data []byte) error {
 			}
 
 		case "id":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Id", err)
 				}
 				s.Id = &value
 			case float64:
@@ -116,13 +117,13 @@ func (s *Client) UnmarshalJSON(data []byte) error {
 			}
 
 		case "last_request_time_millis":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "LastRequestTimeMillis", err)
 				}
 				s.LastRequestTimeMillis = &value
 			case float64:
@@ -133,7 +134,7 @@ func (s *Client) UnmarshalJSON(data []byte) error {
 		case "last_uri":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "LastUri", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -145,7 +146,7 @@ func (s *Client) UnmarshalJSON(data []byte) error {
 		case "local_address":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "LocalAddress", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -155,13 +156,13 @@ func (s *Client) UnmarshalJSON(data []byte) error {
 			s.LocalAddress = &o
 
 		case "opened_time_millis":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "OpenedTimeMillis", err)
 				}
 				s.OpenedTimeMillis = &value
 			case float64:
@@ -172,7 +173,7 @@ func (s *Client) UnmarshalJSON(data []byte) error {
 		case "remote_address":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "RemoteAddress", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -182,13 +183,13 @@ func (s *Client) UnmarshalJSON(data []byte) error {
 			s.RemoteAddress = &o
 
 		case "request_count":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "RequestCount", err)
 				}
 				s.RequestCount = &value
 			case float64:
@@ -197,13 +198,13 @@ func (s *Client) UnmarshalJSON(data []byte) error {
 			}
 
 		case "request_size_bytes":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "RequestSizeBytes", err)
 				}
 				s.RequestSizeBytes = &value
 			case float64:
@@ -214,7 +215,7 @@ func (s *Client) UnmarshalJSON(data []byte) error {
 		case "x_opaque_id":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "XOpaqueId", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)

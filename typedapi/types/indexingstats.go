@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // IndexingStats type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/Stats.ts#L143-L159
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/Stats.ts#L143-L159
 type IndexingStats struct {
 	DeleteCurrent        int64                    `json:"delete_current"`
 	DeleteTime           Duration                 `json:"delete_time,omitempty"`
@@ -65,13 +66,13 @@ func (s *IndexingStats) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "delete_current":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "DeleteCurrent", err)
 				}
 				s.DeleteCurrent = value
 			case float64:
@@ -81,22 +82,22 @@ func (s *IndexingStats) UnmarshalJSON(data []byte) error {
 
 		case "delete_time":
 			if err := dec.Decode(&s.DeleteTime); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "DeleteTime", err)
 			}
 
 		case "delete_time_in_millis":
 			if err := dec.Decode(&s.DeleteTimeInMillis); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "DeleteTimeInMillis", err)
 			}
 
 		case "delete_total":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "DeleteTotal", err)
 				}
 				s.DeleteTotal = value
 			case float64:
@@ -105,13 +106,13 @@ func (s *IndexingStats) UnmarshalJSON(data []byte) error {
 			}
 
 		case "index_current":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "IndexCurrent", err)
 				}
 				s.IndexCurrent = value
 			case float64:
@@ -120,13 +121,13 @@ func (s *IndexingStats) UnmarshalJSON(data []byte) error {
 			}
 
 		case "index_failed":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "IndexFailed", err)
 				}
 				s.IndexFailed = value
 			case float64:
@@ -136,22 +137,22 @@ func (s *IndexingStats) UnmarshalJSON(data []byte) error {
 
 		case "index_time":
 			if err := dec.Decode(&s.IndexTime); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "IndexTime", err)
 			}
 
 		case "index_time_in_millis":
 			if err := dec.Decode(&s.IndexTimeInMillis); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "IndexTimeInMillis", err)
 			}
 
 		case "index_total":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "IndexTotal", err)
 				}
 				s.IndexTotal = value
 			case float64:
@@ -160,13 +161,13 @@ func (s *IndexingStats) UnmarshalJSON(data []byte) error {
 			}
 
 		case "is_throttled":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "IsThrottled", err)
 				}
 				s.IsThrottled = value
 			case bool:
@@ -174,13 +175,13 @@ func (s *IndexingStats) UnmarshalJSON(data []byte) error {
 			}
 
 		case "noop_update_total":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "NoopUpdateTotal", err)
 				}
 				s.NoopUpdateTotal = value
 			case float64:
@@ -190,12 +191,12 @@ func (s *IndexingStats) UnmarshalJSON(data []byte) error {
 
 		case "throttle_time":
 			if err := dec.Decode(&s.ThrottleTime); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "ThrottleTime", err)
 			}
 
 		case "throttle_time_in_millis":
 			if err := dec.Decode(&s.ThrottleTimeInMillis); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "ThrottleTimeInMillis", err)
 			}
 
 		case "types":
@@ -203,17 +204,17 @@ func (s *IndexingStats) UnmarshalJSON(data []byte) error {
 				s.Types = make(map[string]IndexingStats, 0)
 			}
 			if err := dec.Decode(&s.Types); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Types", err)
 			}
 
 		case "write_load":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseFloat(v, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "WriteLoad", err)
 				}
 				f := Float64(value)
 				s.WriteLoad = &f

@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // TextExpansionQuery type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/query_dsl/TextExpansionQuery.ts#L22-L27
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/query_dsl/TextExpansionQuery.ts#L23-L33
 type TextExpansionQuery struct {
 	// Boost Floating point number used to decrease or increase the relevance scores of
 	// the query.
@@ -41,8 +42,10 @@ type TextExpansionQuery struct {
 	// ModelId The text expansion NLP model to use
 	ModelId string `json:"model_id"`
 	// ModelText The query text
-	ModelText  string  `json:"model_text"`
-	QueryName_ *string `json:"_name,omitempty"`
+	ModelText string `json:"model_text"`
+	// PruningConfig Token pruning configurations
+	PruningConfig *TokenPruningConfig `json:"pruning_config,omitempty"`
+	QueryName_    *string             `json:"_name,omitempty"`
 }
 
 func (s *TextExpansionQuery) UnmarshalJSON(data []byte) error {
@@ -61,13 +64,13 @@ func (s *TextExpansionQuery) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "boost":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseFloat(v, 32)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Boost", err)
 				}
 				f := float32(value)
 				s.Boost = &f
@@ -79,7 +82,7 @@ func (s *TextExpansionQuery) UnmarshalJSON(data []byte) error {
 		case "model_id":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "ModelId", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -91,7 +94,7 @@ func (s *TextExpansionQuery) UnmarshalJSON(data []byte) error {
 		case "model_text":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "ModelText", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -100,10 +103,15 @@ func (s *TextExpansionQuery) UnmarshalJSON(data []byte) error {
 			}
 			s.ModelText = o
 
+		case "pruning_config":
+			if err := dec.Decode(&s.PruningConfig); err != nil {
+				return fmt.Errorf("%s | %w", "PruningConfig", err)
+			}
+
 		case "_name":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "QueryName_", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)

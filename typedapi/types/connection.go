@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // Connection type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/graph/_types/Connection.ts#L22-L27
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/graph/_types/Connection.ts#L22-L27
 type Connection struct {
 	DocCount int64   `json:"doc_count"`
 	Source   int64   `json:"source"`
@@ -54,13 +55,13 @@ func (s *Connection) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "doc_count":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "DocCount", err)
 				}
 				s.DocCount = value
 			case float64:
@@ -69,13 +70,13 @@ func (s *Connection) UnmarshalJSON(data []byte) error {
 			}
 
 		case "source":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Source", err)
 				}
 				s.Source = value
 			case float64:
@@ -84,13 +85,13 @@ func (s *Connection) UnmarshalJSON(data []byte) error {
 			}
 
 		case "target":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Target", err)
 				}
 				s.Target = value
 			case float64:
@@ -99,13 +100,13 @@ func (s *Connection) UnmarshalJSON(data []byte) error {
 			}
 
 		case "weight":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseFloat(v, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Weight", err)
 				}
 				f := Float64(value)
 				s.Weight = f

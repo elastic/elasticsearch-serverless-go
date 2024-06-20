@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // FileSystemTotal type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/nodes/_types/Stats.ts#L757-L786
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/nodes/_types/Stats.ts#L757-L786
 type FileSystemTotal struct {
 	// Available Total disk space available to this Java virtual machine on all file stores.
 	// Depending on OS or process level restrictions, this might appear less than
@@ -73,7 +74,7 @@ func (s *FileSystemTotal) UnmarshalJSON(data []byte) error {
 		case "available":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Available", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -83,13 +84,13 @@ func (s *FileSystemTotal) UnmarshalJSON(data []byte) error {
 			s.Available = &o
 
 		case "available_in_bytes":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "AvailableInBytes", err)
 				}
 				s.AvailableInBytes = &value
 			case float64:
@@ -100,7 +101,7 @@ func (s *FileSystemTotal) UnmarshalJSON(data []byte) error {
 		case "free":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Free", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -110,13 +111,13 @@ func (s *FileSystemTotal) UnmarshalJSON(data []byte) error {
 			s.Free = &o
 
 		case "free_in_bytes":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "FreeInBytes", err)
 				}
 				s.FreeInBytes = &value
 			case float64:
@@ -127,7 +128,7 @@ func (s *FileSystemTotal) UnmarshalJSON(data []byte) error {
 		case "total":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Total", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -137,13 +138,13 @@ func (s *FileSystemTotal) UnmarshalJSON(data []byte) error {
 			s.Total = &o
 
 		case "total_in_bytes":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "TotalInBytes", err)
 				}
 				s.TotalInBytes = &value
 			case float64:

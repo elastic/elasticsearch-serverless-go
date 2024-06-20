@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // CompletionContext type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_global/search/_types/suggester.ts#L232-L261
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_global/search/_types/suggester.ts#L232-L261
 type CompletionContext struct {
 	// Boost The factor by which the score of the suggestion should be boosted.
 	// The score is computed by multiplying the boost with the suggestion weight.
@@ -73,13 +74,13 @@ func (s *CompletionContext) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "boost":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseFloat(v, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Boost", err)
 				}
 				f := Float64(value)
 				s.Boost = &f
@@ -104,28 +105,28 @@ func (s *CompletionContext) UnmarshalJSON(data []byte) error {
 
 			default:
 				if err := localDec.Decode(&s.Context); err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Context", err)
 				}
 			}
 
 		case "neighbours":
 			if err := dec.Decode(&s.Neighbours); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Neighbours", err)
 			}
 
 		case "precision":
 			if err := dec.Decode(&s.Precision); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Precision", err)
 			}
 
 		case "prefix":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Prefix", err)
 				}
 				s.Prefix = &value
 			case bool:

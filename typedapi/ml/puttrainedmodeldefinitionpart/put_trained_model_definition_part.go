@@ -16,9 +16,9 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
-// Creates part of a trained model definition
+// Creates part of a trained model definition.
 package puttrainedmodeldefinitionpart
 
 import (
@@ -30,6 +30,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 
 	"github.com/elastic/elastic-transport-go/v8/elastictransport"
@@ -52,16 +53,20 @@ type PutTrainedModelDefinitionPart struct {
 	values  url.Values
 	path    url.URL
 
-	buf *gobytes.Buffer
+	raw io.Reader
 
 	req      *Request
 	deferred []func(request *Request) error
-	raw      io.Reader
+	buf      *gobytes.Buffer
 
 	paramSet int
 
 	modelid string
 	part    string
+
+	spanStarted bool
+
+	instrument elastictransport.Instrumentation
 }
 
 // NewPutTrainedModelDefinitionPart type alias for index.
@@ -81,7 +86,7 @@ func NewPutTrainedModelDefinitionPartFunc(tp elastictransport.Interface) NewPutT
 	}
 }
 
-// Creates part of a trained model definition
+// Creates part of a trained model definition.
 //
 // https://www.elastic.co/guide/en/elasticsearch/reference/current/put-trained-model-definition-part.html
 func New(tp elastictransport.Interface) *PutTrainedModelDefinitionPart {
@@ -89,9 +94,16 @@ func New(tp elastictransport.Interface) *PutTrainedModelDefinitionPart {
 		transport: tp,
 		values:    make(url.Values),
 		headers:   make(http.Header),
-		buf:       gobytes.NewBuffer(nil),
+
+		buf: gobytes.NewBuffer(nil),
 
 		req: NewRequest(),
+	}
+
+	if instrumented, ok := r.transport.(elastictransport.Instrumented); ok {
+		if instrument := instrumented.InstrumentationEnabled(); instrument != nil {
+			r.instrument = instrument
+		}
 	}
 
 	return r
@@ -130,9 +142,7 @@ func (r *PutTrainedModelDefinitionPart) HttpRequest(ctx context.Context) (*http.
 		}
 	}
 
-	if r.raw != nil {
-		r.buf.ReadFrom(r.raw)
-	} else if r.req != nil {
+	if r.raw == nil && r.req != nil {
 
 		data, err := json.Marshal(r.req)
 
@@ -142,6 +152,10 @@ func (r *PutTrainedModelDefinitionPart) HttpRequest(ctx context.Context) (*http.
 
 		r.buf.Write(data)
 
+	}
+
+	if r.buf.Len() > 0 {
+		r.raw = r.buf
 	}
 
 	r.path.Scheme = "http"
@@ -154,11 +168,17 @@ func (r *PutTrainedModelDefinitionPart) HttpRequest(ctx context.Context) (*http.
 		path.WriteString("trained_models")
 		path.WriteString("/")
 
+		if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+			instrument.RecordPathPart(ctx, "modelid", r.modelid)
+		}
 		path.WriteString(r.modelid)
 		path.WriteString("/")
 		path.WriteString("definition")
 		path.WriteString("/")
 
+		if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+			instrument.RecordPathPart(ctx, "part", r.part)
+		}
 		path.WriteString(r.part)
 
 		method = http.MethodPut
@@ -172,20 +192,20 @@ func (r *PutTrainedModelDefinitionPart) HttpRequest(ctx context.Context) (*http.
 	}
 
 	if ctx != nil {
-		req, err = http.NewRequestWithContext(ctx, method, r.path.String(), r.buf)
+		req, err = http.NewRequestWithContext(ctx, method, r.path.String(), r.raw)
 	} else {
-		req, err = http.NewRequest(method, r.path.String(), r.buf)
+		req, err = http.NewRequest(method, r.path.String(), r.raw)
 	}
 
 	req.Header = r.headers.Clone()
 
 	if req.Header.Get("Elastic-Api-Version") == "" {
-		if r.buf.Len() > 0 {
+		if r.raw != nil {
 			req.Header.Set("Elastic-Api-Version", "2023-10-31")
 		}
 	}
 	if req.Header.Get("Content-Type") == "" {
-		if r.buf.Len() > 0 {
+		if r.raw != nil {
 			req.Header.Set("Content-Type", "application/json")
 		}
 	}
@@ -202,27 +222,66 @@ func (r *PutTrainedModelDefinitionPart) HttpRequest(ctx context.Context) (*http.
 }
 
 // Perform runs the http.Request through the provided transport and returns an http.Response.
-func (r PutTrainedModelDefinitionPart) Perform(ctx context.Context) (*http.Response, error) {
+func (r PutTrainedModelDefinitionPart) Perform(providedCtx context.Context) (*http.Response, error) {
+	var ctx context.Context
+	if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+		if r.spanStarted == false {
+			ctx := instrument.Start(providedCtx, "ml.put_trained_model_definition_part")
+			defer instrument.Close(ctx)
+		}
+	}
+	if ctx == nil {
+		ctx = providedCtx
+	}
+
 	req, err := r.HttpRequest(ctx)
 	if err != nil {
+		if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+			instrument.RecordError(ctx, err)
+		}
 		return nil, err
 	}
 
+	if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+		instrument.BeforeRequest(req, "ml.put_trained_model_definition_part")
+		if reader := instrument.RecordRequestBody(ctx, "ml.put_trained_model_definition_part", r.raw); reader != nil {
+			req.Body = reader
+		}
+	}
 	res, err := r.transport.Perform(req)
+	if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+		instrument.AfterRequest(req, "elasticsearch", "ml.put_trained_model_definition_part")
+	}
 	if err != nil {
-		return nil, fmt.Errorf("an error happened during the PutTrainedModelDefinitionPart query execution: %w", err)
+		localErr := fmt.Errorf("an error happened during the PutTrainedModelDefinitionPart query execution: %w", err)
+		if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+			instrument.RecordError(ctx, localErr)
+		}
+		return nil, localErr
 	}
 
 	return res, nil
 }
 
 // Do runs the request through the transport, handle the response and returns a puttrainedmodeldefinitionpart.Response
-func (r PutTrainedModelDefinitionPart) Do(ctx context.Context) (*Response, error) {
+func (r PutTrainedModelDefinitionPart) Do(providedCtx context.Context) (*Response, error) {
+	var ctx context.Context
+	r.spanStarted = true
+	if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+		ctx = instrument.Start(providedCtx, "ml.put_trained_model_definition_part")
+		defer instrument.Close(ctx)
+	}
+	if ctx == nil {
+		ctx = providedCtx
+	}
 
 	response := NewResponse()
 
 	res, err := r.Perform(ctx)
 	if err != nil {
+		if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+			instrument.RecordError(ctx, err)
+		}
 		return nil, err
 	}
 	defer res.Body.Close()
@@ -230,6 +289,9 @@ func (r PutTrainedModelDefinitionPart) Do(ctx context.Context) (*Response, error
 	if res.StatusCode < 299 {
 		err = json.NewDecoder(res.Body).Decode(response)
 		if err != nil {
+			if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+				instrument.RecordError(ctx, err)
+			}
 			return nil, err
 		}
 
@@ -239,6 +301,9 @@ func (r PutTrainedModelDefinitionPart) Do(ctx context.Context) (*Response, error
 	errorResponse := types.NewElasticsearchError()
 	err = json.NewDecoder(res.Body).Decode(errorResponse)
 	if err != nil {
+		if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+			instrument.RecordError(ctx, err)
+		}
 		return nil, err
 	}
 
@@ -246,6 +311,9 @@ func (r PutTrainedModelDefinitionPart) Do(ctx context.Context) (*Response, error
 		errorResponse.Status = res.StatusCode
 	}
 
+	if instrument, ok := r.instrument.(elastictransport.Instrumentation); ok {
+		instrument.RecordError(ctx, errorResponse)
+	}
 	return nil, errorResponse
 }
 
@@ -273,6 +341,50 @@ func (r *PutTrainedModelDefinitionPart) _modelid(modelid string) *PutTrainedMode
 func (r *PutTrainedModelDefinitionPart) _part(part string) *PutTrainedModelDefinitionPart {
 	r.paramSet |= partMask
 	r.part = part
+
+	return r
+}
+
+// ErrorTrace When set to `true` Elasticsearch will include the full stack trace of errors
+// when they occur.
+// API name: error_trace
+func (r *PutTrainedModelDefinitionPart) ErrorTrace(errortrace bool) *PutTrainedModelDefinitionPart {
+	r.values.Set("error_trace", strconv.FormatBool(errortrace))
+
+	return r
+}
+
+// FilterPath Comma-separated list of filters in dot notation which reduce the response
+// returned by Elasticsearch.
+// API name: filter_path
+func (r *PutTrainedModelDefinitionPart) FilterPath(filterpaths ...string) *PutTrainedModelDefinitionPart {
+	tmp := []string{}
+	for _, item := range filterpaths {
+		tmp = append(tmp, fmt.Sprintf("%v", item))
+	}
+	r.values.Set("filter_path", strings.Join(tmp, ","))
+
+	return r
+}
+
+// Human When set to `true` will return statistics in a format suitable for humans.
+// For example `"exists_time": "1h"` for humans and
+// `"eixsts_time_in_millis": 3600000` for computers. When disabled the human
+// readable values will be omitted. This makes sense for responses being
+// consumed
+// only by machines.
+// API name: human
+func (r *PutTrainedModelDefinitionPart) Human(human bool) *PutTrainedModelDefinitionPart {
+	r.values.Set("human", strconv.FormatBool(human))
+
+	return r
+}
+
+// Pretty If set to `true` the returned JSON will be "pretty-formatted". Only use
+// this option for debugging only.
+// API name: pretty
+func (r *PutTrainedModelDefinitionPart) Pretty(pretty bool) *PutTrainedModelDefinitionPart {
+	r.values.Set("pretty", strconv.FormatBool(pretty))
 
 	return r
 }

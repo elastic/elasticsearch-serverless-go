@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,18 +24,16 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
-	"strconv"
 )
 
 // IpRangeAggregation type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/aggregations/bucket.ts#L548-L557
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/aggregations/bucket.ts#L550-L559
 type IpRangeAggregation struct {
 	// Field The date field whose values are used to build ranges.
-	Field *string  `json:"field,omitempty"`
-	Meta  Metadata `json:"meta,omitempty"`
-	Name  *string  `json:"name,omitempty"`
+	Field *string `json:"field,omitempty"`
 	// Ranges Array of IP ranges.
 	Ranges []IpRangeAggregationRange `json:"ranges,omitempty"`
 }
@@ -57,29 +55,12 @@ func (s *IpRangeAggregation) UnmarshalJSON(data []byte) error {
 
 		case "field":
 			if err := dec.Decode(&s.Field); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Field", err)
 			}
-
-		case "meta":
-			if err := dec.Decode(&s.Meta); err != nil {
-				return err
-			}
-
-		case "name":
-			var tmp json.RawMessage
-			if err := dec.Decode(&tmp); err != nil {
-				return err
-			}
-			o := string(tmp[:])
-			o, err = strconv.Unquote(o)
-			if err != nil {
-				o = string(tmp[:])
-			}
-			s.Name = &o
 
 		case "ranges":
 			if err := dec.Decode(&s.Ranges); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Ranges", err)
 			}
 
 		}

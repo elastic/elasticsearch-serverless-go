@@ -16,18 +16,23 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package mget
 
 import (
+	"bytes"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"io"
+
 	"github.com/elastic/elasticsearch-serverless-go/typedapi/types"
 )
 
 // Response holds the response body struct for the package mget
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_global/mget/MultiGetResponse.ts#L22-L26
-
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_global/mget/MultiGetResponse.ts#L22-L26
 type Response struct {
 	Docs []types.MgetResponseItem `json:"docs"`
 }
@@ -36,4 +41,64 @@ type Response struct {
 func NewResponse() *Response {
 	r := &Response{}
 	return r
+}
+
+func (s *Response) UnmarshalJSON(data []byte) error {
+	dec := json.NewDecoder(bytes.NewReader(data))
+
+	for {
+		t, err := dec.Token()
+		if err != nil {
+			if errors.Is(err, io.EOF) {
+				break
+			}
+			return err
+		}
+
+		switch t {
+
+		case "docs":
+			messageArray := []json.RawMessage{}
+			if err := dec.Decode(&messageArray); err != nil {
+				return fmt.Errorf("%s | %w", "Docs", err)
+			}
+		docs:
+			for _, message := range messageArray {
+				keyDec := json.NewDecoder(bytes.NewReader(message))
+				for {
+					t, err := keyDec.Token()
+					if err != nil {
+						if errors.Is(err, io.EOF) {
+							break
+						}
+						return fmt.Errorf("%s | %w", "Docs", err)
+					}
+
+					switch t {
+
+					case "fields", "found", "_primary_term", "_routing", "_seq_no", "_source", "_version":
+						o := types.NewGetResult()
+						localDec := json.NewDecoder(bytes.NewReader(message))
+						if err := localDec.Decode(&o); err != nil {
+							return fmt.Errorf("%s | %w", "Docs", err)
+						}
+						s.Docs = append(s.Docs, o)
+						continue docs
+
+					case "error":
+						o := types.NewMultiGetError()
+						localDec := json.NewDecoder(bytes.NewReader(message))
+						if err := localDec.Decode(&o); err != nil {
+							return fmt.Errorf("%s | %w", "Docs", err)
+						}
+						s.Docs = append(s.Docs, o)
+						continue docs
+
+					}
+				}
+			}
+
+		}
+	}
+	return nil
 }

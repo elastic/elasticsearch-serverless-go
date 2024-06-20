@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // RankEvalMetricDetail type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_global/rank_eval/types.ts#L125-L134
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_global/rank_eval/types.ts#L125-L134
 type RankEvalMetricDetail struct {
 	// Hits The hits section shows a grouping of the search results with their supplied
 	// ratings
@@ -65,7 +66,7 @@ func (s *RankEvalMetricDetail) UnmarshalJSON(data []byte) error {
 
 		case "hits":
 			if err := dec.Decode(&s.Hits); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Hits", err)
 			}
 
 		case "metric_details":
@@ -73,17 +74,17 @@ func (s *RankEvalMetricDetail) UnmarshalJSON(data []byte) error {
 				s.MetricDetails = make(map[string]map[string]json.RawMessage, 0)
 			}
 			if err := dec.Decode(&s.MetricDetails); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "MetricDetails", err)
 			}
 
 		case "metric_score":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseFloat(v, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "MetricScore", err)
 				}
 				f := Float64(value)
 				s.MetricScore = f
@@ -94,7 +95,7 @@ func (s *RankEvalMetricDetail) UnmarshalJSON(data []byte) error {
 
 		case "unrated_docs":
 			if err := dec.Decode(&s.UnratedDocs); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "UnratedDocs", err)
 			}
 
 		}

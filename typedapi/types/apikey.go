@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // ApiKey type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/security/_types/ApiKey.ts#L27-L77
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/security/_types/ApiKey.ts#L27-L89
 type ApiKey struct {
 	// Creation Creation time for the API key in milliseconds.
 	Creation *int64 `json:"creation,omitempty"`
@@ -51,8 +52,13 @@ type ApiKey struct {
 	Metadata Metadata `json:"metadata,omitempty"`
 	// Name Name of the API key.
 	Name string `json:"name"`
+	// ProfileUid The profile uid for the API key owner principal, if requested and if it
+	// exists
+	ProfileUid *string `json:"profile_uid,omitempty"`
 	// Realm Realm name of the principal for which this API key was created.
 	Realm *string `json:"realm,omitempty"`
+	// RealmType Realm type of the principal for which this API key was created
+	RealmType *string `json:"realm_type,omitempty"`
 	// RoleDescriptors The role descriptors assigned to this API key when it was created or last
 	// updated.
 	// An empty role descriptor means the API key inherits the owner user’s
@@ -79,13 +85,13 @@ func (s *ApiKey) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "creation":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Creation", err)
 				}
 				s.Creation = &value
 			case float64:
@@ -94,13 +100,13 @@ func (s *ApiKey) UnmarshalJSON(data []byte) error {
 			}
 
 		case "expiration":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseInt(v, 10, 64)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Expiration", err)
 				}
 				s.Expiration = &value
 			case float64:
@@ -110,17 +116,17 @@ func (s *ApiKey) UnmarshalJSON(data []byte) error {
 
 		case "id":
 			if err := dec.Decode(&s.Id); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Id", err)
 			}
 
 		case "invalidated":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Invalidated", err)
 				}
 				s.Invalidated = &value
 			case bool:
@@ -129,23 +135,35 @@ func (s *ApiKey) UnmarshalJSON(data []byte) error {
 
 		case "limited_by":
 			if err := dec.Decode(&s.LimitedBy); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "LimitedBy", err)
 			}
 
 		case "metadata":
 			if err := dec.Decode(&s.Metadata); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Metadata", err)
 			}
 
 		case "name":
 			if err := dec.Decode(&s.Name); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Name", err)
 			}
+
+		case "profile_uid":
+			var tmp json.RawMessage
+			if err := dec.Decode(&tmp); err != nil {
+				return fmt.Errorf("%s | %w", "ProfileUid", err)
+			}
+			o := string(tmp[:])
+			o, err = strconv.Unquote(o)
+			if err != nil {
+				o = string(tmp[:])
+			}
+			s.ProfileUid = &o
 
 		case "realm":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Realm", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -154,22 +172,34 @@ func (s *ApiKey) UnmarshalJSON(data []byte) error {
 			}
 			s.Realm = &o
 
+		case "realm_type":
+			var tmp json.RawMessage
+			if err := dec.Decode(&tmp); err != nil {
+				return fmt.Errorf("%s | %w", "RealmType", err)
+			}
+			o := string(tmp[:])
+			o, err = strconv.Unquote(o)
+			if err != nil {
+				o = string(tmp[:])
+			}
+			s.RealmType = &o
+
 		case "role_descriptors":
 			if s.RoleDescriptors == nil {
 				s.RoleDescriptors = make(map[string]RoleDescriptor, 0)
 			}
 			if err := dec.Decode(&s.RoleDescriptors); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "RoleDescriptors", err)
 			}
 
 		case "_sort":
 			if err := dec.Decode(&s.Sort_); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Sort_", err)
 			}
 
 		case "username":
 			if err := dec.Decode(&s.Username); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Username", err)
 			}
 
 		}

@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,6 +24,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 
@@ -32,7 +33,7 @@ import (
 
 // SourceField type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/mapping/meta-fields.ts#L58-L65
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/mapping/meta-fields.ts#L58-L65
 type SourceField struct {
 	Compress          *bool                            `json:"compress,omitempty"`
 	CompressThreshold *string                          `json:"compress_threshold,omitempty"`
@@ -58,13 +59,13 @@ func (s *SourceField) UnmarshalJSON(data []byte) error {
 		switch t {
 
 		case "compress":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Compress", err)
 				}
 				s.Compress = &value
 			case bool:
@@ -74,7 +75,7 @@ func (s *SourceField) UnmarshalJSON(data []byte) error {
 		case "compress_threshold":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "CompressThreshold", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
@@ -84,13 +85,13 @@ func (s *SourceField) UnmarshalJSON(data []byte) error {
 			s.CompressThreshold = &o
 
 		case "enabled":
-			var tmp interface{}
+			var tmp any
 			dec.Decode(&tmp)
 			switch v := tmp.(type) {
 			case string:
 				value, err := strconv.ParseBool(v)
 				if err != nil {
-					return err
+					return fmt.Errorf("%s | %w", "Enabled", err)
 				}
 				s.Enabled = &value
 			case bool:
@@ -99,17 +100,17 @@ func (s *SourceField) UnmarshalJSON(data []byte) error {
 
 		case "excludes":
 			if err := dec.Decode(&s.Excludes); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Excludes", err)
 			}
 
 		case "includes":
 			if err := dec.Decode(&s.Includes); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Includes", err)
 			}
 
 		case "mode":
 			if err := dec.Decode(&s.Mode); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Mode", err)
 			}
 
 		}

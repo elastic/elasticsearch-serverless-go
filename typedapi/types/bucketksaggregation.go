@@ -16,7 +16,7 @@
 // under the License.
 
 // Code generated from the elasticsearch-specification DO NOT EDIT.
-// https://github.com/elastic/elasticsearch-specification/tree/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b
+// https://github.com/elastic/elasticsearch-specification/tree/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d
 
 package types
 
@@ -24,13 +24,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strconv"
 )
 
 // BucketKsAggregation type.
 //
-// https://github.com/elastic/elasticsearch-specification/blob/0f7969a4e10ecb4423057d4ad29744c4a7c3c67b/specification/_types/aggregations/pipeline.ts#L94-L127
+// https://github.com/elastic/elasticsearch-specification/blob/ce9d54c65d2c588b2576ab24cfaaa74f7281b37d/specification/_types/aggregations/pipeline.ts#L94-L127
 type BucketKsAggregation struct {
 	// Alternative A list of string values indicating which K-S test alternative to calculate.
 	// The valid values
@@ -51,8 +52,6 @@ type BucketKsAggregation struct {
 	// one used equal percentiles of a
 	// metric to define the bucket end points.
 	Fractions []Float64 `json:"fractions,omitempty"`
-	Meta      Metadata  `json:"meta,omitempty"`
-	Name      *string   `json:"name,omitempty"`
 	// SamplingMethod Indicates the sampling methodology when calculating the K-S test. Note, this
 	// is sampling of the returned values.
 	// This determines the cumulative distribution function (CDF) points used
@@ -80,40 +79,23 @@ func (s *BucketKsAggregation) UnmarshalJSON(data []byte) error {
 
 		case "alternative":
 			if err := dec.Decode(&s.Alternative); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Alternative", err)
 			}
 
 		case "buckets_path":
 			if err := dec.Decode(&s.BucketsPath); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "BucketsPath", err)
 			}
 
 		case "fractions":
 			if err := dec.Decode(&s.Fractions); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "Fractions", err)
 			}
-
-		case "meta":
-			if err := dec.Decode(&s.Meta); err != nil {
-				return err
-			}
-
-		case "name":
-			var tmp json.RawMessage
-			if err := dec.Decode(&tmp); err != nil {
-				return err
-			}
-			o := string(tmp[:])
-			o, err = strconv.Unquote(o)
-			if err != nil {
-				o = string(tmp[:])
-			}
-			s.Name = &o
 
 		case "sampling_method":
 			var tmp json.RawMessage
 			if err := dec.Decode(&tmp); err != nil {
-				return err
+				return fmt.Errorf("%s | %w", "SamplingMethod", err)
 			}
 			o := string(tmp[:])
 			o, err = strconv.Unquote(o)
